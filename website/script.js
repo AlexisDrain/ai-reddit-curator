@@ -1,0 +1,70 @@
+
+const cardContainer = document.getElementById('cardContainer');
+subreddit = "testReddit"
+
+// Sample data for cards
+const cards = [
+    {
+        title: `r/${subreddit}. 15hr. ago`,
+        content: `The reporter asked him about his personal fortune and this was his answer - One of Steve Irwin's last interviews before he died while Filming a documentary in 2006.`,
+        claudeComment: "This post is mindblowing and hilarious, as it showcases Steve Irwin's iconic personality and his humble response to a question about his personal fortune."
+    },
+    {
+        title: 'Card 2',
+        content: 'Nullam fringilla eros ut tempor luctus.'
+    },
+    {
+        title: 'Card 3',
+        content: 'Donec vitae risus ac magna vehicula auctor.'
+    },
+    {
+        title: 'Card 4',
+        content: 'Curabitur fermentum magna et mauris faucibus, vel tristique elit iaculis.'
+    }
+];
+
+// Create and append card elements
+cards.forEach(card => {
+    const cardElement = document.createElement('div');
+    cardElement.classList.add('card');
+
+    const titleElement = document.createElement('h2');
+    titleElement.classList.add('card-title');
+    titleElement.textContent = card.title;
+
+    const contentElement = document.createElement('p');
+    contentElement.classList.add('card-content');
+    contentElement.textContent = card.content;
+
+    const claudeReasonElement = document.createElement('p');
+
+    if(card.claudeComment) {
+        claudeReasonElement.classList.add('card-claudeReason');
+        claudeReasonElement.textContent = "Claude: \"" + card.claudeComment + "\"";
+        }
+        
+        cardElement.appendChild(titleElement);
+        cardElement.appendChild(contentElement);
+        cardElement.appendChild(claudeReasonElement);
+        
+    cardContainer.appendChild(cardElement);
+});
+
+
+
+
+
+// options
+
+const toggleMode = document.getElementById('toggleMode');
+const body = document.body;
+
+toggleMode.addEventListener('click', () => {
+  body.classList.toggle('dark-mode');
+  body.classList.toggle('light-mode');
+});
+
+
+// start of page
+
+body.classList.toggle('dark-mode');
