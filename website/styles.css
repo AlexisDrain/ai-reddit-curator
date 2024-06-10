@@ -11,12 +11,15 @@ body.dark-mode {
   }
 
 
-.container {
-    max-width: 800px;
+.page-center {
+    display: flex;
+    flex-direction: column; /* Stack cards vertically */
+    align-items: center;
+    max-width: 700px;
     margin: 0 auto;
 }
 
-
+/* page title */
 h1 {
     text-align: center;
     margin-bottom: 20px;
@@ -27,26 +30,60 @@ h1 {
 .dark-mode h1  {
     color: #fff;
 }
+/* text: powered by claude */
+h4 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.light-mode h4  {
+    color: #000;
+}
+.dark-mode h4  {
+    color: #fff;
+}
 
 .card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
 }
 
 .card  {
     border-radius: 1em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px #555;
     padding: 20px;
+    max-width: 80vw; /* Set a maximum width of 80% of the viewport width */
+    width: 100%; /* Make the card take up the full width of the container */
+    transition: transform 0.3s ease, z-index 0.3s ease;
+}
+@media (min-width: 768px) {
+    .card {
+      max-width: 60vw; /* Reduce max-width to 60% of the viewport width for screens above 768px */
+    }
+  }
+.card.expanded {
+    transform: scale(1.2);
+    z-index: 2;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 .light-mode .card  {
     background-color: #fff;
 }
 .dark-mode .card {
-    background-color: #181c1f;
+    background-color: #333;
 }
 
 
+/* card text */
+.card-meta {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.light-mode .card-meta  {
+    color: #181c1f;
+}
+.dark-mode .card-meta {
+    color: #EEF1F3;
+}
 .card-title {
     font-size: 18px;
     margin-bottom: 10px;
@@ -73,4 +110,13 @@ h1 {
 .card-claudeReason {
     font-size: 14px;
     color: cornflowerblue;
+}
+
+
+/* options */
+.options {
+    float: left;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }

@@ -1,70 +1,83 @@
-
+const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
-subreddit = "testReddit"
 
 // Sample data for cards
 const cards = [
     {
-        title: `r/${subreddit}. 15hr. ago`,
+        metaInfo: "r/testReddit",
+        title: `I found this amazing thing`,
         content: `The reporter asked him about his personal fortune and this was his answer - One of Steve Irwin's last interviews before he died while Filming a documentary in 2006.`,
-        claudeComment: "This post is mindblowing and hilarious, as it showcases Steve Irwin's iconic personality and his humble response to a question about his personal fortune."
+        claudeComment: "This post is mindblowing and hilarious, as it showcases Steve Irwin's iconic personality and his humble response to a question about his personal fortune.",
     },
     {
-        title: 'Card 2',
+        metaInfo: "r/testReddit",
+        title: `I found this amazing thing`,
         content: 'Nullam fringilla eros ut tempor luctus.'
     },
     {
-        title: 'Card 3',
+        metaInfo: "r/testReddit",
+        title: `I found this amazing thing`,
         content: 'Donec vitae risus ac magna vehicula auctor.'
     },
     {
-        title: 'Card 4',
+        metaInfo: "r/testReddit",
+        title: `I found this amazing thing`,
         content: 'Curabitur fermentum magna et mauris faucibus, vel tristique elit iaculis.'
     }
 ];
 
 // Create and append card elements
-cards.forEach(card => {
-    const cardElement = document.createElement('div');
-    cardElement.classList.add('card');
+function CreateCards(cardsToCreate) {
+    cardsToCreate.forEach(card => {
 
-    const titleElement = document.createElement('h2');
-    titleElement.classList.add('card-title');
-    titleElement.textContent = card.title;
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.addEventListener('click', () => {
+            cardElement.classList.toggle('expanded');
+        });
+    
+        const metaElement = document.createElement('h2');
+        metaElement.classList.add('card-meta');
+        metaElement.textContent = card.metaInfo + ". 15hr. ago";
 
-    const contentElement = document.createElement('p');
-    contentElement.classList.add('card-content');
-    contentElement.textContent = card.content;
+        const titleElement = document.createElement('h2');
+        titleElement.classList.add('card-title');
+        titleElement.textContent = card.title;
 
-    const claudeReasonElement = document.createElement('p');
-
-    if(card.claudeComment) {
-        claudeReasonElement.classList.add('card-claudeReason');
-        claudeReasonElement.textContent = "Claude: \"" + card.claudeComment + "\"";
-        }
-        
-        cardElement.appendChild(titleElement);
-        cardElement.appendChild(contentElement);
-        cardElement.appendChild(claudeReasonElement);
-        
-    cardContainer.appendChild(cardElement);
-});
-
-
-
-
+        const contentElement = document.createElement('p');
+        contentElement.classList.add('card-content');
+        contentElement.textContent = card.content;
+    
+        const claudeReasonElement = document.createElement('p');
+    
+        if(card.claudeComment) {
+            claudeReasonElement.classList.add('card-claudeReason');
+            claudeReasonElement.textContent = "Claude: \"" + card.claudeComment + "\"";
+            }
+            
+            cardElement.appendChild(metaElement);
+            cardElement.appendChild(titleElement);
+            cardElement.appendChild(contentElement);
+            cardElement.appendChild(claudeReasonElement);
+            
+        cardContainer.appendChild(cardElement);
+    });
+}
 
 // options
-
-const toggleMode = document.getElementById('toggleMode');
-const body = document.body;
-
-toggleMode.addEventListener('click', () => {
+const darkModeToggle = document.getElementById('darkModeToggle');
+darkModeToggle.addEventListener('click', () => {
   body.classList.toggle('dark-mode');
   body.classList.toggle('light-mode');
 });
 
 
 // start of page
+function main() {
+    
+    CreateCards(cards);
 
-body.classList.toggle('dark-mode');
+    body.classList.toggle('dark-mode');
+  }
+
+  window.onload = main;
