@@ -4,6 +4,7 @@ const cardContainer = document.getElementById('cardContainer');
 // Sample data for cards
 const cards = [
     {
+        permaLink: '/r/interestingasfuck/comments/1dbfr53/the_reporter_asked_him_about_his_personal_fortune/',
         metaInfo: "r/testReddit",
         title: `I found this amazing thing`,
         content: `The reporter asked him about his personal fortune and this was his answer - One of Steve Irwin's last interviews before he died while Filming a documentary in 2006.`,
@@ -49,13 +50,20 @@ function CreateCards(cardsToCreate) {
         contentElement.textContent = card.content;
     
         const claudeReasonElement = document.createElement('p');
-    
-        if(card.claudeComment) {
+        if (card.claudeComment) {
             claudeReasonElement.classList.add('card-claudeReason');
-            claudeReasonElement.textContent = "Claude: \"" + card.claudeComment + "\"";
-            }
+            claudeReasonElement.textContent = "Claude AI: \"" + card.claudeComment + "\"";
+        }
+    
+        const redditUrlElement = document.createElement('a');
+        if (card.permaLink) {
+            redditUrlElement.classList.add('card-claudeReason');
+            redditUrlElement.href = "https://sh.reddit.com"+ card.permaLink;
+            redditUrlElement.textContent = "On Reddit";
+        }
             
             cardElement.appendChild(metaElement);
+            cardElement.appendChild(redditUrlElement);
             cardElement.appendChild(titleElement);
             cardElement.appendChild(contentElement);
             cardElement.appendChild(claudeReasonElement);
