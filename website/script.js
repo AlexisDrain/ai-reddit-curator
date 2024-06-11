@@ -33,10 +33,12 @@ function CreateCards(cardsToCreate) {
 
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
+        /*
+        expand card listener
         cardElement.addEventListener('click', () => {
             cardElement.classList.toggle('expanded');
         });
-    
+        */
         const redditUrlElement = document.createElement('a');
         if (card.permaLink) {
             redditUrlElement.classList.add('card-url');
@@ -56,18 +58,28 @@ function CreateCards(cardsToCreate) {
         const contentElement = document.createElement('p');
         contentElement.classList.add('card-content');
         contentElement.textContent = card.content;
-    
+        
+        // image post
+        var imageUrl = 'https://i.redd.it/a6thp8fyeg5d1.jpeg';
+        var img = document.createElement('img');
+        img.classList.add('card-image');
+        img.src = imageUrl;
+        var imgContainer = document.createElement('a');
+        imgContainer.href = "https://sh.reddit.com"+ card.permaLink;
+        imgContainer.appendChild(img);
+
         const claudeReasonElement = document.createElement('p');
         if (card.claudeComment) {
             claudeReasonElement.classList.add('card-claudeReason');
             claudeReasonElement.textContent = "Claude AI: \"" + card.claudeComment + "\"";
         }
-    
             
-            cardElement.appendChild(redditUrlElement);
-            cardElement.appendChild(titleElement);
-            cardElement.appendChild(contentElement);
-            cardElement.appendChild(claudeReasonElement);
+            
+        cardElement.appendChild(redditUrlElement);
+        cardElement.appendChild(titleElement);
+        cardElement.appendChild(contentElement);
+        cardElement.appendChild(imgContainer);
+        cardElement.appendChild(claudeReasonElement);
             
         cardContainer.appendChild(cardElement);
     });

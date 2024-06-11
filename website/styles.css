@@ -19,6 +19,11 @@ body.dark-mode {
     margin: 0 auto;
 }
 
+/* links */
+.dark-mode a:visited  {
+    color: steelblue;
+  }
+
 /* page title */
 h1 {
     text-align: center;
@@ -96,6 +101,9 @@ h4 {
 }
 
 
+.card-image {
+    width: 100%;
+}
 .card-content {
     font-size: 14px;
 }
