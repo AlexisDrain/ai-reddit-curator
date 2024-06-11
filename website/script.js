@@ -5,7 +5,7 @@ const cardContainer = document.getElementById('cardContainer');
 const cards = [
     {
         permaLink: '/r/interestingasfuck/comments/1dbfr53/the_reporter_asked_him_about_his_personal_fortune/',
-        metaInfo: "r/testReddit",
+        metaInfo: "r/interestingasfuck",
         title: `I found this amazing thing`,
         content: `The reporter asked him about his personal fortune and this was his answer - One of Steve Irwin's last interviews before he died while Filming a documentary in 2006.`,
         claudeComment: "This post is mindblowing and hilarious, as it showcases Steve Irwin's iconic personality and his humble response to a question about his personal fortune.",
@@ -37,10 +37,18 @@ function CreateCards(cardsToCreate) {
             cardElement.classList.toggle('expanded');
         });
     
+        const redditUrlElement = document.createElement('a');
+        if (card.permaLink) {
+            redditUrlElement.classList.add('card-url');
+            redditUrlElement.href = "https://sh.reddit.com"+ card.permaLink;
+            redditUrlElement.textContent = card.metaInfo + " - 15 hr. ago - By u/someName";
+        }
+
+        /*
         const metaElement = document.createElement('h2');
         metaElement.classList.add('card-meta');
         metaElement.textContent = card.metaInfo + ". 15hr. ago";
-
+        */
         const titleElement = document.createElement('h2');
         titleElement.classList.add('card-title');
         titleElement.textContent = card.title;
@@ -55,14 +63,7 @@ function CreateCards(cardsToCreate) {
             claudeReasonElement.textContent = "Claude AI: \"" + card.claudeComment + "\"";
         }
     
-        const redditUrlElement = document.createElement('a');
-        if (card.permaLink) {
-            redditUrlElement.classList.add('card-claudeReason');
-            redditUrlElement.href = "https://sh.reddit.com"+ card.permaLink;
-            redditUrlElement.textContent = "On Reddit";
-        }
             
-            cardElement.appendChild(metaElement);
             cardElement.appendChild(redditUrlElement);
             cardElement.appendChild(titleElement);
             cardElement.appendChild(contentElement);
