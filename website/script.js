@@ -9,10 +9,11 @@ const cards = [
         title: `I found this amazing thing`,
         content: `The reporter asked him about his personal fortune and this was his answer - One of Steve Irwin's last interviews before he died while Filming a documentary in 2006.`,
         claudeComment: "This post is mindblowing and hilarious, as it showcases Steve Irwin's iconic personality and his humble response to a question about his personal fortune.",
-    },
-    {
+        },
+        {
         metaInfo: "r/testReddit",
         title: `I found this amazing thing`,
+        imageUrl: 'https://i.redd.it/a6thp8fyeg5d1.jpeg',
         content: 'Nullam fringilla eros ut tempor luctus.'
     },
     {
@@ -60,13 +61,15 @@ function CreateCards(cardsToCreate) {
         contentElement.textContent = card.content;
         
         // image post
-        var imageUrl = 'https://i.redd.it/a6thp8fyeg5d1.jpeg';
-        var img = document.createElement('img');
-        img.classList.add('card-image');
-        img.src = imageUrl;
-        var imgContainer = document.createElement('a');
-        imgContainer.href = "https://sh.reddit.com"+ card.permaLink;
-        imgContainer.appendChild(img);
+        const imgContainer = document.createElement('a');
+        if(card.imageUrl) {
+            const img = document.createElement('img');
+            img.classList.add('card-image');
+            img.src = card.imageUrl;
+            imgContainer.href = "https://sh.reddit.com"+ card.permaLink;
+            imgContainer.appendChild(img);
+
+        }
 
         const claudeReasonElement = document.createElement('p');
         if (card.claudeComment) {
@@ -99,6 +102,7 @@ function main() {
     CreateCards(cards);
 
     body.classList.toggle('dark-mode');
+    document.getElementById('textfield-subreddit').value = "";
   }
 
   window.onload = main;

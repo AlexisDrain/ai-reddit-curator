@@ -131,15 +131,24 @@ h4 {
     display: none;
 }
 
-
+#textfield-subreddit {
+    color: blue;
+    margin-bottom: 30px;
+}
 
 /* options */
 .options {
+    position: fixed;
     float: left;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
+@media (max-width: 768px) {
+    .options {
+        display: none;
+    }
+  }
 .dark-mode svg {
     stroke: #fff;
 }
