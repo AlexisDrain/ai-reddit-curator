@@ -114,6 +114,14 @@ h4 {
     color: #a5a5a5;
 }
 
+/* long text card */
+.light-mode .card-selftext {
+    color: #555;
+}
+.dark-mode .card-selftext {
+    color: #B8C5C9;
+}
+
 .card-claudeReason {
     font-size: 14px;
     color: cornflowerblue;

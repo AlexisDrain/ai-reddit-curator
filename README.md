@@ -1,4 +1,4 @@
 # Claude-Reddit-Curator  
  
 ### Credits:  
-icon from https://iconsvg.xyz/   
+Options icon from https://iconsvg.xyz/   

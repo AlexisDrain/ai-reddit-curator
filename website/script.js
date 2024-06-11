@@ -19,7 +19,22 @@ const cards = [
     {
         metaInfo: "r/testReddit",
         title: `I found this amazing thing`,
-        content: 'Donec vitae risus ac magna vehicula auctor.'
+        content: 'Donec vitae risus ac magna vehicula auctor.',
+        selftext: `This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.`,
+        
     },
     {
         metaInfo: "r/testReddit",
@@ -60,6 +75,13 @@ function CreateCards(cardsToCreate) {
         contentElement.classList.add('card-content');
         contentElement.textContent = card.content;
         
+        // text post
+        const selftextElement = document.createElement('p');
+        if(card.selftext) {
+            selftextElement.classList.add('card-selftext');
+            selftextElement.textContent = card.selftext;
+        }
+
         // image post
         const imgContainer = document.createElement('a');
         if(card.imageUrl) {
@@ -81,6 +103,7 @@ function CreateCards(cardsToCreate) {
         cardElement.appendChild(redditUrlElement);
         cardElement.appendChild(titleElement);
         cardElement.appendChild(contentElement);
+        cardElement.appendChild(selftextElement);
         cardElement.appendChild(imgContainer);
         cardElement.appendChild(claudeReasonElement);
             
