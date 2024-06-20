@@ -49,6 +49,13 @@ function CreateCards(cardsToCreate) {
 
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
+
+        const cardUnlock = document.createElement('div');
+        cardUnlock.classList.add('card-unlock');
+
+        const cardLock = document.createElement('div');
+        cardLock.classList.add('card-unlock');
+
         /*
         expand card listener
         cardElement.addEventListener('click', () => {
@@ -100,11 +107,13 @@ function CreateCards(cardsToCreate) {
         }
             
             
-        cardElement.appendChild(redditUrlElement);
-        cardElement.appendChild(titleElement);
-        cardElement.appendChild(contentElement);
-        cardElement.appendChild(selftextElement);
-        cardElement.appendChild(imgContainer);
+        cardUnlock.appendChild(redditUrlElement);
+        cardUnlock.appendChild(titleElement);
+        cardUnlock.appendChild(contentElement);
+        cardUnlock.appendChild(selftextElement);
+        cardUnlock.appendChild(imgContainer);
+        cardElement.appendChild(cardUnlock);
+        cardElement.appendChild(cardLock);
         cardElement.appendChild(claudeReasonElement);
             
         cardContainer.appendChild(cardElement);
