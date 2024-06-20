@@ -41,12 +41,22 @@ def get_headers_with_access_token():
 
 
 
-def get_posts(limit=10):
+# subreddit name "all" as in r/all.
+# time_filter "all" as in the top of all time
+def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter='all'):
     headers = get_headers_with_access_token()
 
     # Step 2: Get the first five posts on r/all
-    url = 'https://oauth.reddit.com/r/all'
-    params = {'limit': limit}
+    if sortByTop:
+        url = f'https://oauth.reddit.com/r/{subredditName}/top'
+        params = {'limit': limit,
+                't': time_filter,
+                'sort': "top",
+                }
+    else:
+        url = f'https://oauth.reddit.com/r/{subredditName}'
+        params = {'limit': limit}
+
     response = requests.get(url, headers=headers, params=params)
 
     if response.status_code == 200:
