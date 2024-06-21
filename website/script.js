@@ -128,8 +128,24 @@ darkModeToggle.addEventListener('click', () => {
 });
 
 
+async function RunPythonTest() {
+    let pyodide = await loadPyodide();
+    
+    try {
+        let response = await fetch('testPythonOnWebsite.py');
+        let pythonCode = await response.text();
+        let result = await pyodide.runPythonAsync(pythonCode);
+        document.getElementById("output").innerText = result;
+    } catch (error) {
+        console.error("Error loading or running Python file:", error);
+        document.getElementById("output").innerText = "Error: " + error.message;
+    }
+}
+
 // start of page
 function main() {
+
+    RunPythonTest();
     
     CreateCards(cards);
 
