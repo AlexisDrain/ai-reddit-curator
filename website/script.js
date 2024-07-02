@@ -146,30 +146,64 @@ darkModeToggle.addEventListener('click', () => {
 });
 
 
+const { exec } = require('child_process');
+
+function executeCommand(command) {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(`Error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        reject(`Stderr: ${stderr}`);
+        return;
+      }
+      resolve(stdout);
+    });
+  });
+}
+
+
 async function RunPythonTest() {
     let pyodide = await loadPyodide();
-    
-    try {
-        // Load dependencies
-        await pyodide.loadPackage(['micropip']);  // Add your required packages here
-        // You might need to install packages not available in Pyodide's default distribution
-        await pyodide.runPythonAsync(`
-            import micropip
-            await micropip.install('anthropic')
-        `);
 
-        let response = await fetch('./testPythonOnWebsite2.py');
-        //let pythonCode = document.getElementById('python-main').text;
-        console.log(pythonCode);
-        // Run the Python code to define the function(s)
-        await pyodide.runPythonAsync(pythonCode);
+    // Running 'ls' command
+    const lsOutput = await executeCommand('ls');
+    console.log('Output of ls command:');
+    console.log(lsOutput);
+
+
+    
+    // try {
+    //     // Load dependencies
+    //     await pyodide.loadPackage(['micropip']);  // Add your required packages here
+    //     // You might need to install packages not available in Pyodide's default distribution
+    //     await pyodide.runPythonAsync(`
+    //         import micropip
+    //         await micropip.install('tokenizers')
+    //         from subprocess import call
+    //         from pathlib import Path
+    //         print('hi alexis')
+    //         Path("my_file.txt").write_text(f"{call('pip freeze')}")
+    //         Path("my_file2.txt").write_text(f"{call('which python')}")
+    //         await micropip.install('anthropic')
+
+
+    //     `);
+
+    //     let response = await fetch('./testPythonOnWebsite2.py');
+    //     //let pythonCode = document.getElementById('python-main').text;
+    //     console.log(pythonCode);
+    //     // Run the Python code to define the function(s)
+    //     await pyodide.runPythonAsync(pythonCode);
         
-        let result = await pyodide.runPythonAsync(pythonCode);
-        document.getElementById("output").innerText = result;
-    } catch (error) {
-        console.error("Error loading or running Python file:", error);
-        document.getElementById("output").innerText = "Error: " + error.message;
-    }
+    //     let result = await pyodide.runPythonAsync(pythonCode);
+    //     document.getElementById("output").innerText = result;
+    // } catch (error) {
+    //     console.error("Error loading or running Python file:", error);
+    //     document.getElementById("output").innerText = "Error: " + error.message;
+    // }
 }
 
 // start of page

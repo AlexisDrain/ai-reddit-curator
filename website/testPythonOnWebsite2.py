@@ -8,6 +8,7 @@
 claude_key = "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"
 os.environ['ANTHROPIC_API_KEY'] = claude_key
 
+
 def basic_sample(prompt:str):
     client = Anthropic(
         # This is the default and can be omitted
