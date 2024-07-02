@@ -1,3 +1,13 @@
+<!--
+Running the website on a local server:
+
+D:
+cd D:\DProjects\AI\Claude-Reddit-Curator\website
+python -m http.server 8000
+http://localhost:8000
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,10 +15,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Reddit Curator</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" 
+      type="image/png" 
+      href="./favicon.png" />
     <!-- <script src="pyodide.js"></script> -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
 </head>
 <body>
+    <!--
+    <script type="text/plain" src="./testPythonOnWebsite2.py" id="python-main"></script>
+    <script type="text/plain" src="./crawl.py" id="python-crawl"></script>
+    <script type="text/plain" src="./sampling.py" id="python-sampling"></script>
+    -->
     <div class="page-container">
         <div class="options">
             <!-- icon from https://iconsvg.xyz/ -->

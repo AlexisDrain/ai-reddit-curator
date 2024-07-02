@@ -33,6 +33,24 @@ const cards = [
         This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
         This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
         This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
+        This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
         This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.`,
         
     },
@@ -65,7 +83,7 @@ function CreateCards(cardsToCreate) {
         const redditUrlElement = document.createElement('a');
         if (card.permaLink) {
             redditUrlElement.classList.add('card-url');
-            redditUrlElement.href = "https://sh.reddit.com"+ card.permaLink;
+            redditUrlElement.href = "https://reddit.com"+ card.permaLink;
             redditUrlElement.textContent = card.metaInfo + " - 15 hr. ago - By u/someName";
         }
 
@@ -132,8 +150,20 @@ async function RunPythonTest() {
     let pyodide = await loadPyodide();
     
     try {
-        let response = await fetch('testPythonOnWebsite.py');
-        let pythonCode = await response.text();
+        // Load dependencies
+        await pyodide.loadPackage(['micropip']);  // Add your required packages here
+        // You might need to install packages not available in Pyodide's default distribution
+        await pyodide.runPythonAsync(`
+            import micropip
+            await micropip.install('anthropic')
+        `);
+
+        let response = await fetch('./testPythonOnWebsite2.py');
+        //let pythonCode = document.getElementById('python-main').text;
+        console.log(pythonCode);
+        // Run the Python code to define the function(s)
+        await pyodide.runPythonAsync(pythonCode);
+        
         let result = await pyodide.runPythonAsync(pythonCode);
         document.getElementById("output").innerText = result;
     } catch (error) {
