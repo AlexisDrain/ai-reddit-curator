@@ -145,7 +145,7 @@ darkModeToggle.addEventListener('click', () => {
   body.classList.toggle('light-mode');
 });
 
-
+/*
 const { exec } = require('child_process');
 
 function executeCommand(command) {
@@ -205,12 +205,18 @@ async function RunPythonTest() {
     //     document.getElementById("output").innerText = "Error: " + error.message;
     // }
 }
+*/
+
+
+import { basic_sample } from './backend.js';
 
 // start of page
 function main() {
 
-    RunPythonTest();
+    // RunPythonTest();
     
+    basic_sample("Hello, my name is alexis");
+
     CreateCards(cards);
 
     body.classList.toggle('dark-mode');
