@@ -1,0 +1,165 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+body.light-mode {
+    background-color: #f5f5f5;
+}
+body.dark-mode {
+    background-color: #0b1416;
+  }
+
+
+.page-center {
+    display: flex;
+    flex-direction: column; /* Stack cards vertically */
+    align-items: center;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* links */
+.dark-mode a:visited  {
+    color: steelblue;
+  }
+
+/* page title */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.light-mode h1  {
+    color: #000;
+}
+.dark-mode h1  {
+    color: #fff;
+}
+/* text: powered by claude */
+h4 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.light-mode h4  {
+    color: #000;
+}
+.dark-mode h4  {
+    color: #fff;
+}
+
+.card-container {
+    display: grid;
+    gap: 20px;
+}
+
+.card  {
+    border-radius: 1em;
+    box-shadow: 0 2px 4px #555;
+    padding: 20px;
+    max-width: 80vw; /* Set a maximum width of 80% of the viewport width */
+    width: 100%; /* Make the card take up the full width of the container */
+    transition: transform 0.3s ease, z-index 0.3s ease;
+}
+@media (min-width: 768px) {
+    .card {
+      max-width: 60vw; /* Reduce max-width to 60% of the viewport width for screens above 768px */
+    }
+  }
+.card.expanded {
+    transform: scale(1.2);
+    z-index: 2;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+.light-mode .card  {
+    background-color: #fff;
+}
+.dark-mode .card {
+    background-color: #333;
+}
+
+
+/* card text */
+.card-meta {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.light-mode .card-meta  {
+    color: #181c1f;
+}
+.dark-mode .card-meta {
+    color: #EEF1F3;
+}
+.card-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.light-mode .card-title  {
+    color: #181c1f;
+}
+.dark-mode .card-title {
+    color: #EEF1F3;
+}
+
+
+.card-image {
+    width: 100%;
+}
+.card-content {
+    font-size: 14px;
+}
+.light-mode .card-content {
+    color: #555;
+}
+.dark-mode .card-content {
+    color: #a5a5a5;
+}
+
+/* long text card */
+.light-mode .card-selftext {
+    color: #555;
+}
+.dark-mode .card-selftext {
+    color: #B8C5C9;
+}
+
+.card-claudeReason {
+    font-size: 14px;
+    color: cornflowerblue;
+}
+
+
+/* big card */
+.big-card {
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    padding: 16px;
+    position: fixed;
+    background-color: red;
+    display: none;
+}
+
+#textfield-subreddit {
+    color: blue;
+    margin-bottom: 30px;
+}
+
+/* options */
+.options {
+    position: fixed;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+@media (max-width: 768px) {
+    .options {
+        display: none;
+    }
+  }
+.dark-mode svg {
+    stroke: #fff;
+}
+.light-mode svg {
+    stroke: #000;
+}
