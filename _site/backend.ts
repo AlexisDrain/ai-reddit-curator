@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 
-var claude_key = "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"
+var claude_key = "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";
 
 const anthropic = new Anthropic({
   apiKey: process.env['ANTHROPIC_API_KEY'], // This is the default and can be omitted
@@ -26,11 +26,11 @@ export function get_prompt(posts) {
   });
 
   return PROMPT_TEMPLATE.replace("{POSTS}", posts_str);
-}
+};
 
 
 // https://github.com/anthropics/anthropic-sdk-typescript
-export async function basic_sample(prompt:string) {
+export async function basic_sample(prompt) {
 
   const message = await anthropic.messages.create({
     max_tokens: 4096,
@@ -45,4 +45,4 @@ export async function basic_sample(prompt:string) {
   // assert isinstance(message.context[0], TextBlock)
   console.log(message.content);
   return message.content;
-}
+};

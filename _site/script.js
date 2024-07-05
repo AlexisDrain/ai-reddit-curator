@@ -1,3 +1,6 @@
+import { basic_sample } from './out/backend';
+// const { basic_sample } = require('./backend.js');
+
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
 
@@ -208,14 +211,16 @@ async function RunPythonTest() {
 */
 
 
-import { basic_sample } from './backend.js';
 
 // start of page
 function main() {
 
     // RunPythonTest();
     
-    basic_sample("Hello, my name is alexis");
+    //basic_sample("Hello, my name is alexis");
+    basic_sample("Hello, my name is alexis").then(result => {
+    console.log(result);
+  });
 
     CreateCards(cards);
 
