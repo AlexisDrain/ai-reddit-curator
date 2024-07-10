@@ -5,6 +5,9 @@
         "moduleResolution": "node",
         "outDir": "out",
     },
+    "include": [ // include all TS files when building
+        "**/*"
+    ],
     "exclude": [
         "node_modules"
     ]
