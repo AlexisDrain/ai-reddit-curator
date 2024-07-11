@@ -1,4 +1,4 @@
-import { get_headers_with_access_token } from './crawl';
+import { get_headers_with_access_token } from './crawl.js';
 console.log(get_headers_with_access_token());
 /*
 posts = get_posts()
