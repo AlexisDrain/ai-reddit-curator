@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.3",
     "typescript": "^5.5.3"
