@@ -1,20 +1,14 @@
-import { get_headers_with_access_token } from './crawl';
+import { get_headers_with_access_token, get_posts } from './crawl.js';
 
-import { get_prompt, basic_sample } from './sample';
+import { get_prompt, basic_sample } from './sample.js';
 
-console.log(get_headers_with_access_token());
+let posts = get_posts(); // todo, get type of object
 
 /*
-posts = get_posts()
+console.log(posts);
+let prompt = get_prompt(posts); // todo, get type of object
 
-print(f"{posts=}")
+console.log(prompt);
 
-
-prompt = get_prompt(posts)
-
-print(prompt)
-
-print(basic_sample(prompt))
-
-
+console.log(basic_sample(prompt));
 */
