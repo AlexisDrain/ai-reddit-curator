@@ -41,7 +41,10 @@ def get_headers_with_access_token():
 
 
 
+# https://www.reddit.com/dev/api#GET_best
 # subreddit name "all" as in r/all.
+# sort options: hot/best (default), new, top, contravorsial, rising
+# top and contravorsial have time_filter -t: (hour, day, week, month, year, all)
 # time_filter "all" as in the top of all time
 def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter='all'):
     headers = get_headers_with_access_token()

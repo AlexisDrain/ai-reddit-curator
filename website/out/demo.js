@@ -1,7 +1,11 @@
 import { get_posts } from './crawl.js';
-let posts = get_posts(); // todo, get type of object
+get_posts().then(posts => {
+    console.log(posts);
+    // Do something with the data
+}).catch(error => {
+    console.error("Error in fetchData:", error);
+});
 /*
-console.log(posts);
 let prompt = get_prompt(posts); // todo, get type of object
 
 console.log(prompt);
