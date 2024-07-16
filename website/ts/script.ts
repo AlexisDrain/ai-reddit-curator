@@ -1,5 +1,14 @@
-import { basic_sample } from './out/backend';
-// const { basic_sample } = require('./backend.js');
+
+// debug: prototype to load a json
+async function loadData() {
+  const response = await fetch('/dailyData/2024-7-14.json');
+  const data = await response.json();
+  return data;
+}
+loadData().then(jsonFile => {
+  console.log(jsonFile);
+});
+
 
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
@@ -215,17 +224,11 @@ async function RunPythonTest() {
 // start of page
 function main() {
 
-    // RunPythonTest();
-    
-    //basic_sample("Hello, my name is alexis");
-    basic_sample("Hello, my name is alexis").then(result => {
-    console.log(result);
-  });
 
     CreateCards(cards);
 
     body.classList.toggle('dark-mode');
-    document.getElementById('textfield-subreddit').value = "";
+    // document.getElementById('textfield-subreddit').value = "";
   }
 
   window.onload = main;

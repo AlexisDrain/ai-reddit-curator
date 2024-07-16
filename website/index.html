@@ -1,10 +1,7 @@
 <!--
 
-Running a node.js script locally
-ctrl+shift+d
-cd to website/out/
-!node demo
-
+frontend: this project uses typescript mostly.
+Edit the files in website/ts. And compile them into website/out folder (which is javascript)
 
 Running the website on Jekyll
 D:
@@ -12,8 +9,18 @@ cd D:\DProjects\AI\Claude-Reddit-Curator\website
 bundle exec jekyll serve
 http://localhost:4000
 
+Backend:
+python files are in /python folder. Used to sample Claude, or crawl Reddit.
 
 
+// RETRO
+Running a node.js script locally
+ctrl+shift+d
+cd to website/out/
+node demo
+
+
+// RETRO
 Running the website on a local server:
 D:
 cd D:\DProjects\AI\Claude-Reddit-Curator\website
@@ -56,7 +63,6 @@ http://localhost:8000
             </div>
         <div class="big-card" id="bigCard"></div>
     </div>
-    <script type ="text/javascript" type="module" src="/out/backend.js"></script>
-    <script type ="text/javascript" type="module" src="script.js"></script>
+    <script type="module" type ="text/javascript" src="/out/script.js"></script>
 </body>
 </html>

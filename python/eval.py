@@ -91,7 +91,7 @@ def score_results(results:str):
         claude_ranks.append(claude_permalink_to_rank[permalink])
         golden_scores.append(golden_permalink_to_score[permalink])
 
-    return -np.corrcoef(claude_ranks, golden_scores)[0][1]
+    return -np.corrcoef(claude_ranks, golden_scores)[0][1] # use a spearman correlation instead?
 
 if __name__ == '__main__':
     score_basic_prompt_lower_variance()

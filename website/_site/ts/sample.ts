@@ -1,7 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
 
-var claude_key = "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";
-
 const anthropic = new Anthropic({
   apiKey: process.env['ANTHROPIC_API_KEY'], // This is the default and can be omitted
 });

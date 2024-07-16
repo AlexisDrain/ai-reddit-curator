@@ -19,4 +19,4 @@ jobs:
     - name: Run Anthropic script
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      run: node ./website/out/demo.js
+      run: python ./python/demo.py
