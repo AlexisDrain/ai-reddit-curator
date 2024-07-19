@@ -67,6 +67,21 @@ const cards = [
         content: 'Curabitur fermentum magna et mauris faucibus, vel tristique elit iaculis.'
     }
 ];
+// dateChange (right side of screen)
+const dateChanger = document.getElementById('redditDate');
+function setDefaultDate() {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    const defaultDate = yesterday.toISOString().split('T')[0];
+    dateChanger.value = defaultDate;
+}
+setDefaultDate();
+function onChangeDate(e) {
+    console.log(e);
+    alert(e.target.value);
+}
+dateChanger.addEventListener('input', onChangeDate);
 // Create and append card elements
 function CreateCards(cardsToCreate) {
     cardsToCreate.forEach(card => {

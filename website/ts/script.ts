@@ -73,6 +73,23 @@ const cards = [
     }
 ];
 
+// dateChange (right side of screen)
+const dateChanger : HTMLInputElement = document.getElementById('redditDate') as HTMLInputElement;
+function setDefaultDate() {
+  const today : Date = new Date();
+  const yesterday : Date = new Date();
+  yesterday.setDate(today.getDate() - 1);
+  
+  const defaultDate = yesterday.toISOString().split('T')[0];
+  dateChanger.value = defaultDate;
+}
+setDefaultDate();
+function onChangeDate(e){
+  console.log(e);
+  alert(e.target.value);
+}
+dateChanger.addEventListener('input', onChangeDate);
+
 // Create and append card elements
 function CreateCards(cardsToCreate) {
     cardsToCreate.forEach(card => {

@@ -10,6 +10,30 @@ body.dark-mode {
     background-color: #0b1416;
   }
 
+.page-container {
+display: flex;
+justify-content: space-between;
+}
+
+/* options */
+.options {
+    /* position: fixed; */
+    float: left;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+@media (max-width: 768px) {
+    .options {
+        display: none;
+    }
+  }
+.dark-mode svg {
+    stroke: #fff;
+}
+.light-mode svg {
+    stroke: #000;
+}
 
 .page-center {
     display: flex;
@@ -18,6 +42,12 @@ body.dark-mode {
     max-width: 700px;
     margin: 0 auto;
 }
+
+.page-right {
+    margin-right: 0;
+    margin-left: auto;
+}
+
 
 /* links */
 .dark-mode a:visited  {
@@ -33,6 +63,15 @@ h1 {
     color: #000;
 }
 .dark-mode h1  {
+    color: #fff;
+}
+/* text: date title */
+label {
+}
+.light-mode label  {
+    color: #000;
+}
+.dark-mode label  {
     color: #fff;
 }
 /* text: powered by claude */
@@ -142,24 +181,4 @@ h4 {
 #textfield-subreddit {
     color: blue;
     margin-bottom: 30px;
-}
-
-/* options */
-.options {
-    position: fixed;
-    float: left;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-@media (max-width: 768px) {
-    .options {
-        display: none;
-    }
-  }
-.dark-mode svg {
-    stroke: #fff;
-}
-.light-mode svg {
-    stroke: #000;
 }
