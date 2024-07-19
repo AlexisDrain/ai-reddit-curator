@@ -15,6 +15,24 @@ display: flex;
 justify-content: space-between;
 }
 
+
+.page-center {
+    display: flex;
+    flex-direction: column; /* Stack cards vertically */
+    align-items: center;
+    max-width: 700px;
+    margin: 0 auto;
+    padding-right: 270px; /* Width of page-right + some extra space */
+}
+
+.page-right {
+    position: fixed;
+    right: 0px;
+    width: 250px;
+    margin-right: 0;
+    margin-left: auto;
+}
+
 /* options */
 .options {
     /* position: fixed; */
@@ -23,9 +41,22 @@ justify-content: space-between;
     flex-direction: column;
     gap: 20px;
 }
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .options {
         display: none;
+    }
+    .page-center {
+      padding-right: 0; /* Remove the padding we added for the sidebar */
+    }
+    .page-right {
+            /* For top positioning */
+        top: 0;
+        bottom: auto;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: auto; /* Height will adjust to content */
+        max-height: 50vh; /* Limit to half the viewport height */
     }
   }
 .dark-mode svg {
@@ -34,20 +65,6 @@ justify-content: space-between;
 .light-mode svg {
     stroke: #000;
 }
-
-.page-center {
-    display: flex;
-    flex-direction: column; /* Stack cards vertically */
-    align-items: center;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.page-right {
-    margin-right: 0;
-    margin-left: auto;
-}
-
 
 /* links */
 .dark-mode a:visited  {
