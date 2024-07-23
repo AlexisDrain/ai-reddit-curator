@@ -1,14 +1,7 @@
-// debug: prototype to load a json
-async function loadData() {
-    const response = await fetch('/dailyData/2024-7-14.json');
-    const data = await response.json();
-    return data;
-}
-loadData().then(jsonFile => {
-    console.log(jsonFile);
-});
+import * as DateChanger from "./dateChanger.js";
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
+/*
 // Sample data for cards
 const cards = [
     {
@@ -17,8 +10,8 @@ const cards = [
         title: `I found this amazing thing`,
         content: `The reporter asked him about his personal fortune and this was his answer - One of Steve Irwin's last interviews before he died while Filming a documentary in 2006.`,
         claudeComment: "This post is mindblowing and hilarious, as it showcases Steve Irwin's iconic personality and his humble response to a question about his personal fortune.",
-    },
-    {
+        },
+        {
         metaInfo: "r/testReddit",
         title: `I found this amazing thing`,
         imageUrl: 'https://i.redd.it/a6thp8fyeg5d1.jpeg',
@@ -60,6 +53,7 @@ const cards = [
         This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
         This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.
         This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up. This is a super long text I made up.`,
+        
     },
     {
         metaInfo: "r/testReddit",
@@ -67,21 +61,7 @@ const cards = [
         content: 'Curabitur fermentum magna et mauris faucibus, vel tristique elit iaculis.'
     }
 ];
-// dateChange (right side of screen)
-const dateChanger = document.getElementById('redditDate');
-function setDefaultDate() {
-    const today = new Date();
-    const yesterday = new Date();
-    yesterday.setDate(today.getDate() - 1);
-    const defaultDate = yesterday.toISOString().split('T')[0];
-    dateChanger.value = defaultDate;
-}
-setDefaultDate();
-function onChangeDate(e) {
-    console.log(e);
-    alert(e.target.value);
-}
-dateChanger.addEventListener('input', onChangeDate);
+*/
 // Create and append card elements
 function CreateCards(cardsToCreate) {
     cardsToCreate.forEach(card => {
@@ -101,7 +81,7 @@ function CreateCards(cardsToCreate) {
         if (card.permaLink) {
             redditUrlElement.classList.add('card-url');
             redditUrlElement.href = "https://reddit.com" + card.permaLink;
-            redditUrlElement.textContent = card.metaInfo + " - 15 hr. ago - By u/someName";
+            redditUrlElement.textContent = " - 15 hr. ago - By u/someName";
         }
         /*
         const metaElement = document.createElement('h2');
@@ -145,78 +125,33 @@ function CreateCards(cardsToCreate) {
         cardContainer.appendChild(cardElement);
     });
 }
-// options
-const darkModeToggle = document.getElementById('darkModeToggle');
-darkModeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    body.classList.toggle('light-mode');
-});
-/*
-const { exec } = require('child_process');
-
-function executeCommand(command) {
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(`Error: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        reject(`Stderr: ${stderr}`);
-        return;
-      }
-      resolve(stdout);
-    });
-  });
+// debug: prototype to load a json
+async function loadData(date) {
+    try {
+        const response = await fetch('/dailyData/' + date + '.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    }
+    catch (error) {
+        console.error("Failed to load data:", error);
+        return null;
+    }
 }
-
-
-async function RunPythonTest() {
-    let pyodide = await loadPyodide();
-
-    // Running 'ls' command
-    const lsOutput = await executeCommand('ls');
-    console.log('Output of ls command:');
-    console.log(lsOutput);
-
-
-    
-    // try {
-    //     // Load dependencies
-    //     await pyodide.loadPackage(['micropip']);  // Add your required packages here
-    //     // You might need to install packages not available in Pyodide's default distribution
-    //     await pyodide.runPythonAsync(`
-    //         import micropip
-    //         await micropip.install('tokenizers')
-    //         from subprocess import call
-    //         from pathlib import Path
-    //         print('hi alexis')
-    //         Path("my_file.txt").write_text(f"{call('pip freeze')}")
-    //         Path("my_file2.txt").write_text(f"{call('which python')}")
-    //         await micropip.install('anthropic')
-
-
-    //     `);
-
-    //     let response = await fetch('./testPythonOnWebsite2.py');
-    //     //let pythonCode = document.getElementById('python-main').text;
-    //     console.log(pythonCode);
-    //     // Run the Python code to define the function(s)
-    //     await pyodide.runPythonAsync(pythonCode);
-        
-    //     let result = await pyodide.runPythonAsync(pythonCode);
-    //     document.getElementById("output").innerText = result;
-    // } catch (error) {
-    //     console.error("Error loading or running Python file:", error);
-    //     document.getElementById("output").innerText = "Error: " + error.message;
-    // }
+function cardContainerDestroyAll() {
+    cardContainer.innerHTML = "";
 }
-*/
 // start of page
-function main() {
-    CreateCards(cards);
-    body.classList.toggle('dark-mode');
-    // document.getElementById('textfield-subreddit').value = "";
+export function main() {
+    let jsonFileCurrent;
+    loadData(DateChanger.dateChangerInput.value).then(jsonFile => {
+        jsonFileCurrent = jsonFile;
+        console.log(jsonFileCurrent);
+    }).then(asdf => {
+        cardContainerDestroyAll();
+        CreateCards(jsonFileCurrent);
+    });
 }
 window.onload = main;
-export {};
