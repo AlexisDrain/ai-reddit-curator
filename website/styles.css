@@ -91,6 +91,15 @@ label {
 .dark-mode label  {
     color: #fff;
 }
+/* text:*/
+p {
+}
+.light-mode p  {
+    color: #000;
+}
+.dark-mode p  {
+    color: #fff;
+}
 /* text: powered by claude */
 h4 {
     text-align: center;
@@ -198,4 +207,13 @@ h4 {
 #textfield-subreddit {
     color: blue;
     margin-bottom: 30px;
+}
+
+
+
+
+/* about page */
+
+.about {
+    text-align: left;
 }

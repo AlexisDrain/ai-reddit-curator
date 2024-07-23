@@ -1,42 +1,10 @@
-<!--
-
-frontend: this project uses typescript mostly.
-Edit the files in website/ts. And compile them into website/out folder (which is javascript)
-
-Running the website on Jekyll
-D:
-cd D:\DProjects\AI\Claude-Reddit-Curator\website
-bundle exec jekyll serve
-http://localhost:4000
-
-Backend:
-python files are in /python folder. Used to sample Claude, or crawl Reddit.
-
-
-// RETRO
-Running a node.js script locally
-ctrl+shift+d
-cd to website/out/
-node demo
-
-
-// RETRO
-Running the website on a local server:
-D:
-cd D:\DProjects\AI\Claude-Reddit-Curator\website
-python -m http.server 8000
-http://localhost:8000
-
-
--->
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Reddit Curator</title>
+    <title>About: AI Reddit Curator</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" 
       type="image/png" 
@@ -55,23 +23,27 @@ http://localhost:8000
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             <button id="darkModeToggle">Toggle Light/Dark Mode</button>
             <h4>Powered by Claude 3 Haiku.</h4>
-            <a href = "./about.html">About AI Reddit Curator</a>
+            <a href = "./index.html">Main Site</a>
         </div>
         <div class="page-center">
-            <!--<input id="textfield-subreddit" type= "text" placeholder="r/all" /> -->
-            <div class="card-container" id="cardContainer"></div>
+            <div class="about-card-container">
+                
+
+                <h1 class="about">“Why use this site?” aka About page:</h1>
+                <p>I want to make browsing Reddit less "rage-bait"-y. There is a set of criteria that, using Claude 3, lets me curate what I want to see. You could also use this site for the opposite reason — You could make it so that you ONLY see the rage-bait content if that's what you want. All you have to do is fill out a system prompt with what you want Claude AI to show you.
+                <br><br>
+                To use the site, enter the name of the subreddit you want to browse on the top textfield. By default, Claude fetches the first 10 links from r/all, which is a diverse subreddit that exhibits the daily posts that reach the front page of Reddit.
+                <br><br>
+                This site was made by Alexis Drain (front-end) & Dawn Drain (back-end). Check out my other work, such as the 140 Github star browser extension: Less Addictive Reddit... or my 15 web games!
+                <br><br>
+                Politics is a healthy dish for an intellectual diet. But the word “political” on reddit is a synonym for rage-bait regardless of political orientation.</p>
+                <br>
+                <a href = "./index.html">Back to main site.</a>
+            </div>
         </div>
         <div class="page-right">
-            <form>
-                <label>
-                  Choose the date for Reddit:<br>
-                  <input type="date" id="redditDate" min="2024-07-14" />
-                </label>
-              </form>
         </div>
     </div>
-    <script type="module" type ="text/javascript" src="/out/dateChanger.js"></script>
-    <script type="module" type ="text/javascript" src="/out/options.js"></script>
-    <script type="module" type ="text/javascript" src="/out/script.js"></script>
+    <script type="module" type ="text/javascript" src="/out/aboutPage.js"></script>
 </body>
 </html>
