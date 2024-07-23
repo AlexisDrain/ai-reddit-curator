@@ -10,12 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Use Node.js
-      uses: actions/setup-node@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        node-version: '20'
+        python-version: '3.x'
+    
     - name: Install dependencies
-      run: npm install @anthropic-ai/sdk
+      run: |
+        python -m pip install --upgrade pip
+        pip install anthropic
+    
     - name: Run Anthropic script
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
