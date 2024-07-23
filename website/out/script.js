@@ -88,10 +88,10 @@ export function main() {
     let jsonFileCurrent;
     loadData(DateChanger.dateChangerInput.value).then(jsonFile => {
         jsonFileCurrent = jsonFile;
-        console.log(jsonFileCurrent);
     }).then(asdf => {
         cardContainerDestroyAll();
         CreateCards(jsonFileCurrent);
     });
 }
-window.onload = main;
+// init page
+window.onload = DateChanger.callDefaultDate; // script main is called there
