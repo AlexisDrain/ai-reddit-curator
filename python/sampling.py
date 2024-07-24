@@ -48,16 +48,15 @@ Here are the posts:
 {POSTS}
 </posts>
 
-For each post, write the permalink inside <permalink></permalink>, write your rating inside an xml tag <rating></rating>, and write the explanation for your rating inside <comment></<comment>.
+For each post, write the permalink inside <permalink></permalink>, write your rating inside an xml tag <rating></rating>, and write the explanation for your rating inside <comment></<comment>. Then leave a blank line for the next post.
 """
-
 
 def get_prompt(posts):
     posts_str = ""
     for i,post in enumerate(posts):
-        # posts_str += f"{i+1}. {post['data']['title']}\n{post['data']['url']}\n" Ask Dawn: is post['data']['url'] readable by claude?
-        # posts_str += f"{post['data']['title']}\n{post['data']['permalink']}\n"
-        posts_str += f"{post['data']['title']}\n{post['data']['url']}\n{post['data']['permalink']}\n\n"
+        # posts_str += f"{i+1}. {post['data']['title']}\n{post['data']['url']}\n" # we don't need an index
+        # posts_str += f"{post['data']['title']}\n{post['data']['url']}\n{post['data']['permalink']}\n\n" # Claude cannot read data in ['url']
+        posts_str += f"{post['data']['title']}\n{post['data']['permalink']}\n"
     return PROMPT_TEMPLATE_ALEXIS.format(POSTS=posts_str)
 
 
