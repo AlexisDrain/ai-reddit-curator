@@ -48,7 +48,7 @@ Here are the posts:
 {POSTS}
 </posts>
 
-For each post, write the permalink inside <permalink></permalink>, write your rating inside an xml tag <rating></rating>, and write the explanation for your rating inside <comment></<comment>. Then leave a blank line for the next post.
+For each post, write the permalink inside xml tags <permalink></permalink>, write your rating inside <rating></rating>, and write the explanation for your rating inside <comment></<comment>. Then combine those tags into one <post></post> xml tags.
 """
 
 def get_prompt(posts):

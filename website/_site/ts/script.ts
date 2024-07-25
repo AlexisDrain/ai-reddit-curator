@@ -2,10 +2,11 @@ import * as DateChanger from "./dateChanger.js";
 const body = document.body;
 
 interface RedditPost {
-  permaLink: string;
-  title: string;
-  content: string;
-  claudeComment: string;
+  permalink: string;
+  title?: string;
+  content?: string;
+  rating: number;
+  comment: string;
   imageUrl?: string;  // Optional
   selftext?: string;  // Optional
 }
@@ -15,7 +16,6 @@ const cardContainer = document.getElementById('cardContainer');
 // Create and append card elements
 function CreateCards(cardsToCreate : RedditPost[]) {
     cardsToCreate.forEach(card => {
-
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
 
@@ -32,11 +32,11 @@ function CreateCards(cardsToCreate : RedditPost[]) {
         });
         */
         const redditUrlElement = document.createElement('a');
-        if (card.permaLink) {
+        if (card.permalink) {
             redditUrlElement.classList.add('card-url');
-            redditUrlElement.href = "https://reddit.com"+ card.permaLink;
+            redditUrlElement.href = "https://reddit.com"+ card.permalink;
             const regex = /^(\/r\/[^\/]+)/;
-            redditUrlElement.textContent = card.permaLink.match(regex)[1] + " - 15 hr. ago - By u/someName";
+            redditUrlElement.textContent = card.permalink.match(regex)[1] + " - 15 hr. ago - By u/someName";
         }
 
         /*
@@ -46,12 +46,15 @@ function CreateCards(cardsToCreate : RedditPost[]) {
         */
         const titleElement = document.createElement('h2');
         titleElement.classList.add('card-title');
-        titleElement.textContent = card.title;
+        if (card.title) {
+            titleElement.textContent = card.title;
+        }
 
         const contentElement = document.createElement('p');
         contentElement.classList.add('card-content');
-        contentElement.textContent = card.content;
-        
+        if (card.content) {
+            contentElement.textContent = card.content;
+        }
         // text post
         const selftextElement = document.createElement('p');
         if(card.selftext) {
@@ -65,15 +68,15 @@ function CreateCards(cardsToCreate : RedditPost[]) {
             const img = document.createElement('img');
             img.classList.add('card-image');
             img.src = card.imageUrl;
-            imgContainer.href = "https://sh.reddit.com"+ card.permaLink;
+            imgContainer.href = "https://sh.reddit.com"+ card.permalink;
             imgContainer.appendChild(img);
 
         }
 
         const claudeReasonElement = document.createElement('p');
-        if (card.claudeComment) {
+        if (card.comment) {
             claudeReasonElement.classList.add('card-claudeReason');
-            claudeReasonElement.textContent = "Claude AI: \"" + card.claudeComment + "\"";
+            claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
         }
             
             
