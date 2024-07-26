@@ -2,7 +2,6 @@ import requests
 import secrets
 from functools import lru_cache
 
-
 # Replace the placeholders with your actual values
 client_id = "6Hef4rlP_2-rMq5Qfeox5w"
 # response_type = "code"

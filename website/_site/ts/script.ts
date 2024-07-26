@@ -2,13 +2,12 @@ import * as DateChanger from "./dateChanger.js";
 const body = document.body;
 
 interface RedditPost {
-  permalink: string;
+  permalink?: string;
   title?: string;
-  content?: string;
-  rating: number;
-  comment: string;
-  imageUrl?: string;  // Optional
-  selftext?: string;  // Optional
+  rating?: number;
+  comment?: string;
+  url?: string;  // this is an image in Reddit speak
+  selftext?: string;  // this is a text post in Reddit speak
 }
 
 const cardContainer = document.getElementById('cardContainer');
@@ -32,8 +31,8 @@ function CreateCards(cardsToCreate : RedditPost[]) {
         });
         */
         const redditUrlElement = document.createElement('a');
+        redditUrlElement.classList.add('card-url');
         if (card.permalink) {
-            redditUrlElement.classList.add('card-url');
             redditUrlElement.href = "https://reddit.com"+ card.permalink;
             const regex = /^(\/r\/[^\/]+)/;
             redditUrlElement.textContent = card.permalink.match(regex)[1] + " - 15 hr. ago - By u/someName";
@@ -50,39 +49,34 @@ function CreateCards(cardsToCreate : RedditPost[]) {
             titleElement.textContent = card.title;
         }
 
-        const contentElement = document.createElement('p');
-        contentElement.classList.add('card-content');
-        if (card.content) {
-            contentElement.textContent = card.content;
-        }
         // text post
         const selftextElement = document.createElement('p');
+        selftextElement.classList.add('card-selftext');
         if(card.selftext) {
-            selftextElement.classList.add('card-selftext');
             selftextElement.textContent = card.selftext;
         }
 
         // image post
         const imgContainer = document.createElement('a');
-        if(card.imageUrl) {
-            const img = document.createElement('img');
-            img.classList.add('card-image');
-            img.src = card.imageUrl;
+        imgContainer.classList.add('card-imgContainer');
+        const img = document.createElement('img');
+        img.classList.add('card-image');
+        if(card.url && !card.selftext) {
+            img.src = card.url;
             imgContainer.href = "https://sh.reddit.com"+ card.permalink;
             imgContainer.appendChild(img);
 
         }
 
         const claudeReasonElement = document.createElement('p');
+        claudeReasonElement.classList.add('card-claudeReason');
         if (card.comment) {
-            claudeReasonElement.classList.add('card-claudeReason');
             claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
         }
             
             
         cardUnlock.appendChild(redditUrlElement);
         cardUnlock.appendChild(titleElement);
-        cardUnlock.appendChild(contentElement);
         cardUnlock.appendChild(selftextElement);
         cardUnlock.appendChild(imgContainer);
         cardElement.appendChild(cardUnlock);

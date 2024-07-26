@@ -1,7 +1,4 @@
 import re
-from datetime import datetime
-from pathlib import Path
-import json
 
 test_data = """
 Here is the list of posts with my ratings and comments:
@@ -83,16 +80,23 @@ def extract_tags(fullText):
         posts[i]["permalink"] = permalink
         posts[i]["rating"] = rating
         posts[i]["comment"] = comment
-        
-        posts[i]['title'] = 'fake title: ' + comment
-        posts[i]['content'] = 'fake content ' + comment
-
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    Path(f'website/dailyData/{current_date}.json').write_text(json.dumps(posts, indent=2))
             
     return posts
 
-print(extract_tags(test_data))
+def combine_claude_reddit_crawl(claude_posts, reddit_posts):
+    combined_posts = claude_posts
+
+    for i, c_post in enumerate(claude_posts):
+        for r_post in reddit_posts:
+            if c_post.get("permalink") == r_post["data"]["permalink"]:
+                combined_posts[i]["title"] = r_post["data"]["title"]
+                if r_post["data"]["selftext"]:
+                    combined_posts[i]["selftext"] = r_post["data"]["selftext"]
+                if r_post["data"]["url"] : # this is normally an image
+                    combined_posts[i]["url"] = r_post["data"]["url"]
+                continue
+
+    return combined_posts
 
 """
 python python/score_extract.py
