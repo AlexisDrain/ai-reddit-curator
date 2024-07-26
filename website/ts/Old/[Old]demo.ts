@@ -1,6 +1,6 @@
-import { get_headers_with_access_token, get_posts } from './crawl.js';
+import { get_headers_with_access_token, get_posts } from './[Old]crawl.js';
 
-import { get_prompt, basic_sample } from './sample.js';
+import { get_prompt, basic_sample } from './[Old]sample.js';
 
 get_posts().then(posts => {
     console.log(posts);
