@@ -20,7 +20,13 @@ claude_data = extract_tags(claude_sample) # get the scores from claude and save 
 combined_data = combine_claude_reddit_crawl(claude_data, posts_reddit) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
 current_date = datetime.now().strftime('%Y-%m-%d') # name the file
-Path(f'../website/dailyData/{current_date}.json').write_text(json.dumps(combined_data)) # save the file
+
+output_dir = Path('../website/dailyData')
+output_dir.mkdir(parents=True, exist_ok=True)
+output_file = output_dir / f'{current_date}.json'
+output_file.write_text(json.dumps(combined_data))
+
+# Path(f'../website/dailyData/{current_date}.json').write_text(json.dumps(combined_data)) # save the file
 
 
 '''

@@ -88,7 +88,7 @@ def combine_claude_reddit_crawl(claude_posts, reddit_posts):
 
     for i, c_post in enumerate(claude_posts):
         for r_post in reddit_posts:
-            if c_post.get("permalink") == r_post["data"]["permalink"]:
+            if c_post["permalink"] == r_post["data"]["permalink"]:
                 combined_posts[i]["title"] = r_post["data"]["title"]
                 if r_post["data"]["selftext"]:
                     combined_posts[i]["selftext"] = r_post["data"]["selftext"]
