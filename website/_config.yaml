@@ -1,1 +1,3 @@
 source: .
+include:
+  - get-data.json.liquid

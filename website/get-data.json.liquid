@@ -1,0 +1,9 @@
+---
+---
+{% assign filename = page.url | split: "=" | last %}
+{% assign file_content = site.data[filename] %}
+{% if file_content %}
+{{ file_content | jsonify }}
+{% else %}
+{"error": "File not found", "filename": "{{ filename }}"}
+{% endif %}

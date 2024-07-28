@@ -48,9 +48,7 @@ function CreateCards(cardsToCreate) {
             img.src = card.url;
             imgContainer.href = "https://sh.reddit.com" + card.permalink;
             imgContainer.appendChild(img);
-        } //else { destory this
-          //  imgContainer.href
-          // }
+        }
         const claudeReasonElement = document.createElement('p');
         claudeReasonElement.classList.add('card-claudeReason');
         if (card.comment) {
@@ -69,17 +67,24 @@ function CreateCards(cardsToCreate) {
 // debug: prototype to load a json
 async function loadData(date) {
     try {
-        const response = await fetch('/dailyData/' + date + '.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
+        const response = awair, fetch, {}, {};
     }
-    catch (error) {
-        console.error("Failed to load data:", error);
-        return null;
+    //const response = await fetch('/_data/' + date +'.json');
+    finally {
     }
+    //const response = await fetch('/_data/' + date +'.json');
+    const response = await fetch(`/get-data.json?filename=${date}.json`);
+    console.log(response);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+}
+try { }
+catch (error) {
+    console.error("Failed to load data:", error);
+    return null;
 }
 function cardContainerDestroyAll() {
     cardContainer.innerHTML = "";
