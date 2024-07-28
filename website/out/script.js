@@ -67,24 +67,19 @@ function CreateCards(cardsToCreate) {
 // debug: prototype to load a json
 async function loadData(date) {
     try {
-        const response = awair, fetch, {}, {};
+        const response = await fetch('/dailyData/' + date + '.json');
+        // const response = await fetch(`/get-data.json?filename=${date}.json`);
+        console.log(response);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
     }
-    //const response = await fetch('/_data/' + date +'.json');
-    finally {
+    catch (error) {
+        console.error("Failed to load data:", error);
+        return null;
     }
-    //const response = await fetch('/_data/' + date +'.json');
-    const response = await fetch(`/get-data.json?filename=${date}.json`);
-    console.log(response);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-}
-try { }
-catch (error) {
-    console.error("Failed to load data:", error);
-    return null;
 }
 function cardContainerDestroyAll() {
     cardContainer.innerHTML = "";
