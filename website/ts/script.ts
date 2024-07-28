@@ -90,6 +90,10 @@ function CreateCards(cardsToCreate : RedditPost[]) {
 // debug: prototype to load a json
 async function loadData(date : string) {
   try {
+    // this should point to
+    // https://alexisdrain.github.io/Claude-Reddit-Curator/dailyData/2024-07-24.json
+    // it currently points to
+    // https://alexisdrain.github.io/dailyData/2024-07-24.json
     const response = await fetch('./dailyData/' + date +'.json');
     // const response = await fetch(`/get-data.json?filename=${date}.json`);
     console.log(response);
