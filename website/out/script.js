@@ -67,7 +67,7 @@ function CreateCards(cardsToCreate) {
 // debug: prototype to load a json
 async function loadData(date) {
     try {
-        const response = await fetch('/dailyData/' + date + '.json');
+        const response = await fetch('../dailyData/' + date + '.json');
         // const response = await fetch(`/get-data.json?filename=${date}.json`);
         console.log(response);
         if (!response.ok) {
