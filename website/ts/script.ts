@@ -90,7 +90,7 @@ function CreateCards(cardsToCreate : RedditPost[]) {
 // debug: prototype to load a json
 async function loadData(date : string) {
   try {
-    const response = await fetch('../dailyData/' + date +'.json');
+    const response = await fetch('./dailyData/' + date +'.json');
     // const response = await fetch(`/get-data.json?filename=${date}.json`);
     console.log(response);
     if (!response.ok) {
