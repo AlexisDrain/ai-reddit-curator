@@ -2,10 +2,10 @@ import * as DateChanger from "./dateChanger.js";
 const body = document.body;
 
 interface RedditPost {
-  permalink?: string;
-  title?: string;
-  rating?: number;
-  comment?: string;
+  permalink?: string; // link to post, example: r/some_subreddit/asdfasdfasdf
+  title?: string; // title of post
+  rating?: number; // rating by claude
+  comment?: string; // comment by claude
   url?: string;  // this is an image in Reddit speak
   selftext?: string;  // this is a text post in Reddit speak
 }
@@ -70,18 +70,18 @@ function CreateCards(cardsToCreate : RedditPost[]) {
 
         const claudeReasonElement = document.createElement('p');
         claudeReasonElement.classList.add('card-claudeReason');
-        if (card.comment) {
+        if (card.comment && card.comment !== "") {
             claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
         }
             
             
         cardUnlock.appendChild(redditUrlElement);
         cardUnlock.appendChild(titleElement);
+        cardElement.appendChild(claudeReasonElement);
         cardUnlock.appendChild(selftextElement);
         cardUnlock.appendChild(imgContainer);
         cardElement.appendChild(cardUnlock);
         cardElement.appendChild(cardLock);
-        cardElement.appendChild(claudeReasonElement);
             
         cardContainer.appendChild(cardElement);
     });
@@ -127,4 +127,4 @@ export function main() {
 
 
   // init page
-  window.onload = DateChanger.callDefaultDate // script main is called there
+  window.onload = DateChanger.callDefaultDate // script.ts main() is called there. Done this way so that we get the date before the page loads

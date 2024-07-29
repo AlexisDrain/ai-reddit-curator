@@ -51,16 +51,16 @@ function CreateCards(cardsToCreate) {
         }
         const claudeReasonElement = document.createElement('p');
         claudeReasonElement.classList.add('card-claudeReason');
-        if (card.comment) {
+        if (card.comment && card.comment !== "") {
             claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
         }
         cardUnlock.appendChild(redditUrlElement);
         cardUnlock.appendChild(titleElement);
+        cardElement.appendChild(claudeReasonElement);
         cardUnlock.appendChild(selftextElement);
         cardUnlock.appendChild(imgContainer);
         cardElement.appendChild(cardUnlock);
         cardElement.appendChild(cardLock);
-        cardElement.appendChild(claudeReasonElement);
         cardContainer.appendChild(cardElement);
     });
 }
@@ -99,4 +99,4 @@ export function main() {
     });
 }
 // init page
-window.onload = DateChanger.callDefaultDate; // script main is called there
+window.onload = DateChanger.callDefaultDate; // script.ts main() is called there. Done this way so that we get the date before the page loads

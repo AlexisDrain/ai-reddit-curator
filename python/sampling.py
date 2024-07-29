@@ -79,6 +79,7 @@ Here are the posts:
 Write your scores as an enumerated list, like so:
 1. (first_score)
 2. (second_score)
+3. (third_score)
 etc.
 """
 
