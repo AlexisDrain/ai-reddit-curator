@@ -24,6 +24,7 @@ export function callDefaultDate() {
   );
 }
 
+// we keep an index file that updates everyday because we cant use Path in a static website
 async function fetchMostRecentData() {
   try {
       // Fetch the index file
