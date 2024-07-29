@@ -1,4 +1,5 @@
 import re
+from copy import deepcopy
 
 test_data = """
 Here is the list of posts with my ratings and comments:
@@ -66,37 +67,67 @@ Here is the list of posts with my ratings and comments:
 
 """
 
+
 def extract_tags(fullText):
 
-    postPattern = r'<post>(.*?)</post>'
+    postPattern = r"<post>(.*?)</post>"
     matches = re.findall(postPattern, fullText, re.DOTALL)
     posts = [dict() for _ in range(len(matches))]
     for i, match in enumerate(matches):
-        permalink = re.search(r'<permalink>(.*?)</permalink>', match, re.DOTALL).group(1).strip()
-        rating = re.search(r'<rating>(.*?)</rating>', match, re.DOTALL).group(1).strip()
-        comment = re.search(r'<comment>(.*?)</comment>', match, re.DOTALL).group(1).strip()
-
+        permalink = (
+            re.search(r"<permalink>(.*?)</permalink>", match, re.DOTALL)
+            .group(1)
+            .strip()
+        )
+        rating = re.search(r"<rating>(.*?)</rating>", match, re.DOTALL).group(1).strip()
+        # comment = re.search(r'<comment>(.*?)</comment>', match, re.DOTALL).group(1).strip()
 
         posts[i]["permalink"] = permalink
         posts[i]["rating"] = rating
-        posts[i]["comment"] = comment
-            
+        posts[i]["comment"] = "No comment"  # comment
+
     return posts
 
-def combine_claude_reddit_crawl(claude_posts, reddit_posts):
-    combined_posts = claude_posts
 
-    for i, c_post in enumerate(claude_posts):
-        for r_post in reddit_posts:
-            if c_post["permalink"] == r_post["data"]["permalink"]:
-                combined_posts[i]["title"] = r_post["data"]["title"]
-                if r_post["data"]["selftext"]:
-                    combined_posts[i]["selftext"] = r_post["data"]["selftext"]
-                if r_post["data"]["url"] : # this is normally an image
-                    combined_posts[i]["url"] = r_post["data"]["url"]
-                continue
+def parse_enumerated_list(claude_sample: str) -> list[int]:
+    res = []
+    for line in claude_sample.splitlines():
+        if "." not in line:
+            continue
+        line_count, score = line.split(".")
+        line_count = int(line_count)
+        score = int(score)
+        assert line_count == len(res) + 1
+        res.append(score)
+    return res
+
+
+def test_parse_enumerated_list():
+    my_sample = """Here you go friend:
+    1. 8
+    2. 3
+    3. 9
+Hope you enjoy!"""
+    assert parse_enumerated_list(my_sample) == [8, 3, 9]
+
+
+def combine_claude_reddit_crawl(
+    scored_claude_posts: list[dict | int], reddit_posts
+) -> list[dict]:
+    if isinstance(scored_claude_posts[0], int):
+        scored_claude_posts = [{"rating": r} for r in scored_claude_posts]
+    combined_posts = deepcopy(scored_claude_posts)
+    reddit_posts = deepcopy(reddit_posts)
+
+    print(combined_posts[0])
+    print(reddit_posts[0])
+    for scored_post, full_post in zip(combined_posts, reddit_posts, strict=True):
+        scored_post.update(
+            {k: full_post["data"][k]} for k in ["permalink", "url", "title", "selftext"]
+        )
 
     return combined_posts
+
 
 """
 python python/score_extract.py

@@ -21,47 +21,50 @@ client_id = "6Hef4rlP_2-rMq5Qfeox5w"
 #     print(f"Request failed with status code: {response.status_code}")
 
 
-
-@lru_cache
+@lru_cache(1)
 def get_headers_with_access_token():
     # taken from https://ssl.reddit.com/prefs/apps/
     secret = "c0aOfsj7xRn3JzuoJC2EPfeVlHiQAA"
 
     # Step 1: Get an access token
     auth = requests.auth.HTTPBasicAuth(client_id, secret)
-    data = {'grant_type': 'client_credentials'}
+    data = {"grant_type": "client_credentials"}
     headers = {"User-Agent": "AIRedditCurator/1.0 by my_tummy_hurts"}
-    res = requests.post('https://www.reddit.com/api/v1/access_token',
-                        auth=auth, data=data, headers=headers)
-    token = res.json()['access_token']
-    headers = {**headers, **{'Authorization': f'Bearer {token}'}}
+    res = requests.post(
+        "https://www.reddit.com/api/v1/access_token",
+        auth=auth,
+        data=data,
+        headers=headers,
+    )
+    token = res.json()["access_token"]
+    headers = {**headers, **{"Authorization": f"Bearer {token}"}}
     return headers
 
 
-
-
-# https://www.reddit.com/dev/api#GET_best
-# subreddit name "all" as in r/all.
-# sort options: hot/best (default), new, top, contravorsial, rising
-# top and contravorsial have time_filter -t: (hour, day, week, month, year, all)
-# time_filter "all" as in the top of all time
-def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter='all'):
+def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all"):
+    """https://www.reddit.com/dev/api#GET_best
+    subreddit name "all" as in r/all.
+    sort options: hot/best (default), new, top, contravorsial, rising
+    top and contravorsial have time_filter -t: (hour, day, week, month, year, all)
+    time_filter "all" as in the top of all time
+    """
     headers = get_headers_with_access_token()
 
     if sortByTop:
-        url = f'https://oauth.reddit.com/r/{subredditName}/top'
-        params = {'limit': limit,
-                't': time_filter,
-                'sort': "top",
-                }
+        url = f"https://oauth.reddit.com/r/{subredditName}/top"
+        params = {
+            "limit": limit,
+            "t": time_filter,
+            "sort": "top",
+        }
     else:
-        url = f'https://oauth.reddit.com/r/{subredditName}'
-        params = {'limit': limit}
+        url = f"https://oauth.reddit.com/r/{subredditName}"
+        params = {"limit": limit}
 
     response = requests.get(url, headers=headers, params=params)
 
     if response.status_code == 200:
-        posts = response.json()['data']['children']
+        posts = response.json()["data"]["children"]
         return posts
         # for post in posts:
         #    print(post['data']['title'])
