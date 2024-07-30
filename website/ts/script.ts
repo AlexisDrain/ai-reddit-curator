@@ -1,5 +1,6 @@
 import * as DateChanger from "./dateChanger.js";
 const body = document.body;
+const cardContainer = document.getElementById('cardContainer');
 
 interface RedditPost {
   permalink?: string; // link to post, example: r/some_subreddit/asdfasdfasdf
@@ -10,11 +11,11 @@ interface RedditPost {
   selftext?: string;  // this is a text post in Reddit speak
 }
 
-const cardContainer = document.getElementById('cardContainer');
 
 // Create and append card elements
-function CreateCards(cardsToCreate : RedditPost[]) {
+function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
     cardsToCreate.forEach(card => {
+
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
 
@@ -22,7 +23,7 @@ function CreateCards(cardsToCreate : RedditPost[]) {
         cardUnlock.classList.add('card-unlock');
 
         const cardLock = document.createElement('div');
-        cardLock.classList.add('card-unlock');
+        cardLock.classList.add('card-lock');
 
         /*
         expand card listener
@@ -43,6 +44,14 @@ function CreateCards(cardsToCreate : RedditPost[]) {
         metaElement.classList.add('card-meta');
         metaElement.textContent = card.metaInfo + ". 15hr. ago";
         */
+
+        const ratingElement = document.createElement('div');
+        ratingElement.classList.add('card-rating');
+        if (card.rating) {
+          ratingElement.textContent = "AI Rating: " + card.rating.toString();
+          cardElement.setAttribute('rating', card.rating.toString());
+        }
+
         const titleElement = document.createElement('h2');
         titleElement.classList.add('card-title');
         if (card.title) {
@@ -77,16 +86,30 @@ function CreateCards(cardsToCreate : RedditPost[]) {
             
         cardUnlock.appendChild(redditUrlElement);
         cardUnlock.appendChild(titleElement);
+        cardUnlock.appendChild(ratingElement);
         cardUnlock.appendChild(claudeReasonElement);
         cardUnlock.appendChild(selftextElement);
         cardUnlock.appendChild(imgContainer);
         cardElement.appendChild(cardUnlock);
         cardElement.appendChild(cardLock);
-            
-        cardContainer.appendChild(cardElement);
+        
+
+        cards.appendChild(cardElement);
     });
 }
 
+function sortCards(cards : HTMLElement | null) {
+  const cardsArray = Array.from(cards.children) as HTMLElement[];
+
+  cardsArray.sort((a, b) => {
+    const ratingA = Number(a.getAttribute('rating')) || 0;
+    const ratingB = Number(b.getAttribute('rating')) || 0;
+    return ratingB - ratingA; // Sort in descending order
+  });
+
+  // Reappend the sorted elements
+  cardsArray.forEach(card => cards.appendChild(card));
+}
 // debug: prototype to load a json
 async function loadData(date : string) {
   try {
@@ -108,8 +131,8 @@ async function loadData(date : string) {
   }
 }
 
-function cardContainerDestroyAll() {
-  cardContainer.innerHTML = "";
+function cardContainerDestroyAll(cards : HTMLElement | null) {
+  cards.innerHTML = "";
 }
 
 // start of page
@@ -119,8 +142,9 @@ export function main() {
   loadData(DateChanger.dateChangerInput.value).then(jsonFile => {
       jsonFileCurrent = jsonFile;
     }).then(asdf => {
-      cardContainerDestroyAll();
-      CreateCards(jsonFileCurrent);
+      cardContainerDestroyAll(cardContainer);
+      createCards(jsonFileCurrent, cardContainer);
+      sortCards(cardContainer);
     });
 
   }

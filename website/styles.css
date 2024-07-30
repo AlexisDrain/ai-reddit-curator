@@ -71,6 +71,19 @@ justify-content: space-between;
     color: steelblue;
   }
 
+/* Claude Ratin */
+.card-rating {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.light-mode .card-rating  {
+    color: #000;
+}
+.dark-mode .card-rating  {
+    color: burlywood;
+}
+
 /* page title */
 h1 {
     text-align: center;
