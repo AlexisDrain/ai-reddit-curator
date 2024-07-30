@@ -30,7 +30,6 @@ async function fetchMostRecentData() {
         // Parse the JSONL content
         const dataFiles = indexText.trim().split('\n')
             .map(line => JSON.parse(line));
-        console.log(dataFiles[0]['file']);
         return dataFiles[0]['file'];
     }
     catch (error) {

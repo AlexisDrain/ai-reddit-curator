@@ -77,7 +77,7 @@ function CreateCards(cardsToCreate : RedditPost[]) {
             
         cardUnlock.appendChild(redditUrlElement);
         cardUnlock.appendChild(titleElement);
-        cardElement.appendChild(claudeReasonElement);
+        cardUnlock.appendChild(claudeReasonElement);
         cardUnlock.appendChild(selftextElement);
         cardUnlock.appendChild(imgContainer);
         cardElement.appendChild(cardUnlock);

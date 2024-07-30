@@ -100,17 +100,6 @@ p {
 .dark-mode p  {
     color: #fff;
 }
-/* text: powered by claude */
-h4 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-.light-mode h4  {
-    color: #000;
-}
-.dark-mode h4  {
-    color: #fff;
-}
 
 .card-container {
     display: grid;
@@ -216,4 +205,37 @@ h4 {
 
 .about {
     text-align: left;
+}
+
+
+/* logo */
+
+#logo-image-wrapper {
+    text-decoration:none; /* remove underline from link */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Or any specific width */
+}
+
+#logo-img {
+    border-radius: 15px;
+    width: 75px;
+    height: 75px;
+}
+
+#logo-text {
+    padding-left: 20px;
+}
+
+
+/* text: powered by claude */
+h4 {
+    margin-bottom: 20px;
+}
+.light-mode h4  {
+    color: #000;
+}
+.dark-mode h4  {
+    color: #fff;
 }
