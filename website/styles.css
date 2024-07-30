@@ -78,7 +78,7 @@ justify-content: space-between;
     margin-bottom: 20px;
 }
 .light-mode .card-rating  {
-    color: #000;
+    color: chocolate;
 }
 .dark-mode .card-rating  {
     color: burlywood;
