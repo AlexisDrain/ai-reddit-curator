@@ -48,7 +48,7 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         const ratingElement = document.createElement('div');
         ratingElement.classList.add('card-rating');
         if (card.rating) {
-          ratingElement.textContent = "AI Rating: " + card.rating.toString();
+          ratingElement.textContent = "AI Rating: " + card.rating.toString() + "/10";
           cardElement.setAttribute('rating', card.rating.toString());
         }
 

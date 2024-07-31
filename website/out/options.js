@@ -9,7 +9,7 @@ export const defaultOptions : OptionsConfig {
 */
 const body = document.body;
 // init page: set dark mode
-body.classList.toggle('dark-mode');
+// body.classList.toggle('dark-mode'); // this is now done in index.html
 // options button toggle
 const darkModeToggle = document.getElementById('darkModeToggle');
 darkModeToggle.addEventListener('click', () => {
