@@ -14,7 +14,13 @@ export function callDefaultDate() {
 }
 */
 
-
+const scrollToTop = () => {
+  const c = document.documentElement.scrollTop || document.body.scrollTop;
+  if (c > 0) {
+    window.requestAnimationFrame(scrollToTop);
+    window.scrollTo(0, c - c / 8);
+  }
+};
 
 export function callDefaultDate() {
   fetchMostRecentData().then(name => {
@@ -48,6 +54,7 @@ async function fetchMostRecentData() {
 
 
 function onChangeDate(e){
+    scrollToTop();
     script.main();
 }
 dateChangerInput.addEventListener('input', onChangeDate);
