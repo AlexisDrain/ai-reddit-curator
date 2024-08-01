@@ -30,10 +30,7 @@ justify-content: space-between;
 
 .page-right {
     position: fixed;
-    right: 1em;
-    width: auto;
-    margin-right: 0;
-    margin-left: auto;
+    left: calc(50% + 410px);
 }
 #form-date {
     background: chocolate;
@@ -44,6 +41,20 @@ justify-content: space-between;
     box-shadow: 0 2px 4px #000;
 }
 
+/* Styles for larger desktops */
+@media (min-width: 1200px) {
+    /* Your styles for larger screens */
+  }
+  
+  /* Styles for medium-sized screens (tablets and smaller desktops) */
+  @media (max-width: 1199px) {
+    /* Your styles for medium screens */
+  }
+  
+  /* Styles for smaller tablets and mobile */
+  @media (max-width: 991px) {
+    /* Your styles for smaller screens */
+  }
 
 /* options */
 .options {
