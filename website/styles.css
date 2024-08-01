@@ -30,11 +30,19 @@ justify-content: space-between;
 
 .page-right {
     position: fixed;
-    right: 0px;
-    width: 250px;
+    right: 1em;
+    width: auto;
     margin-right: 0;
     margin-left: auto;
 }
+#form-date {
+    background: chocolate;
+    padding: 1em;
+    border-radius: 0.5em;
+    flex-basis: 100%;
+    display: flex;
+  }
+
 
 /* options */
 .options {
@@ -134,14 +142,14 @@ label#darkModeLabel::after {
 }
 
 /* page title */
-h1 {
-    text-align: center;
+h1#logo-text {
+    text-align: left;
     margin-bottom: 20px;
 }
-.light-mode h1  {
+.light-mode h1#logo-text  {
     color: #000;
 }
-.dark-mode h1  {
+.dark-mode h1#logo-text  {
     color: #fff;
 }
 /* text: date title */

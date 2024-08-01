@@ -15,7 +15,7 @@ const body = document.body;
 // options button toggle
 // using tutorial from https://www.youtube.com/watch?v=S-T9XoCMwt4
 const darkModeToggle = document.getElementById('darkModeToggle') as HTMLInputElement | null;
-darkModeToggle.checked = true;
+darkModeToggle.checked = body.classList.contains('dark-mode');
 darkModeToggle.addEventListener('click', () => {
   body.classList.toggle('dark-mode');
   body.classList.toggle('light-mode');
