@@ -25,7 +25,7 @@ justify-content: space-between;
     align-items: center;
     max-width: 700px;
     margin: 0 auto;
-    padding-right: 270px; /* Width of page-right + some extra space */
+     /* padding-right: 270px; Width of page-right + some extra space */
 }
 
 .page-right {
@@ -47,18 +47,22 @@ justify-content: space-between;
 
 /* options */
 .options {
-    /* position: fixed; */
+    position: absolute;
     float: left;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
-@media (max-width: 900px) {
+@media (max-width: 990px) {
+    .page-container {
+        justify-content: center;
+      }
     .options {
-        display: none;
+        padding-top: 5em;
+        align-items: center;
     }
     .page-center {
-      padding-right: 0; /* Remove the padding we added for the sidebar */
+      padding-top: 20em;
     }
     .page-right {
             /* For top positioning */
@@ -160,10 +164,10 @@ h1#logo-text {
 label {
 }
 .light-mode label  {
-    color: #000;
+    color: #fff;
 }
 .dark-mode label  {
-    color: #fff;
+    color: #fff; /* just in case I need to color it late. I think it should be white to accomidate the browser 'date' input which is normally white */
 }
 /* text:*/
 p {
