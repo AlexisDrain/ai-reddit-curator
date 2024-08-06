@@ -95,6 +95,7 @@ display: flex;
 }
 
 
+/* date picker on right side of screen */
 #form-date {
     background: chocolate;
     padding: 1em;
@@ -103,6 +104,31 @@ display: flex;
     display: flex;
     box-shadow: 0 2px 4px #000;
 }
+
+/* message at the bottom of text/or not found data on day */
+#noDataMessage {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-flow: column;
+    margin-top: 45px;
+  }
+#noDataMessageLogo {
+    width: 5em;
+    height: 5em;
+}
+#noDataMessage-text {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.light-mode #noDataMessage-text  {
+    color: #000;
+}
+.dark-mode #noDataMessage-text  {
+    color: #fff;
+}
+
+
 
 .dark-mode svg {
     stroke: #fff;

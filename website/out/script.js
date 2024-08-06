@@ -1,6 +1,7 @@
 import * as DateChanger from "./dateChanger.js";
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
+const noDataMessageText = document.getElementById('noDataMessage-text');
 // Create and append card elements
 function createCards(cardsToCreate, cards) {
     cardsToCreate.forEach(card => {
@@ -70,6 +71,7 @@ function createCards(cardsToCreate, cards) {
         cardElement.appendChild(cardLock);
         cards.appendChild(cardElement);
     });
+    noDataMessageText.innerHTML = "You've reached the end of this Reddit day! You may pick another date.";
 }
 function sortCards(cards) {
     const cardsArray = Array.from(cards.children);
@@ -92,6 +94,7 @@ async function loadData(date) {
         // const response = await fetch(`/get-data.json?filename=${date}.json`);
         console.log(response);
         if (!response.ok) {
+            noDataMessageText.innerHTML = "No data found on this day (" + DateChanger.dateChangerInput.value + ").";
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
