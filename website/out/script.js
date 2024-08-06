@@ -52,8 +52,17 @@ function createCards(cardsToCreate, cards) {
         const img = document.createElement('img');
         img.classList.add('card-image');
         if (card.url && !card.selftext) {
-            img.src = card.url;
-            imgContainer.href = "https://sh.reddit.com" + card.permalink;
+            if (card.url.includes("//v.redd.it")) { // video
+            }
+            else if (card.url.includes("gallery")) { // series of images
+            }
+            else if (card.url.includes("//i.redd.it")) { // images
+                // img.src = resolveImageLink(card.url);
+                img.src = card.url;
+                imgContainer.href = "https://reddit.com" + card.permalink;
+            }
+            else { // other links like news
+            }
             imgContainer.appendChild(img);
         }
         const claudeReasonElement = document.createElement('p');
@@ -92,7 +101,7 @@ async function loadData(date) {
         // https://alexisdrain.github.io/dailyData/2024-07-24.json
         const response = await fetch('./dailyData/' + date + '.json');
         // const response = await fetch(`/get-data.json?filename=${date}.json`);
-        console.log(response);
+        // console.log(response);
         if (!response.ok) {
             noDataMessageText.innerHTML = "No data found on this day (" + DateChanger.dateChangerInput.value + ").";
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -108,10 +117,46 @@ async function loadData(date) {
 function cardContainerDestroyAll(cards) {
     cards.innerHTML = "";
 }
+let weservAvailable = false;
+function checkWeservAvailability(timeout = 5000) {
+    return new Promise((resolve, reject) => {
+        const testImage = new Image();
+        const timer = setTimeout(() => {
+            testImage.onerror = testImage.onload = null;
+            resolve('Timeout while checking Images.weserv.nl');
+            console.log("images.weserv.nl is unavailable. time out");
+            weservAvailable = false;
+        }, timeout);
+        testImage.onerror = () => {
+            clearTimeout(timer);
+            resolve('images.weserv.nl is unavailable. Error loading test image from Images.weserv.nl');
+            console.log("images.weserv.nl is unavailable. Error loading test image from Images.weserv.nl");
+            weservAvailable = false;
+        };
+        testImage.onload = () => {
+            clearTimeout(timer);
+            resolve('Images.weserv.nl is available');
+            weservAvailable = true;
+            console.log("images.weserv.nl is available");
+        };
+        // Use a small, static image from weserv.nl for the test
+        testImage.src = 'https://images.weserv.nl/favicon.ico';
+    });
+}
+// Proxy the image through images.weserv.nl so we don't raise cookie warning
+function resolveImageLink(newLink) {
+    let proxyUrl = newLink;
+    if (weservAvailable) {
+        proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(newLink)}`; // Proxy the image through images.weserv.nl so we don't raise cookie warning
+    }
+    return proxyUrl;
+}
 // start of page
 export function main() {
     let jsonFileCurrent;
-    loadData(DateChanger.dateChangerInput.value).then(jsonFile => {
+    //checkWeservAvailability(1000).then(() => // use the image proxy to avoid raising cookies
+    loadData(DateChanger.dateChangerInput.value)
+        .then(jsonFile => {
         jsonFileCurrent = jsonFile;
     }).then(asdf => {
         cardContainerDestroyAll(cardContainer);
