@@ -26,4 +26,4 @@ const toggleDarkMode = (event: Event) => {
 darkModeToggle.addEventListener('click', toggleDarkMode);
 
 // Add touch event listeners for mobile
-darkModeToggle.addEventListener('touchstart', toggleDarkMode);
+// darkModeToggle.addEventListener('touchstart', toggleDarkMode);
