@@ -13,67 +13,63 @@ body.dark-mode {
     transition: 0.3s;
   }
 
-.page-container {
-display: flex;
-justify-content: space-between;
-}
 
-
-.page-center {
-    display: flex;
-    flex-direction: column; /* Stack cards vertically */
-    align-items: center;
+/* start: main components of page */
+  .page-center {
     max-width: 700px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    /*
+    display: flex;
+    flex-direction: column;  Stack cards vertically
+    align-items: center;
     margin: 0 auto;
-     /* padding-right: 270px; Width of page-right + some extra space */
+    padding-right: 270px; Width of page-right + some extra space */
 }
-
 .page-right {
     position: fixed;
     left: calc(50% + 410px);
 }
-#form-date {
-    background: chocolate;
-    padding: 1em;
-    border-radius: 0.5em;
-    flex-basis: 100%;
-    display: flex;
-    box-shadow: 0 2px 4px #000;
-}
 
+.page-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-right: 20px;
+}
 /* Styles for larger desktops */
 @media (min-width: 1200px) {
     /* Your styles for larger screens */
+
+  }
+  @media (max-width: 1450px) {
+    .page-left {
+        width: 300px;
+    }
   }
   
   /* Styles for medium-sized screens (tablets and smaller desktops) */
   @media (max-width: 1199px) {
-    /* Your styles for medium screens */
   }
-  
   /* Styles for smaller tablets and mobile */
   @media (max-width: 991px) {
-    /* Your styles for smaller screens */
   }
 
-/* options */
-.options {
-    position: absolute;
-    float: left;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-@media (max-width: 990px) {
+  /* Styles for smaller tablets and mobile */
+@media (max-width: 1100px) {
     .page-container {
         justify-content: center;
       }
-    .options {
+    .page-left {
+        width: 100%;
         padding-top: 5em;
         align-items: center;
+        padding-right: 0px;
     }
     .page-center {
-      padding-top: 20em;
+        position: absolute;
+        padding-top: 20em;
     }
     .page-right {
             /* For top positioning */
@@ -85,7 +81,29 @@ justify-content: space-between;
         height: auto; /* Height will adjust to content */
         max-height: 50vh; /* Limit to half the viewport height */
     }
+    #form-date {
+        justify-content: center;
+        text-align: center;
+    }
   }
+  /* end: main components of page */
+
+
+.page-container {
+display: flex;
+/* justify-content: space-between; */
+}
+
+
+#form-date {
+    background: chocolate;
+    padding: 1em;
+    border-radius: 0.5em;
+    flex-basis: 100%;
+    display: flex;
+    box-shadow: 0 2px 4px #000;
+}
+
 .dark-mode svg {
     stroke: #fff;
 }
