@@ -204,15 +204,25 @@ label#darkModeLabel::after {
     color: chocolate; /* before: burlywood */
 }
 
-/* page title */
+/* page title or About title page */
 h1#logo-text {
     text-align: left;
     margin-bottom: 20px;
 }
-.light-mode h1#logo-text  {
+.light-mode h1#logo-text {
     color: #000;
 }
-.dark-mode h1#logo-text  {
+.dark-mode h1#logo-text {
+    color: #fff;
+}
+h1.about {
+    text-align: left;
+    margin-bottom: 20px;
+}
+.light-mode h1.about {
+    color: #000;
+}
+.dark-mode h1.about {
     color: #fff;
 }
 /* text: date title */

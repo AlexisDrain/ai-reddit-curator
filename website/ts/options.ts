@@ -1,26 +1,36 @@
-/*
-export interface OptionsConfig {
-    theme: 'light' | "dark";
-};
+// using tutorial from https://www.youtube.com/watch?v=S-T9XoCMwt4
 
-export const defaultOptions : OptionsConfig {
-    theme = "dark"
-};
-*/
 const body = document.body;
 
-// init page: set dark mode
-// body.classList.toggle('dark-mode'); // this is now done in index.html
-
 // options button toggle
-// using tutorial from https://www.youtube.com/watch?v=S-T9XoCMwt4
 const darkModeToggle = document.getElementById('darkModeToggle') as HTMLInputElement | null;
+
+// load dark-mode setting
+let themeDark = localStorage.getItem('theme-dark');
+if(themeDark == "true") {
+  body.classList.toggle('dark-mode', true);
+  body.classList.toggle('light-mode', false);
+} else if(themeDark == "false") {
+  body.classList.toggle('dark-mode', false);
+  body.classList.toggle('light-mode', true);
+}
 darkModeToggle.checked = body.classList.contains('dark-mode');
 
+// click listener event
 const toggleDarkMode = (event: Event) => {
   // event.preventDefault(); // Prevent default behavior // Alexis: this makes the toggle button stuck at dark-mode for some reason
-  body.classList.toggle('dark-mode');
-  body.classList.toggle('light-mode');
+
+  if(themeDark == "true") {
+    themeDark = "false";
+    body.classList.toggle('dark-mode', false);
+    body.classList.toggle('light-mode', true);
+  } else if(themeDark == "false") {
+    themeDark = "true";
+    body.classList.toggle('dark-mode', true);
+    body.classList.toggle('light-mode', false);
+  }
+
+  localStorage.setItem("theme-dark", themeDark);
 };
 
 darkModeToggle.addEventListener('click', toggleDarkMode);
