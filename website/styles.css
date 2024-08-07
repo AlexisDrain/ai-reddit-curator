@@ -383,3 +383,19 @@ h4 {
 .dark-mode h4  {
     color: #fff;
 }
+
+
+/* about page */
+.about-card-container {
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px #555;
+  }
+  .light-mode  .about-card-container  {
+    background: antiquewhite;
+  }
+  .dark-mode  .about-card-container  {
+    background: #346;
+  }
+  
+  
