@@ -314,6 +314,12 @@ p {
     color: #a5a5a5;
 }
 
+.card-playButton {
+    width: 100%;
+    /* height: 100%; */
+}
+
+
 /* long text card */
 .light-mode .card-selftext {
     color: #555;
@@ -324,8 +330,24 @@ p {
 
 .card-claudeReason {
     font-size: 14px;
+}
+.light-mode .card-claudeReason {
+    color: chocolate;
+}
+.dark-mode .card-claudeReason {
+    color: chocolate;
+}
+.card-warning {
+    font-size: 16px;
     color: cornflowerblue;
 }
+.light-mode .card-warning {
+    color: #000;
+}
+.dark-mode .card-warning {
+    color: #fff;
+}
+
 
 
 /* big card */

@@ -18,5 +18,7 @@ Another advantage that we have over reddit is that we can grab the best content 
 
 ### Credits:  
 Icons from https://iconsvg.xyz/  
+chevron-right.svg  
+play-circle.svg  
 settings.svg  
 lock.svg  

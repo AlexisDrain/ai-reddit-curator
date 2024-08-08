@@ -7,16 +7,61 @@ function createCards(cardsToCreate, cards) {
     cardsToCreate.forEach(card => {
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
-        const cardUnlock = document.createElement('div');
-        cardUnlock.classList.add('card-unlock');
-        const cardLock = document.createElement('div');
-        cardLock.classList.add('card-lock');
-        /*
-        expand card listener
-        cardElement.addEventListener('click', () => {
-            cardElement.classList.toggle('expanded');
-        });
-        */
+        if (card.url) {
+            if (card.url.includes("//v.redd.it")) {
+                // video
+                cardElement.setAttribute('typeOfCard', "video");
+            }
+            else if (card.url.includes("gallery")) {
+                // series of images
+                cardElement.setAttribute('typeOfCard', "gallery");
+            }
+            else if (card.url.includes("//i.redd.it")) {
+                // image
+                cardElement.setAttribute('typeOfCard', "image");
+            }
+            else {
+                // other links like news
+                cardElement.setAttribute('typeOfCard', "misc");
+            }
+        }
+        const imgContainer = document.createElement('a');
+        imgContainer.classList.add('card-imgContainer');
+        const warningElement = document.createElement('p');
+        warningElement.classList.add('card-warning');
+        if (cardElement.getAttribute('typeOfCard') === "image") {
+            // img.src = resolveImageLink(card.url);
+            const img = document.createElement('img');
+            img.classList.add('card-image');
+            img.src = card.url;
+            imgContainer.href = "https://reddit.com" + card.permalink;
+            imgContainer.appendChild(img);
+        }
+        if (cardElement.getAttribute('typeOfCard') === "gallery") {
+            const img = document.createElement('img');
+            img.classList.add('card-image');
+            img.src = card.galleryFirst;
+            imgContainer.href = "https://reddit.com" + card.permalink;
+            warningElement.textContent = "🌱This is a gallery of images. Click the image to see rest on Reddit!";
+            imgContainer.appendChild(createNextImageSVG());
+            imgContainer.appendChild(img);
+        }
+        if (cardElement.getAttribute('typeOfCard') === "video") {
+            warningElement.textContent = "⚠️This AI is unable to view the content of videos other than the title and thumbnail.";
+            imgContainer.appendChild(createPlayButtonSVG());
+        }
+        // text post.
+        // some of the previous post types combine selftext with images.
+        const selftextElement = document.createElement('p');
+        selftextElement.classList.add('card-selftext');
+        if (card.selftext) {
+            selftextElement.textContent = card.selftext;
+        }
+        const claudeReasonElement = document.createElement('p');
+        claudeReasonElement.classList.add('card-claudeReason');
+        if (card.comment && card.comment !== "") {
+            claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
+        }
         const redditUrlElement = document.createElement('a');
         redditUrlElement.classList.add('card-url');
         if (card.permalink) {
@@ -24,11 +69,6 @@ function createCards(cardsToCreate, cards) {
             const regex = /^(\/r\/[^\/]+)/;
             redditUrlElement.textContent = card.permalink.match(regex)[1] + " - 15 hr. ago - By u/someName";
         }
-        /*
-        const metaElement = document.createElement('h2');
-        metaElement.classList.add('card-meta');
-        metaElement.textContent = card.metaInfo + ". 15hr. ago";
-        */
         const ratingElement = document.createElement('div');
         ratingElement.classList.add('card-rating');
         if (card.rating) {
@@ -40,45 +80,28 @@ function createCards(cardsToCreate, cards) {
         if (card.title) {
             titleElement.textContent = card.title;
         }
-        // text post
-        const selftextElement = document.createElement('p');
-        selftextElement.classList.add('card-selftext');
-        if (card.selftext) {
-            selftextElement.textContent = card.selftext;
-        }
-        // image post
-        const imgContainer = document.createElement('a');
-        imgContainer.classList.add('card-imgContainer');
-        const img = document.createElement('img');
-        img.classList.add('card-image');
-        if (card.url && !card.selftext) {
-            if (card.url.includes("//v.redd.it")) { // video
-            }
-            else if (card.url.includes("gallery")) { // series of images
-            }
-            else if (card.url.includes("//i.redd.it")) { // images
-                // img.src = resolveImageLink(card.url);
-                img.src = card.url;
-                imgContainer.href = "https://reddit.com" + card.permalink;
-            }
-            else { // other links like news
-            }
-            imgContainer.appendChild(img);
-        }
-        const claudeReasonElement = document.createElement('p');
-        claudeReasonElement.classList.add('card-claudeReason');
-        if (card.comment && card.comment !== "") {
-            claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
-        }
-        cardUnlock.appendChild(redditUrlElement);
-        cardUnlock.appendChild(titleElement);
-        cardUnlock.appendChild(ratingElement);
-        cardUnlock.appendChild(claudeReasonElement);
-        cardUnlock.appendChild(selftextElement);
-        cardUnlock.appendChild(imgContainer);
-        cardElement.appendChild(cardUnlock);
-        cardElement.appendChild(cardLock);
+        cardElement.appendChild(redditUrlElement);
+        cardElement.appendChild(titleElement);
+        cardElement.appendChild(ratingElement);
+        cardElement.appendChild(claudeReasonElement);
+        cardElement.appendChild(warningElement);
+        cardElement.appendChild(selftextElement);
+        cardElement.appendChild(imgContainer);
         cards.appendChild(cardElement);
+        /* remnant from a feature that hides elements under a certain rating
+        const cardUnlock = document.createElement('div');
+        cardUnlock.classList.add('card-unlock');
+
+        const cardLock = document.createElement('div');
+        cardLock.classList.add('card-lock');
+
+        expand card listener
+        cardElement.addEventListener('click', () => {
+            cardElement.classList.toggle('expanded');
+        });
+        // cardElement.appendChild(cardUnlock);
+        // cardElement.appendChild(cardLock);
+        */
     });
     noDataMessageText.innerHTML = "You've reached the end of this Reddit day! You may pick another date.";
 }
@@ -91,6 +114,49 @@ function sortCards(cards) {
     });
     // Reappend the sorted elements
     cardsArray.forEach(card => cards.appendChild(card));
+}
+function createPlayButtonSVG() {
+    // Create the SVG element
+    const playButton = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    playButton.classList.add('card-playButton');
+    playButton.setAttribute("width", "100");
+    playButton.setAttribute("height", "100");
+    playButton.setAttribute("viewBox", "0 0 24 24");
+    playButton.setAttribute("fill", "none");
+    playButton.setAttribute("stroke", "#000000");
+    playButton.setAttribute("stroke-width", "1.5");
+    playButton.setAttribute("stroke-linecap", "round");
+    playButton.setAttribute("stroke-linejoin", "round");
+    // Create the circle element
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", "12");
+    circle.setAttribute("cy", "12");
+    circle.setAttribute("r", "10");
+    // Create the polygon element
+    const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    polygon.setAttribute("points", "10 8 16 12 10 16 10 8");
+    // Append circle and polygon to the SVG
+    playButton.appendChild(circle);
+    playButton.appendChild(polygon);
+    return playButton;
+}
+function createNextImageSVG() {
+    // Create the SVG element
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", "100");
+    svg.setAttribute("height", "100");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke", "#000000");
+    svg.setAttribute("stroke-width", "1.5");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+    // Create the path element
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M9 18l6-6-6-6");
+    // Append path to the SVG
+    svg.appendChild(path);
+    return svg;
 }
 // debug: prototype to load a json
 async function loadData(date) {
@@ -165,4 +231,7 @@ export function main() {
     });
 }
 // init page
-window.onload = DateChanger.callDefaultDate; // script.ts main() is called there. Done this way so that we get the date before the page loads
+// window.onload = DateChanger.callDefaultDate
+document.addEventListener('DOMContentLoaded', function () {
+    DateChanger.callDefaultDate(); // script.ts main() is called there. Done this way so that we get the date before the page loads
+});
