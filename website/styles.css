@@ -186,9 +186,12 @@ label#darkModeLabel::after {
 
 
 
-/* links */
+/* link colors from Wikipedia */
+a {
+    color: #6d8af2;
+}
 .dark-mode a:visited  {
-    color: steelblue;
+    color: #977dbd;
   }
 
 /* Claude Rating */
