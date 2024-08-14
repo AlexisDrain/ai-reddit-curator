@@ -263,12 +263,7 @@ function linkifyText(text: string): string {
 
   // Replace URLs with anchor tags
   return text.replace(urlRegex, (url) => {
-    let displayUrl = url;
-    // Optionally truncate long URLs for display
-    if (url.length > 50) {
-      displayUrl = url.substring(0, 47) + '...';
-    }
-    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>`;
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
   });
 }
 
