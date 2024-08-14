@@ -19,7 +19,7 @@ darkModeToggle.checked = body.classList.contains('dark-mode');
 // click listener event
 const toggleDarkMode = (event: Event) => {
   // event.preventDefault(); // Prevent default behavior // Alexis: this makes the toggle button stuck at dark-mode for some reason
-
+  console.log("toggle dark mode");
   if(themeDark == "true") {
     themeDark = "false";
     body.classList.toggle('dark-mode', false);
