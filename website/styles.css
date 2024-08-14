@@ -136,6 +136,12 @@ display: flex;
 .light-mode svg {
     stroke: #000;
 }
+.dark-mode .svg-always-light {
+    stroke: #fff;
+}
+.light-mode .svg-always-light {
+    stroke: #fff;
+}
 
 
 /* darkmode toggle checkbox */
@@ -331,8 +337,13 @@ p {
     width: 100%;
     /* height: 100%; */
 }
-.card-playButton {
-    width: 100%;
+.card-video-playButton {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    translate: 50% -50%;
+    border-radius: 1000px;
+    background-color: black;
     /* height: 100%; */
 }
 

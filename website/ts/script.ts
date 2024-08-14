@@ -61,6 +61,8 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         imgContainer.appendChild(img);
       }
       if (cardElement.getAttribute('typeOfCard') === "gallery") {
+        warningElement.textContent = "🌱 This is a gallery of images. Click the image to see rest on Reddit!";
+
         const cardImageWrapper = document.createElement("div");
         cardImageWrapper.classList.add("card-image-wrapper");
 
@@ -73,8 +75,6 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         
         imgContainer.href = "https://reddit.com"+ card.permalink;
         imgContainer.appendChild(cardImageWrapper);
-
-        warningElement.textContent = "🌱 This is a gallery of images. Click the image to see rest on Reddit!";
       }
       if (cardElement.getAttribute('typeOfCard') === "video") {
         warningElement.textContent = "⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
@@ -181,7 +181,7 @@ function sortCards(cards : HTMLElement | null) {
 function createPlayButtonSVG() : SVGSVGElement {
   // Create the SVG element
   const playButton = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  playButton.classList.add('card-playButton');
+  playButton.classList.add('card-video-playButton', "svg-always-light");
   playButton.setAttribute("width", "100");
   playButton.setAttribute("height", "100");
   playButton.setAttribute("viewBox", "0 0 24 24");
@@ -200,6 +200,7 @@ function createPlayButtonSVG() : SVGSVGElement {
   // Create the polygon element
   const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
   polygon.setAttribute("points", "10 8 16 12 10 16 10 8");
+  polygon.setAttribute("fill", "white");
 
   // Append circle and polygon to the SVG
   playButton.appendChild(circle);
@@ -210,7 +211,8 @@ function createPlayButtonSVG() : SVGSVGElement {
 function createNextImageSVG(): HTMLElement {
   // Create the SVG element
   const arrowContainer = document.createElement("div");
-  arrowContainer.className = "button-arrowContainer";
+  arrowContainer.classList.add('button-arrowContainer', "svg-always-light");
+  
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("width", "100");
   svg.setAttribute("height", "100");
