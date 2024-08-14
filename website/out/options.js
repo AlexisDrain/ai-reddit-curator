@@ -3,16 +3,28 @@ const body = document.body;
 // options button toggle
 const darkModeToggle = document.getElementById('darkModeToggle');
 // load dark-mode setting
-let themeDark = localStorage.getItem('theme-dark');
-if (themeDark == "true") {
-    body.classList.toggle('dark-mode', true);
-    body.classList.toggle('light-mode', false);
+let themeDark;
+try {
+    themeDark = localStorage.getItem('theme-dark');
+    if (themeDark === null) {
+        console.log("Item 'theme-dark' not found in localStorage");
+    }
+    else {
+        console.log("Retrieved 'theme-dark' from localStorage:", themeDark);
+        if (themeDark == "true") {
+            body.classList.toggle('dark-mode', true);
+            body.classList.toggle('light-mode', false);
+        }
+        else if (themeDark == "false") {
+            body.classList.toggle('dark-mode', false);
+            body.classList.toggle('light-mode', true);
+        }
+        darkModeToggle.checked = body.classList.contains('dark-mode');
+    }
 }
-else if (themeDark == "false") {
-    body.classList.toggle('dark-mode', false);
-    body.classList.toggle('light-mode', true);
+catch (error) {
+    console.error("Error accessing localStorage:", error);
 }
-darkModeToggle.checked = body.classList.contains('dark-mode');
 // click listener event
 const toggleDarkMode = (event) => {
     // event.preventDefault(); // Prevent default behavior // Alexis: this makes the toggle button stuck at dark-mode for some reason
@@ -22,7 +34,7 @@ const toggleDarkMode = (event) => {
         body.classList.toggle('dark-mode', false);
         body.classList.toggle('light-mode', true);
     }
-    else if (themeDark == "false") {
+    else {
         themeDark = "true";
         body.classList.toggle('dark-mode', true);
         body.classList.toggle('light-mode', false);

@@ -6,15 +6,27 @@ const body = document.body;
 const darkModeToggle = document.getElementById('darkModeToggle') as HTMLInputElement | null;
 
 // load dark-mode setting
-let themeDark = localStorage.getItem('theme-dark');
-if(themeDark == "true") {
-  body.classList.toggle('dark-mode', true);
-  body.classList.toggle('light-mode', false);
-} else if(themeDark == "false") {
-  body.classList.toggle('dark-mode', false);
-  body.classList.toggle('light-mode', true);
+let themeDark: string | null;
+try {
+  themeDark = localStorage.getItem('theme-dark');
+  
+  if (themeDark === null) {
+    console.log("Item 'theme-dark' not found in localStorage");
+  } else {
+    console.log("Retrieved 'theme-dark' from localStorage:", themeDark);
+
+    if(themeDark == "true") {
+      body.classList.toggle('dark-mode', true);
+      body.classList.toggle('light-mode', false);
+    } else if(themeDark == "false") {
+      body.classList.toggle('dark-mode', false);
+      body.classList.toggle('light-mode', true);
+    }
+    darkModeToggle.checked = body.classList.contains('dark-mode');
+  }
+} catch (error) {
+  console.error("Error accessing localStorage:", error);
 }
-darkModeToggle.checked = body.classList.contains('dark-mode');
 
 // click listener event
 const toggleDarkMode = (event: Event) => {
@@ -24,7 +36,7 @@ const toggleDarkMode = (event: Event) => {
     themeDark = "false";
     body.classList.toggle('dark-mode', false);
     body.classList.toggle('light-mode', true);
-  } else if(themeDark == "false") {
+  } else {
     themeDark = "true";
     body.classList.toggle('dark-mode', true);
     body.classList.toggle('light-mode', false);
