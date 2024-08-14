@@ -13,6 +13,7 @@ interface RedditPost {
   url?: string;  // this is an image in Reddit speak
   selftext?: string;  // this is a text post in Reddit speak
   galleryFirst?: string; // this is the first image in a gallery of images
+  videoThumbnail?: string; // for video posts
 }
 
 
@@ -60,17 +61,36 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         imgContainer.appendChild(img);
       }
       if (cardElement.getAttribute('typeOfCard') === "gallery") {
+        const cardImageWrapper = document.createElement("div");
+        cardImageWrapper.classList.add("card-image-wrapper");
+
         const img = document.createElement('img');
         img.classList.add('card-image');
         img.src = card.galleryFirst;
+        
+        cardImageWrapper.appendChild(img);
+        cardImageWrapper.appendChild(createNextImageSVG());
+        
         imgContainer.href = "https://reddit.com"+ card.permalink;
-        warningElement.textContent = "🌱This is a gallery of images. Click the image to see rest on Reddit!";
-        imgContainer.appendChild(createNextImageSVG());
-        imgContainer.appendChild(img);
+        imgContainer.appendChild(cardImageWrapper);
+
+        warningElement.textContent = "🌱 This is a gallery of images. Click the image to see rest on Reddit!";
       }
       if (cardElement.getAttribute('typeOfCard') === "video") {
-        warningElement.textContent = "⚠️This AI is unable to view the content of videos other than the title and thumbnail.";
-        imgContainer.appendChild(createPlayButtonSVG());
+        warningElement.textContent = "⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
+
+        const cardVideoWrapper = document.createElement("div");
+        cardVideoWrapper.classList.add("card-image-wrapper");
+
+        const videoThumbnail = document.createElement('img');
+        videoThumbnail.classList.add('card-video-thumbnail');
+        videoThumbnail.src = card.videoThumbnail;
+
+        cardVideoWrapper.appendChild(videoThumbnail);
+        cardVideoWrapper.appendChild(createPlayButtonSVG());
+
+        imgContainer.href = "https://reddit.com"+ card.permalink;
+        imgContainer.appendChild(cardVideoWrapper);
       }
 
       // text post.
@@ -78,7 +98,8 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
       const selftextElement = document.createElement('p');
       selftextElement.classList.add('card-selftext');
       if(card.selftext) {
-          selftextElement.textContent = card.selftext;
+        card.selftext = linkifyText(card.selftext);
+          selftextElement.innerHTML = card.selftext;
 
       }
 
@@ -186,12 +207,14 @@ function createPlayButtonSVG() : SVGSVGElement {
 
   return playButton;
 }
-function createNextImageSVG(): SVGSVGElement {
+function createNextImageSVG(): HTMLElement {
   // Create the SVG element
+  const arrowContainer = document.createElement("div");
+  arrowContainer.className = "button-arrowContainer";
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("width", "100");
   svg.setAttribute("height", "100");
-  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("viewBox", "-0.5 0 24 24");
   svg.setAttribute("fill", "none");
   svg.setAttribute("stroke", "#000000");
   svg.setAttribute("stroke-width", "1.5");
@@ -204,8 +227,8 @@ function createNextImageSVG(): SVGSVGElement {
 
   // Append path to the SVG
   svg.appendChild(path);
-
-  return svg;
+  arrowContainer.appendChild(svg);
+  return arrowContainer;
 }
 
 // debug: prototype to load a json
@@ -234,8 +257,24 @@ function cardContainerDestroyAll(cards : HTMLElement | null) {
   cards.innerHTML = "";
 }
 
-let weservAvailable : boolean = false;
+function linkifyText(text: string): string {
+  // Regular expression to match URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
 
+  // Replace URLs with anchor tags
+  return text.replace(urlRegex, (url) => {
+    let displayUrl = url;
+    // Optionally truncate long URLs for display
+    if (url.length > 50) {
+      displayUrl = url.substring(0, 47) + '...';
+    }
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>`;
+  });
+}
+
+
+/*  delete this if there are no cookies generated  */
+let weservAvailable : boolean = false;
 function checkWeservAvailability(timeout = 5000) {
   return new Promise((resolve, reject) => {
       const testImage = new Image();
