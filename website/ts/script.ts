@@ -185,7 +185,7 @@ function createPlayButtonSVG() : SVGSVGElement {
   playButton.setAttribute("width", "100");
   playButton.setAttribute("height", "100");
   playButton.setAttribute("viewBox", "0 0 24 24");
-  playButton.setAttribute("fill", "none");
+  playButton.setAttribute("fill", "black");
   playButton.setAttribute("stroke", "#000000");
   playButton.setAttribute("stroke-width", "1.5");
   playButton.setAttribute("stroke-linecap", "round");

@@ -8,9 +8,17 @@ try {
     themeDark = localStorage.getItem('theme-dark');
     if (themeDark === null) {
         console.log("Item 'theme-dark' not found in localStorage");
+        // save the bool for the user
+        themeDark = "true";
+        localStorage.setItem("theme-dark", themeDark);
+        // added to the body
+        body.classList.toggle('dark-mode', true);
+        body.classList.toggle('light-mode', false);
+        darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
     }
     else {
         console.log("Retrieved 'theme-dark' from localStorage:", themeDark);
+        // added to the body
         if (themeDark == "true") {
             body.classList.toggle('dark-mode', true);
             body.classList.toggle('light-mode', false);
@@ -19,7 +27,7 @@ try {
             body.classList.toggle('dark-mode', false);
             body.classList.toggle('light-mode', true);
         }
-        darkModeToggle.checked = body.classList.contains('dark-mode');
+        darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
     }
 }
 catch (error) {
@@ -39,6 +47,7 @@ const toggleDarkMode = (event) => {
         body.classList.toggle('dark-mode', true);
         body.classList.toggle('light-mode', false);
     }
+    darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
     localStorage.setItem("theme-dark", themeDark);
 };
 darkModeToggle.addEventListener('click', toggleDarkMode);

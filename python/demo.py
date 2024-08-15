@@ -11,6 +11,8 @@ from score_extract import extract_tags, combine_claude_reddit_crawl
 
 posts_reddit = get_posts() # this is the 100 posts from reddit
 
+# posts_reddit = get_posts(10, "CrosspostNudes") # test
+
 prompt = get_prompt(posts_reddit) # this converts the posts into the prompt
 
 claude_sample = basic_sample(prompt) # this returns the message from Claude
