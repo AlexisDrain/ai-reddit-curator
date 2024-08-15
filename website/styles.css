@@ -402,6 +402,9 @@ p {
 .about {
     text-align: left;
 }
+.page-about {
+    min-width: 400px;
+}
 
 
 /* logo */

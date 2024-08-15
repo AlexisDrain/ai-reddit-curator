@@ -11,7 +11,7 @@ try {
   themeDark = localStorage.getItem('theme-dark');
   
   if (themeDark === null) {
-    console.log("Item 'theme-dark' not found in localStorage");
+    console.log("Item 'theme-dark' not found in localStorage. Set to true (dark)");
     
     // save the bool for the user
     themeDark = "true";
