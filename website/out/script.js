@@ -44,8 +44,10 @@ function createCards(cardsToCreate, cards) {
             const img = document.createElement('img');
             img.classList.add('card-image');
             img.src = card.galleryFirst;
+            img.addEventListener('load', function () {
+                cardImageWrapper.appendChild(createNextImageSVG());
+            });
             cardImageWrapper.appendChild(img);
-            cardImageWrapper.appendChild(createNextImageSVG());
             imgContainer.href = "https://reddit.com" + card.permalink;
             imgContainer.appendChild(cardImageWrapper);
         }
@@ -53,11 +55,13 @@ function createCards(cardsToCreate, cards) {
             warningElement.textContent = "⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
             const cardVideoWrapper = document.createElement("div");
             cardVideoWrapper.classList.add("card-image-wrapper");
-            const videoThumbnail = document.createElement('img');
-            videoThumbnail.classList.add('card-video-thumbnail');
-            videoThumbnail.src = card.videoThumbnail;
-            cardVideoWrapper.appendChild(videoThumbnail);
-            cardVideoWrapper.appendChild(createPlayButtonSVG());
+            const videoThumbnailImg = document.createElement('img');
+            videoThumbnailImg.classList.add('card-video-thumbnail');
+            videoThumbnailImg.src = card.videoThumbnail;
+            videoThumbnailImg.addEventListener('load', function () {
+                cardVideoWrapper.appendChild(createPlayButtonSVG());
+            });
+            cardVideoWrapper.appendChild(videoThumbnailImg);
             imgContainer.href = "https://reddit.com" + card.permalink;
             imgContainer.appendChild(cardVideoWrapper);
         }
@@ -158,11 +162,12 @@ function createNextImageSVG() {
     const arrowContainer = document.createElement("div");
     arrowContainer.classList.add('button-arrowContainer', "svg-always-light");
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.classList.add("svg-always-light");
     svg.setAttribute("width", "100");
     svg.setAttribute("height", "100");
     svg.setAttribute("viewBox", "-0.5 0 24 24");
     svg.setAttribute("fill", "none");
-    svg.setAttribute("stroke", "#000000");
+    svg.setAttribute("stroke", "#fff");
     svg.setAttribute("stroke-width", "1.5");
     svg.setAttribute("stroke-linecap", "round");
     svg.setAttribute("stroke-linejoin", "round");
