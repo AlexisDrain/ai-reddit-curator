@@ -24,7 +24,7 @@ def write_date_in_index_file():
                     file.seek(-2, 1)  # ...jump back two bytes and read again
                 last_line = file.readline().decode().strip()
                 if content.find(last_line) != -1:
-                    print(f"new line `{content}` already exists as the last line in the file.")
+                    print(f"`{content}` new line already exists as the last line in the file.")
                     return False
             except OSError:
                 # File is too small, has only one line, or other issue

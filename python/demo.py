@@ -27,9 +27,8 @@ claude_data = parse_enumerated_list(claude_sample) # get the scores from claude 
 
 combined_data = combine_claude_reddit_crawl(claude_data, posts_reddit) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
-current_date = datetime.now().strftime('%Y-%m-%d') # name the file
-
 # write the file inside dailyData
+current_date = datetime.now().strftime('%Y-%m-%d') # name the file
 output_dir = Path('../website/dailyData')
 output_dir.mkdir(parents=True, exist_ok=True)
 output_file = output_dir / f'{current_date}.json'

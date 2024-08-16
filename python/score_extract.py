@@ -120,11 +120,15 @@ def combine_claude_reddit_crawl(
     reddit_posts = deepcopy(reddit_posts)
 
     # print(combined_posts[0])
-    # print(reddit_posts[0])
+    print(reddit_posts[0])
     for scored_post, full_post in zip(combined_posts, reddit_posts, strict=True):
         scored_post.update({
-            k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext"]
+            k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext", "thumbnail", "over_18"]
         })
+
+        # For videos: Add the fallback_url if it exists
+        if full_post["data"].get("media") and full_post["data"]["media"].get("reddit_video"):
+            scored_post["fallback_url"] = full_post["data"]["media"]["reddit_video"].get("fallback_url")
 
     return combined_posts
 

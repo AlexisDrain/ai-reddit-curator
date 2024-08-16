@@ -13,7 +13,9 @@ interface RedditPost {
   url?: string;  // this is an image in Reddit speak
   selftext?: string;  // this is a text post in Reddit speak
   galleryFirst?: string; // this is the first image in a gallery of images
-  videoThumbnail?: string; // for video posts
+  thumbnail?: string; // for video posts or news posts
+  fallback_url?: string; // this is the video url .mp4
+  over_18?: string; // nsfw posts
 }
 
 
@@ -86,7 +88,15 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
         const videoThumbnailImg = document.createElement('img');
         videoThumbnailImg.classList.add('card-video-thumbnail');
-        videoThumbnailImg.src = card.videoThumbnail;
+        videoThumbnailImg.src = card.thumbnail;
+        
+        const video = document.createElement('video');
+        video.classList.add("hidden-video");
+        video.src = card.fallback_url;
+        video.addEventListener('click', () => {
+          video.play();
+        });
+        imgContainer.appendChild(video);
 
         videoThumbnailImg.addEventListener('load', function() {
           cardVideoWrapper.appendChild(createPlayButtonSVG());
@@ -95,6 +105,16 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         
         imgContainer.href = "https://reddit.com"+ card.permalink;
         imgContainer.appendChild(cardVideoWrapper);
+      }
+      if (cardElement.getAttribute('typeOfCard') === "misc") {
+        // img.src = resolveImageLink(card.url);
+        warningElement.textContent = "📞 This post is a link to external site!";
+
+        const img = document.createElement('img');
+        img.classList.add('card-image');
+        img.src = card.thumbnail;
+        imgContainer.href = "https://reddit.com"+ card.permalink;
+        imgContainer.appendChild(img);
       }
 
       // text post.

@@ -57,13 +57,29 @@ function createCards(cardsToCreate, cards) {
             cardVideoWrapper.classList.add("card-image-wrapper");
             const videoThumbnailImg = document.createElement('img');
             videoThumbnailImg.classList.add('card-video-thumbnail');
-            videoThumbnailImg.src = card.videoThumbnail;
+            videoThumbnailImg.src = card.thumbnail;
+            const video = document.createElement('video');
+            video.classList.add("hidden-video");
+            video.src = card.fallback_url;
+            video.addEventListener('click', () => {
+                video.play();
+            });
+            imgContainer.appendChild(video);
             videoThumbnailImg.addEventListener('load', function () {
                 cardVideoWrapper.appendChild(createPlayButtonSVG());
             });
             cardVideoWrapper.appendChild(videoThumbnailImg);
             imgContainer.href = "https://reddit.com" + card.permalink;
             imgContainer.appendChild(cardVideoWrapper);
+        }
+        if (cardElement.getAttribute('typeOfCard') === "misc") {
+            // img.src = resolveImageLink(card.url);
+            warningElement.textContent = "📞 This post is a link to external site!";
+            const img = document.createElement('img');
+            img.classList.add('card-image');
+            img.src = card.thumbnail;
+            imgContainer.href = "https://reddit.com" + card.permalink;
+            imgContainer.appendChild(img);
         }
         // text post.
         // some of the previous post types combine selftext with images.
