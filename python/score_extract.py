@@ -119,12 +119,12 @@ def combine_claude_reddit_crawl(
     combined_posts = deepcopy(scored_claude_posts)
     reddit_posts = deepcopy(reddit_posts)
 
-    print(combined_posts[0])
-    print(reddit_posts[0])
+    # print(combined_posts[0])
+    # print(reddit_posts[0])
     for scored_post, full_post in zip(combined_posts, reddit_posts, strict=True):
-        scored_post.update(
-            {k: full_post["data"][k]} for k in ["permalink", "url", "title", "selftext"]
-        )
+        scored_post.update({
+            k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext"]
+        })
 
     return combined_posts
 

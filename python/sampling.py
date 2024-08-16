@@ -81,6 +81,8 @@ Write your scores as an enumerated list, like so:
 2. (second_score)
 3. (third_score)
 etc.
+
+Do NOT add anything else like your reasoning in that list. Make the list ordered in the same order that I gave you.
 """
 
 

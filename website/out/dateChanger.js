@@ -37,7 +37,7 @@ async function fetchMostRecentData() {
         // Parse the JSONL content
         const dataFiles = indexText.trim().split('\n')
             .map(line => JSON.parse(line));
-        return dataFiles[0]['file'];
+        return dataFiles[dataFiles.length - 1]['file'];
     }
     catch (error) {
         console.error('Error:', error);
