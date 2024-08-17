@@ -17,7 +17,7 @@ interface RedditPost {
   galleryFirst?: string; // this is the first image in a gallery of images
   thumbnail?: string; // for video posts or news posts
   fallback_url?: string; // this is the video url .mp4
-  over_18?: string; // nsfw posts
+  // over_18?: boolean; // [removed because of anthropic refusal] nsfw posts
 }
 
 

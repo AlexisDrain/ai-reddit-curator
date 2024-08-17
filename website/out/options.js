@@ -17,7 +17,7 @@ try {
         darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
     }
     else {
-        console.log("Retrieved 'theme-dark' from localStorage:", themeDark);
+        console.log("Retrieved 'theme-dark' from localStorage. var value: ", themeDark);
         // added to the body
         if (themeDark == "true") {
             body.classList.toggle('dark-mode', true);

@@ -65,8 +65,10 @@ def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all")
 
     if response.status_code == 200:
         posts = response.json()["data"]["children"]
-        return posts
-        # for post in posts:
-        #    print(post['data']['title'])
+
+        safe_posts = [post for post in posts if not post['data']['over_18']]
+        return safe_posts
+    
+        # return posts
     else:
         print(f"Request failed with status code: {response.status_code}")

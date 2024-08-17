@@ -1,7 +1,9 @@
 import re
 from copy import deepcopy
 
-test_data = """
+
+
+old_test_data = """
 Here is the list of posts with my ratings and comments:
 
 <post>
@@ -67,7 +69,8 @@ Here is the list of posts with my ratings and comments:
 
 """
 
-
+'''
+# Old. expects the tags above. We moved on to making the sampling a list instead of an XML file
 def extract_tags(fullText):
 
     postPattern = r"<post>(.*?)</post>"
@@ -87,7 +90,7 @@ def extract_tags(fullText):
         posts[i]["comment"] = "No comment"  # comment
 
     return posts
-
+'''
 
 def parse_enumerated_list(claude_sample: str) -> list[int]:
     res = []
@@ -120,11 +123,16 @@ def combine_claude_reddit_crawl(
     reddit_posts = deepcopy(reddit_posts)
 
     # print(combined_posts[0])
-    print(reddit_posts[0])
+    # print(reddit_posts[0])
     for scored_post, full_post in zip(combined_posts, reddit_posts, strict=True):
         scored_post.update({
-            k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext", "thumbnail", "over_18", "link_flair_text", "author"]
+            k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext", "thumbnail", "link_flair_text", "author"]
         })
+
+        # [This is deleted because of anthropic safety]
+        # For NSFW posts
+        # if full_post.get("over_18", False):
+        #     scored_post["over_18"] = True
 
         # For videos: Add the fallback_url if it exists
         if full_post["data"].get("media") and full_post["data"]["media"].get("reddit_video"):
