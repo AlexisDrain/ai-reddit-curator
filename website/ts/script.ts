@@ -8,6 +8,8 @@ const noDataMessageText = document.getElementById('noDataMessage-text');
 interface RedditPost {
   permalink?: string; // link to post, example: r/some_subreddit/asdfasdfasdf
   title?: string; // title of post
+  author?: string // name of user who made the post
+  link_flair_text?: string // flair for post
   rating?: number; // rating by claude
   comment?: string; // comment by claude
   url?: string;  // this is an image in Reddit speak
@@ -138,8 +140,8 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         redditUrlElement.classList.add('card-url');
         if (card.permalink) {
             redditUrlElement.href = "https://reddit.com"+ card.permalink;
-            const regex = /^(\/r\/[^\/]+)/;
-            redditUrlElement.textContent = card.permalink.match(regex)[1] + " - 15 hr. ago - By u/someName";
+            const regex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
+            redditUrlElement.textContent = card.permalink.match(regex)[1] + " - u/" + card.author;
         }
 
 

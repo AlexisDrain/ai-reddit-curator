@@ -123,7 +123,7 @@ def combine_claude_reddit_crawl(
     print(reddit_posts[0])
     for scored_post, full_post in zip(combined_posts, reddit_posts, strict=True):
         scored_post.update({
-            k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext", "thumbnail", "over_18"]
+            k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext", "thumbnail", "over_18", "link_flair_text", "author"]
         })
 
         # For videos: Add the fallback_url if it exists

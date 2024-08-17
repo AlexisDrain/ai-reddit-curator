@@ -11,13 +11,14 @@ from score_extract import extract_tags, parse_enumerated_list, combine_claude_re
 from write_date_in_dailyData import write_date_in_index_file
 
 
+# Grabbing stuf from reddit
 '''
-Grabbing stuf from reddit
-posts_reddit = get_posts(10, "2sentence2horror") # test
+posts_reddit = get_posts(2, "2sentence2horror") # test
 print(posts_reddit)
-'''
 
-posts_reddit = get_posts() # this is the first 10 posts from reddit
+
+'''
+posts_reddit = get_posts() # this is the first 10 posts from r/all reddit
 
 prompt = get_prompt(posts_reddit) # this converts the posts into the prompt
 
@@ -35,10 +36,6 @@ output_file = output_dir / f'{current_date}.json'
 output_file.write_text(json.dumps(combined_data, indent=2))
 
 write_date_in_index_file()
-
-
-
-# Path(f'../website/dailyData/{current_date}.json').write_text(json.dumps(combined_data)) # save the file
 
 
 '''

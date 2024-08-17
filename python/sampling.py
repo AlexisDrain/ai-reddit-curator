@@ -92,7 +92,11 @@ def get_prompt(posts, include_comments=False):
         # posts_str += f"{i+1}. {post['data']['title']}\n{post['data']['url']}\n" # we don't need an index
         # posts_str += f"{post['data']['title']}\n{post['data']['url']}\n{post['data']['permalink']}\n\n" # Claude cannot read data in ['url']
         if not include_comments:
-            posts_str += f"\n<post_{i+1}>\n{post['data']['title']}\n{post['data']['permalink']}\n</post_{i+1}>\n"
+            if not post['data']['link_flair_text']:
+                post['data']['link_flair_text'] = ""
+            else:
+                post['data']['link_flair_text'] = "\nflair: " + post['data']['link_flair_text']
+            posts_str += f"\n<post_{i+1}>\n{post['data']['title']}\n{post['data']['permalink']}{post['data']['link_flair_text']}\n</post_{i+1}>\n"
         else:
             top_comments = get_top_comments(post)
             posts_str += f"\n<post_{i+1}>\n{post['data']['title']}\n{post['data']['permalink']}\nTop Comments:\n{top_comments}\n</post_{i+1}>\n"

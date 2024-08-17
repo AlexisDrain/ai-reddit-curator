@@ -98,8 +98,8 @@ function createCards(cardsToCreate, cards) {
         redditUrlElement.classList.add('card-url');
         if (card.permalink) {
             redditUrlElement.href = "https://reddit.com" + card.permalink;
-            const regex = /^(\/r\/[^\/]+)/;
-            redditUrlElement.textContent = card.permalink.match(regex)[1] + " - 15 hr. ago - By u/someName";
+            const regex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
+            redditUrlElement.textContent = card.permalink.match(regex)[1] + " - u/" + card.author;
         }
         const ratingElement = document.createElement('div');
         ratingElement.classList.add('card-rating');
