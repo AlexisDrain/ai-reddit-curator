@@ -243,13 +243,27 @@ label {
 .dark-mode label  {
     color: #fff; /* just in case I need to color it late. I think it should be white to accomidate the browser 'date' input which is normally white */
 }
-/* text:*/
+/* text
+
 p {
 }
+*/
 .light-mode p  {
     color: #000;
 }
 .dark-mode p  {
+    color: #fff;
+}
+
+/* used only for r/ and u/
+
+span {
+}
+*/
+.light-mode span  {
+    color: #000;
+}
+.dark-mode span  {
     color: #fff;
 }
 

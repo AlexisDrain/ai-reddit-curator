@@ -18,7 +18,7 @@ print(posts_reddit)
 
 
 '''
-posts_reddit = get_posts() # this is the first 10 posts from r/all reddit
+posts_reddit = get_posts(10, "videos") # this is the first 10 posts from r/all reddit
 
 prompt = get_prompt(posts_reddit) # this converts the posts into the prompt
 

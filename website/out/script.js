@@ -62,15 +62,23 @@ function createCards(cardsToCreate, cards) {
             video.classList.add("hidden-video");
             video.src = card.fallback_url;
             video.addEventListener('click', () => {
-                video.play();
+                if (video.paused == true) {
+                    video.controls = true;
+                    video.play();
+                    video.muted = false;
+                }
+                else {
+                    video.pause();
+                    video.muted = true;
+                }
             });
             imgContainer.appendChild(video);
             videoThumbnailImg.addEventListener('load', function () {
                 cardVideoWrapper.appendChild(createPlayButtonSVG());
             });
             cardVideoWrapper.appendChild(videoThumbnailImg);
-            imgContainer.href = "https://reddit.com" + card.permalink;
-            imgContainer.appendChild(cardVideoWrapper);
+            // imgContainer.href = "https://reddit.com"+ card.permalink;
+            // imgContainer.appendChild(cardVideoWrapper);
         }
         if (cardElement.getAttribute('typeOfCard') === "misc") {
             // img.src = resolveImageLink(card.url);
@@ -94,25 +102,46 @@ function createCards(cardsToCreate, cards) {
         if (card.comment && card.comment !== "") {
             claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
         }
+        /*
         const redditUrlElement = document.createElement('a');
         redditUrlElement.classList.add('card-url');
         if (card.permalink) {
-            redditUrlElement.href = "https://reddit.com" + card.permalink;
+            redditUrlElement.href = "https://reddit.com"+ card.permalink;
             const regex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
             redditUrlElement.textContent = card.permalink.match(regex)[1] + " - u/" + card.author;
         }
+            */
+        // subreddet + user line
+        const containerElement = document.createElement('span');
+        // Create the first link element
+        const redditUrlElement1 = document.createElement('a');
+        const regex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
+        redditUrlElement1.textContent = card.permalink.match(regex)[1];
+        redditUrlElement1.href = "https://reddit.com/" + card.permalink.match(regex)[1];
+        // Create the second link element
+        const redditUrlElement2 = document.createElement('a');
+        redditUrlElement2.href = "https://reddit.com/u/" + card.author;
+        redditUrlElement2.textContent = "/u/" + card.author;
+        const separatorText = document.createElement('span');
+        separatorText.textContent = " — ";
+        // Append both link elements to the container
+        containerElement.appendChild(redditUrlElement1);
+        containerElement.appendChild(separatorText);
+        containerElement.appendChild(redditUrlElement2);
         const ratingElement = document.createElement('div');
         ratingElement.classList.add('card-rating');
         if (card.rating) {
             ratingElement.textContent = "AI Rating: " + card.rating.toString() + "/10";
             cardElement.setAttribute('rating', card.rating.toString());
         }
+        // if (card.title) {
         const titleElement = document.createElement('h2');
+        const linkElement = document.createElement('a');
         titleElement.classList.add('card-title');
-        if (card.title) {
-            titleElement.textContent = card.title;
-        }
-        cardElement.appendChild(redditUrlElement);
+        linkElement.textContent = card.title;
+        linkElement.href = "https://reddit.com" + card.permalink;
+        titleElement.appendChild(linkElement);
+        cardElement.appendChild(containerElement);
         cardElement.appendChild(titleElement);
         cardElement.appendChild(ratingElement);
         cardElement.appendChild(claudeReasonElement);
