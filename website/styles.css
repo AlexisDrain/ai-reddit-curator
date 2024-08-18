@@ -199,6 +199,9 @@ a {
 .dark-mode a:visited  {
     color: #977dbd;
   }
+.light-mode a:visited  {
+    color: #977dbd;
+}
 
 /* Claude Rating */
 .card-rating {
