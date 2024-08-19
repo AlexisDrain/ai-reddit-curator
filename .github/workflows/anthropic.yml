@@ -26,12 +26,23 @@ jobs:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       run: python ./python/demo.py
 
-    - name: Check output file
+    - name: Check new output files
       run: |
-        echo "Output file contents:"
-        cat website/dailyData/datesIndex.jsonl
-        echo "File size:"
-        ls -l website/dailyData/datesIndex.jsonl
+        echo "Checking for new files in website/dailyData:"
+        new_files=$(git ls-files --others --exclude-standard website/dailyData/)
+        if [ -z "$new_files" ]; then
+          echo "No new files found."
+        else
+          echo "New files found:"
+          for file in $new_files; do
+            echo "File: $file"
+            echo "Contents:"
+            cat "$file"
+            echo "File size:"
+            ls -l "$file"
+            echo "----------------------"
+          done
+        fi
 
     - name: Configure Git
       run: |
