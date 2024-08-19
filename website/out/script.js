@@ -52,42 +52,47 @@ function createCards(cardsToCreate, cards) {
             imgContainer.appendChild(cardImageWrapper);
         }
         if (cardElement.getAttribute('typeOfCard') === "video") {
-            warningElement.textContent = "⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
+            warningElement.textContent = "📽️⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
             const cardVideoWrapper = document.createElement("div");
             cardVideoWrapper.classList.add("card-image-wrapper");
             const videoThumbnailImg = document.createElement('img');
             videoThumbnailImg.classList.add('card-video-thumbnail');
             videoThumbnailImg.src = card.thumbnail;
+            /*
+            [Deprecated Video because I cannot sync video+audio easily]
+    
             const video = document.createElement('video');
             video.classList.add("hidden-video");
             video.src = card.fallback_url;
             video.addEventListener('click', () => {
-                if (video.paused == true) {
-                    video.controls = true;
-                    video.play();
-                    video.muted = false;
-                }
-                else {
-                    video.pause();
-                    video.muted = true;
-                }
+              if(video.paused == true) {
+                video.controls = true;
+                video.play();
+                video.muted = false;
+              } else {
+                video.pause();
+                video.muted = true;
+              }
             });
             imgContainer.appendChild(video);
+            */
             videoThumbnailImg.addEventListener('load', function () {
                 cardVideoWrapper.appendChild(createPlayButtonSVG());
             });
             cardVideoWrapper.appendChild(videoThumbnailImg);
-            // imgContainer.href = "https://reddit.com"+ card.permalink;
-            // imgContainer.appendChild(cardVideoWrapper);
+            imgContainer.href = "https://reddit.com" + card.permalink;
+            imgContainer.appendChild(cardVideoWrapper);
         }
         if (cardElement.getAttribute('typeOfCard') === "misc") {
             // img.src = resolveImageLink(card.url);
             warningElement.textContent = "📞 This post is a link to external site!";
             const img = document.createElement('img');
             img.classList.add('card-image');
-            img.src = card.thumbnail;
             imgContainer.href = "https://reddit.com" + card.permalink;
-            imgContainer.appendChild(img);
+            if (card.thumbnail != "default") {
+                img.src = card.thumbnail;
+                imgContainer.appendChild(img);
+            }
         }
         // text post.
         // some of the previous post types combine selftext with images.

@@ -15,8 +15,9 @@ interface RedditPost {
   url?: string;  // this is an image in Reddit speak
   selftext?: string;  // this is a text post in Reddit speak
   galleryFirst?: string; // this is the first image in a gallery of images
-  thumbnail?: string; // for video posts or news posts
-  fallback_url?: string; // this is the video url .mp4
+  thumbnail?: string; // for news posts
+  // videoThumbnail?: string; // for video posts hosted on Reddit
+  // dash_url?: string; // this is the video url .mp4
   // over_18?: boolean; // [removed because of anthropic refusal] nsfw posts
 }
 
@@ -83,7 +84,7 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         imgContainer.appendChild(cardImageWrapper);
       }
       if (cardElement.getAttribute('typeOfCard') === "video") {
-        warningElement.textContent = "⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
+        warningElement.textContent = "📽️⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
 
         const cardVideoWrapper = document.createElement("div");
         cardVideoWrapper.classList.add("card-image-wrapper");
@@ -92,6 +93,9 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         videoThumbnailImg.classList.add('card-video-thumbnail');
         videoThumbnailImg.src = card.thumbnail;
         
+        /*
+        [Deprecated Video because I cannot sync video+audio easily]
+
         const video = document.createElement('video');
         video.classList.add("hidden-video");
         video.src = card.fallback_url;
@@ -106,14 +110,14 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
           }
         });
         imgContainer.appendChild(video);
-
+        */
         videoThumbnailImg.addEventListener('load', function() {
           cardVideoWrapper.appendChild(createPlayButtonSVG());
         });
         cardVideoWrapper.appendChild(videoThumbnailImg);
         
-        // imgContainer.href = "https://reddit.com"+ card.permalink;
-        // imgContainer.appendChild(cardVideoWrapper);
+        imgContainer.href = "https://reddit.com"+ card.permalink;
+        imgContainer.appendChild(cardVideoWrapper);
       }
       if (cardElement.getAttribute('typeOfCard') === "misc") {
         // img.src = resolveImageLink(card.url);
@@ -121,9 +125,11 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
         const img = document.createElement('img');
         img.classList.add('card-image');
-        img.src = card.thumbnail;
         imgContainer.href = "https://reddit.com"+ card.permalink;
-        imgContainer.appendChild(img);
+        if(card.thumbnail != "default") {
+            img.src = card.thumbnail;
+            imgContainer.appendChild(img);
+        }
       }
 
       // text post.

@@ -134,9 +134,16 @@ def combine_claude_reddit_crawl(
         # if full_post.get("over_18", False):
         #     scored_post["over_18"] = True
 
+        # [Deprecated Video because I cannot sync video+audio easily]
         # For videos: Add the fallback_url if it exists
-        if full_post["data"].get("media") and full_post["data"]["media"].get("reddit_video"):
-            scored_post["fallback_url"] = full_post["data"]["media"]["reddit_video"].get("fallback_url")
+        if full_post["data"]["is_video"]:
+            try:
+                videoThumbnail = full_post["data"]["preview"]["images"][0]["source"]["url"]
+                videoThumbnail = videoThumbnail.replace("&amp;", "&")
+                scored_post["thumbnail"] = videoThumbnail
+            except (KeyError, IndexError, TypeError):
+                print("video thumbnail not found")
+                pass  # or set a default value if needed
 
     return combined_posts
 

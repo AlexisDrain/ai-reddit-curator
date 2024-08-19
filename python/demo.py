@@ -18,7 +18,9 @@ print(posts_reddit)
 
 
 '''
-posts_reddit = get_posts(10, "videos") # this is the first 10 posts from r/all reddit
+posts_reddit = get_posts(10, "all") # this is the first 10 posts from r/all reddit
+
+# print(json.dumps(posts_reddit, indent=2))
 
 prompt = get_prompt(posts_reddit) # this converts the posts into the prompt
 

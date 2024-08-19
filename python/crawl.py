@@ -66,8 +66,14 @@ def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all")
     if response.status_code == 200:
         posts = response.json()["data"]["children"]
 
-        safe_posts = [post for post in posts if not post['data']['over_18']]
-        return safe_posts
+        # safe_posts = [post for post in posts if not post['data']['over_18']]
+        for i in range(len(posts) - 1, -1, -1):
+            post = posts[i]
+            if post['data']['over_18']:
+                print(f"Removing post {i + 1} (over 18)")
+                posts.pop(i)
+        
+        return posts
     
         # return posts
     else:

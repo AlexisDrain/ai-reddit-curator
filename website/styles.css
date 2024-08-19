@@ -94,6 +94,9 @@ display: flex;
 /* justify-content: space-between; */
 }
 
+video {
+    width: 100%;
+}
 
 /* date picker on right side of screen */
 #form-date {
