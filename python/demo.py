@@ -34,6 +34,7 @@ output_file.write_text(json.dumps(combined_data, indent=2))
 
 write_date_in_index_file()
 
+print(f"Demo.py ran successfully. New file {current_date}.json in {output_dir}")
 
 '''
 Saving data as a test

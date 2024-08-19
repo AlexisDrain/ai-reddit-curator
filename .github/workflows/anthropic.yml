@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.12.4'
     
@@ -29,6 +29,7 @@ jobs:
     - name: Check for changes
       id: git-check
       run: |
+        cd /home/runner/work/Claude-Reddit-Curator/website/dailyData
         git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
 
     - name: Create Pull Request
