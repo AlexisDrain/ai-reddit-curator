@@ -26,15 +26,28 @@ jobs:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       run: python ./python/demo.py
 
+    - name: Check output file
+      run: |
+        echo "Output file contents:"
+        cat website/dailyData/datesIndex.jsonl
+        echo "File size:"
+        ls -l website/dailyData/datesIndex.jsonl
+
+    - name: Configure Git
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+
     - name: Check for changes
       id: git-check
       run: |
-        cd /home/runner/work/Claude-Reddit-Curator/website/dailyData
-        git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+        git add website/dailyData/datesIndex.jsonl
+        git status
+        git diff --staged --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
 
     - name: Create Pull Request
       if: steps.git-check.outputs.changes == 'true'
-      uses: peter-evans/create-pull-request@v6
+      uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Update data from Claude Reddit Curator
