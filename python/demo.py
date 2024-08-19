@@ -11,13 +11,7 @@ from score_extract import parse_enumerated_list, combine_claude_reddit_crawl
 from write_date_in_dailyData import write_date_in_index_file
 
 
-# Grabbing stuf from reddit
-'''
-posts_reddit = get_posts(2, "2sentence2horror") # test
-print(posts_reddit)
 
-
-'''
 posts_reddit = get_posts(10, "all") # this is the first 10 posts from r/all reddit
 
 # print(json.dumps(posts_reddit, indent=2))
