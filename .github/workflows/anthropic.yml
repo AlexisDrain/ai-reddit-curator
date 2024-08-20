@@ -44,8 +44,6 @@ jobs:
           echo "New files found:"
           for file in $new_files; do
             echo "File: $file"
-            echo "Contents:"
-            cat "$file"
             echo "File size:"
             ls -l "$file"
             echo "----------------------"
@@ -60,9 +58,14 @@ jobs:
     - name: Check for changes
       id: git-check
       run: |
+        git add website/dailyData/*.json
         git add website/dailyData/datesIndex.jsonl
+        echo "Git status:"
         git status
+        echo "Git diff:"
+        git diff --staged
         git diff --staged --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
 
     - name: Debug - Environment
       run: |
