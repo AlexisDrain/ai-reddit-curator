@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 from datetime import datetime
 
-
 current_date = datetime.now().strftime('%Y-%m-%d') # name the file
 file_path = Path('../website/dailyData/datesIndex.jsonl')
 content = f'\n{{"file": "{current_date}"}}'
