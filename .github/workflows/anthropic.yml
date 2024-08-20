@@ -26,6 +26,18 @@ jobs:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       run: python ./python/demo.py
 
+
+    - name: Debug - List directory contents
+      run: |
+        echo "Current directory:"
+        pwd
+        echo "Contents of current directory:"
+        ls -R
+        echo "Contents of website/dailyData:"
+        ls -l website/dailyData || echo "Directory not found"
+
+
+
     - name: Check new output files
       run: |
         echo "Checking for new files in website/dailyData:"
@@ -56,6 +68,13 @@ jobs:
         git status
         git diff --staged --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
 
+    - name: Debug - Environment
+      run: |
+        echo "GitHub workspace: $GITHUB_WORKSPACE"
+        echo "GitHub event name: $GITHUB_EVENT_NAME"
+        echo "GitHub repository: $GITHUB_REPOSITORY"
+        echo "GitHub ref: $GITHUB_REF"
+
     - name: Create Pull Request
       if: steps.git-check.outputs.changes == 'true'
       uses: peter-evans/create-pull-request@v5
@@ -68,3 +87,9 @@ jobs:
           It updates the data based on the latest run of the script.
         branch: update-claude-data
         base: main
+
+    - name: Debug - PR Creation
+      if: steps.git-check.outputs.changes == 'true'
+      run: |
+        echo "Pull request creation attempted"
+        echo "Check the Actions tab for any error messages"
