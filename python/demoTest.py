@@ -13,10 +13,12 @@ from write_date_in_dailyData import write_date_in_index_file
 
 
 
-posts_reddit = get_posts(300, "all") # this is the first 10 posts from r/all reddit
+# posts_reddit = get_posts(10, "crosspostNudes", allow_over_18=True) # this is the first 10 posts from r/all reddit
+posts_reddit = get_posts(10)
 
 # print(json.dumps(posts_reddit, indent=2))
 
+'''
 prompt = get_prompt(posts_reddit) # this converts the posts into the prompt
 
 claude_sample = basic_sample(prompt) # this returns the message from Claude
@@ -43,6 +45,7 @@ output_file.write_text(json.dumps(combined_data, indent=2))
 write_date_in_index_file(current_date, output_dir / 'datesIndex.jsonl')
 
 print(f"Demo.py ran successfully. New file {output_file} in {output_dir}")
+'''
 
 '''
 Saving data as a test

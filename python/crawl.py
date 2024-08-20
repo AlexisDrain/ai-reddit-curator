@@ -41,7 +41,7 @@ def get_headers_with_access_token():
     return headers
 
 
-def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all"):
+def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all", allow_over_18=False, allow_crosspost=False):
     """https://www.reddit.com/dev/api#GET_best
     subreddit name "all" as in r/all.
     sort options: hot/best (default), new, top, contravorsial, rising
@@ -66,12 +66,19 @@ def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all")
     if response.status_code == 200:
         posts = response.json()["data"]["children"]
 
-        # safe_posts = [post for post in posts if not post['data']['over_18']]
         for i in range(len(posts) - 1, -1, -1):
             post = posts[i]
-            if post['data']['over_18']:
-                print(f"Removing post {i + 1} (over 18)")
-                posts.pop(i)
+            
+            if allow_over_18 == False:
+                # safe_posts = [post for post in posts if not post['data']['over_18']]
+                if post['data']['over_18']:
+                    print(f"Removing post {i + 1} (over 18)")
+                    posts.pop(i)
+
+            if allow_crosspost == False:
+                if post['data'].get('crosspost_parent_list'):
+                    print(f"Removing post {i + 1} (crosspost)")
+                    posts.pop(i)
         
         return posts
     

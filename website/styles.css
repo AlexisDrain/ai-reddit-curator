@@ -16,7 +16,7 @@ body.dark-mode {
 
 /* start: main components of page */
   .page-center {
-    max-width: 700px;
+    max-width: 600px;
     left: 50%;
     transform: translateX(-50%);
     position: absolute;
@@ -29,7 +29,7 @@ body.dark-mode {
 }
 .page-right {
     position: fixed;
-    left: calc(50% + 410px);
+    left: calc(50% + 360px);
 }
 
 .page-left {
