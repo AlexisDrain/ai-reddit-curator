@@ -29,10 +29,6 @@ jobs:
 
     - name: Debug - List directory contents
       run: |
-        echo "Current directory:"
-        pwd
-        echo "Contents of current directory:"
-        ls -R
         echo "Contents of website/dailyData:"
         ls -l website/dailyData || echo "Directory not found"
 
