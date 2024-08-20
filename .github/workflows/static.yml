@@ -6,6 +6,13 @@ on:
   push:
     branches: ["main"]
 
+  # Runs when the anthropic.yml workflow completes
+  workflow_run:
+    workflows: ["Claude Reddit Curator poster"]
+    types:
+      - completed
+    branches: [main]
+    
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
