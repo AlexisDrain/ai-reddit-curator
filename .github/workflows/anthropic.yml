@@ -58,8 +58,7 @@ jobs:
     - name: Check for changes
       id: git-check
       run: |
-        git add website/dailyData/*.json
-        git add website/dailyData/datesIndex.jsonl
+        git add website/dailyData/*.json website/dailyData/datesIndex.jsonl
         echo "Git status:"
         git status
         echo "Git diff:"
