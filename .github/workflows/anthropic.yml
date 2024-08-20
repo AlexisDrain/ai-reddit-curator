@@ -58,12 +58,21 @@ jobs:
     - name: Check for changes
       id: git-check
       run: |
+        # Stage all changes, including modifications to existing files
         git add website/dailyData/*.json website/dailyData/datesIndex.jsonl
+        
+        # Check if there are any changes staged
+        if [[ -n "$(git diff --staged)" ]]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+          echo "Changes detected:"
+          git diff --staged --name-status
+        else
+          echo "No changes detected"
+        fi
+        
+        # Show overall git status
         echo "Git status:"
         git status
-        echo "Git diff:"
-        git diff --staged
-        git diff --staged --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
 
 
     - name: Debug - Environment
