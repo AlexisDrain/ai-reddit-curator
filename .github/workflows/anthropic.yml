@@ -72,8 +72,14 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # Push the changes to a new branch
-        git push origin HEAD:update-daily-data
+        # Generate a unique branch name
+        branch_name="update-daily-data-$(date +%Y%m%d-%H%M%S)"
+        
+        # Create and switch to the new branch
+        git checkout -b $branch_name
+        
+        # Push the changes to the new branch
+        git push origin $branch_name
 
         # Install GitHub CLI
         type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
@@ -84,7 +90,7 @@ jobs:
         && sudo apt install gh -y
 
         # Create and merge the pull request
-        pr_url=$(gh pr create --title "Update: Daily data from Claude Reddit Curator" --body "Automated update of daily data files." --base main --head update-daily-data)
+        pr_url=$(gh pr create --title "Update: Daily data from Claude Reddit Curator" --body "Automated update of daily data files." --base main --head $branch_name)
         gh pr merge $pr_url --merge --auto
 
     - name: Debug - PR Creation and Merge
