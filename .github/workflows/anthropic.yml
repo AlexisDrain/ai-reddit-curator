@@ -27,14 +27,15 @@ jobs:
       run: python ./python/demo.py
 
 
-    - name: Debug - List directory contents
-      run: |
-        echo "Contents of website/dailyData:"
-        ls -l website/dailyData || echo "Directory not found"
+      
+    #- name: Debug - List directory contents
+    #  run: |
+    #    echo "Contents of website/dailyData:"
+    #    ls -l website/dailyData || echo "Directory not found"
 
 
 
-    - name: Check new output files
+    - name: Debug - Check new output files
       run: |
         echo "Checking for new files in website/dailyData:"
         new_files=$(git ls-files --others --exclude-standard website/dailyData/)
@@ -55,48 +56,39 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
 
-    - name: Check for changes
+    - name: Check for changes and create commit
       id: git-check
       run: |
-        # Stage all changes, including modifications to existing files
         git add website/dailyData/*.json website/dailyData/datesIndex.jsonl
-        
-        # Check if there are any changes staged
         if [[ -n "$(git diff --staged)" ]]; then
           echo "changes=true" >> $GITHUB_OUTPUT
-          echo "Changes detected:"
-          git diff --staged --name-status
+          git commit -m "Update daily data from Claude Reddit Curator"
         else
           echo "No changes detected"
         fi
-        
-        # Show overall git status
-        echo "Git status:"
-        git status
-
-
-    - name: Debug - Environment
-      run: |
-        echo "GitHub workspace: $GITHUB_WORKSPACE"
-        echo "GitHub event name: $GITHUB_EVENT_NAME"
-        echo "GitHub repository: $GITHUB_REPOSITORY"
-        echo "GitHub ref: $GITHUB_REF"
-
-    - name: Create Pull Request
+  
+    - name: Push changes and create/merge PR
       if: steps.git-check.outputs.changes == 'true'
-      uses: peter-evans/create-pull-request@v5
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: Update data from Claude Reddit Curator
-        title: 'Update: Claude Reddit Curator data'
-        body: |
-          This is an automated PR created by the Claude Reddit Curator poster workflow.
-          It updates the data based on the latest run of the script.
-        branch: update-claude-data
-        base: main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Push the changes to a new branch
+        git push origin HEAD:update-daily-data
 
-    - name: Debug - PR Creation
+        # Install GitHub CLI
+        type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+        && sudo apt update \
+        && sudo apt install gh -y
+
+        # Create and merge the pull request
+        pr_url=$(gh pr create --title "Update: Daily data from Claude Reddit Curator" --body "Automated update of daily data files." --base main --head update-daily-data)
+        gh pr merge $pr_url --merge --auto
+
+    - name: Debug - PR Creation and Merge
       if: steps.git-check.outputs.changes == 'true'
       run: |
-        echo "Pull request creation attempted"
-        echo "Check the Actions tab for any error messages"
+        echo "Pull request creation and merge attempted"
+        echo "Check the Actions tab and repository for the merged changes"

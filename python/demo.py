@@ -40,7 +40,7 @@ output_file = output_dir / f'{current_date}.json'
 # output_file = output_dir / 'dontsave.json' # uncomment previous line for testing the dumped json
 output_file.write_text(json.dumps(combined_data, indent=2))
 
-write_date_in_index_file()
+write_date_in_index_file(current_date, output_dir / 'datesIndex.jsonl')
 
 print(f"Demo.py ran successfully. New file {output_file} in {output_dir}")
 

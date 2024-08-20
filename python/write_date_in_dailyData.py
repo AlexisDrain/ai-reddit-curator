@@ -8,7 +8,8 @@ file_path = Path('../website/dailyData/datesIndex.jsonl')
 content = f'\n{{"file": "{current_date}"}}'
 
 
-def write_date_in_index_file():
+def write_date_in_index_file(current_date, file_path):
+    content = f'\n{{"file": "{current_date}"}}'
     # Convert to absolute path
     abs_path = Path(file_path).resolve()
     
