@@ -5,7 +5,8 @@ import os
 
 from crawl import get_posts
 
-from sampling import get_prompt, basic_sample
+# from sampling import get_prompt, basic_sample
+from sampling_images import analyze_reddit_posts
 
 from score_extract import parse_enumerated_list, combine_claude_reddit_crawl
 
@@ -16,10 +17,17 @@ from write_date_in_dailyData import write_date_in_index_file
 # posts_reddit = get_posts(10, "crosspostNudes", allow_over_18=True) # this is the first 10 posts from r/all reddit
 posts_reddit = get_posts(10)
 
-# print(json.dumps(posts_reddit, indent=2))
+with open('reddit_posts.json', 'w') as file:
+    # Write the JSON data to the file
+    json.dump(posts_reddit, file, indent=2)
+
+# print(posts_reddit)
+
+# prompt = analyze_reddit_posts(posts_reddit) # this converts the posts into the prompt
+
+# print(prompt)
 
 '''
-prompt = get_prompt(posts_reddit) # this converts the posts into the prompt
 
 claude_sample = basic_sample(prompt) # this returns the message from Claude
 

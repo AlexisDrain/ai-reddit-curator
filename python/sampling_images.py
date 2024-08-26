@@ -1,0 +1,200 @@
+import base64
+import requests
+from anthropic import Anthropic
+from typing import List, Dict
+import os
+from tqdm import tqdm
+from io import BytesIO
+import json
+
+
+# Example usage
+# claude example. Don't use
+'''
+posts = [
+    {
+        "title": "Interesting sunset",
+        "transcription": "A beautiful orange and purple sunset over the ocean.",
+        "image_path": "path/to/sunset_image.jpg"
+    },
+    # ... more posts ...
+]
+'''
+
+test_get_prompt = '''
+Can you help me decide what reddit posts to look at?
+I'm going to give a list of reddit posts, and I want you to rate them from 0 to 10.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, or stupid.
+Here are the posts:
+<posts>
+
+<post_1>
+Donald Trump's press aide displaying a Jan 6th text from Melania Trump on a jumbotron 
+/r/pics/comments/1exxsfw/donald_trumps_press_aide_displaying_a_jan_6th/
+flair: Politics
+</post_1>
+
+<post_2>
+Teen girl sues Detroit judge who detained her after she fell asleep in courtroom
+/r/news/comments/1exyix4/teen_girl_sues_detroit_judge_who_detained_her/
+</post_2>
+
+<post_3>
+The power on this guy
+/r/nextfuckinglevel/comments/1extcw1/the_power_on_this_guy/
+</post_3>
+
+</posts>
+
+Write your scores as an enumerated list, like so:
+1. (first_score)
+2. (second_score)
+3. (third_score)
+etc.
+
+Do NOT add anything else like your reasoning in that list. Make the list ordered in the same order that I gave you.
+'''
+
+# Don't use this. claude runs out of tokens FAST. You should work on posts one at a time.
+PROMPT_TEST_IMAGES = """Describe each of the following images using this format:
+1. (your description of image 1) (link to image 1)
+2. (your description of image 2) (link to image 2)
+3. (your description of image 3) (link to image 3)
+etc
+"""
+PROMPT_TEST_IMAGES_ONEATATIME = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, or stupid.
+Your answer will be a score from 0 to 10. Do NOT add anything else like your reasoning.
+"""
+
+PROMPT_TEST_IMAGES_ONEATATIME_IMAGEDEBUG = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, or stupid.
+Your answer will be a description of the image and a score from 0 to 10. Do NOT add anything else like your reasoning.
+"""
+
+PROMPT_TEMPLATE_DAWN_LIST = """Can you help me decide what reddit posts to look at?
+I'm going to give a list of reddit posts, and I want you to rate them from 0 to 10.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, or stupid.
+Here are the posts:
+<posts>
+{POSTS}
+</posts>
+
+Write your scores as an enumerated list, like so:
+1. (first_score)
+2. (second_score)
+3. (third_score)
+etc.
+
+Do NOT add anything else like your reasoning in that list. Make the list ordered in the same order that I gave you.
+"""
+
+claude_key = "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"
+os.environ["ANTHROPIC_API_KEY"] = claude_key
+
+
+with open('reddit_posts.json', 'r') as file:
+    # Load the JSON data from the file into a variable
+    test_get_posts = json.load(file)
+
+
+
+def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307"):
+    client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+    
+    def process_post(index, debug_prompt=False):
+        content = [{"type": "text", "text": PROMPT_TEST_IMAGES_ONEATATIME}]
+        post = test_get_posts[index]
+        posts_str = ""
+
+        # add post info
+        if not post['data']['link_flair_text']: # post flair
+            post['data']['link_flair_text'] = ""
+        else:
+            post['data']['link_flair_text'] = "\nflair: " + post['data']['link_flair_text']
+        posts_str += f"{post['data']['title']}\n{post['data']['permalink']}{post['data']['link_flair_text']}"
+        content.append({
+            "type": "text",
+            "text": posts_str
+        })
+
+        if(debug_prompt):
+            print(posts_str)
+        # Add post image
+        if post['data'].get('url', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+            try:
+                response = requests.get(post['data']['url'], timeout=10)
+                response.raise_for_status()  # Raise an exception for bad status codes
+                image_data = BytesIO(response.content)
+                base64_image = base64.b64encode(image_data.getvalue()).decode('utf-8')
+                content.append({
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": f"image/{post['data']['url'].split('.')[-1].lower()}",
+                        "data": base64_image
+                    }
+                })
+                
+            except requests.RequestException as e:
+                Warning(f"Error downloading image from {post['data']['url']}: {e}")
+                # Optionally, add a placeholder or error message to the content
+                    
+        message = client.messages.create(
+            max_tokens=4096,
+            messages=[{"role": "user", "content": content}],
+            model=model,
+        )
+        return message.content[0].text
+
+    # Process posts in batches
+    results = []
+    debug_listOfPosts = []
+    for i in range(0, len(posts)):
+        result = process_post(index=i, debug_prompt=False)
+        results.append(result)
+        debug_listOfPosts.append(posts[i]["data"]["url"])
+    
+    print(debug_listOfPosts)
+    return results
+    '''
+    # Combine and summarize results
+    final_summary = client.messages.create(
+        max_tokens=4096,
+        messages=[
+            {
+                "role": "user",
+                "content": f"Here are the analyses of Reddit posts in batches. Please provide a final summary and recommendation:\n\n{''.join(results)}"
+            }
+        ],
+        model=model,
+    )
+    return final_summary.content[0].text
+    '''
+
+
+final_analysis = analyze_reddit_posts(test_get_posts)
+# get_prompt(test_get_posts)
+print(final_analysis)
+
+'''
+def get_prompt(posts, include_comments=False):
+    posts_str = ""
+    for i, post in tqdm(list(enumerate(posts))):
+        # posts_str += f"{i+1}. {post['data']['title']}\n{post['data']['url']}\n" # we don't need an index
+        # posts_str += f"{post['data']['title']}\n{post['data']['url']}\n{post['data']['permalink']}\n\n" # Claude cannot read data in ['url']
+        if not include_comments:
+            if not post['data']['link_flair_text']:
+                post['data']['link_flair_text'] = ""
+            else:
+                post['data']['link_flair_text'] = "\nflair: " + post['data']['link_flair_text']
+            posts_str += f"\n<post_{i+1}>\n{post['data']['title']}\n{post['data']['permalink']}{post['data']['link_flair_text']}\n</post_{i+1}>\n"
+        else:
+            top_comments = get_top_comments(post)
+            posts_str += f"\n<post_{i+1}>\n{post['data']['title']}\n{post['data']['permalink']}\nTop Comments:\n{top_comments}\n</post_{i+1}>\n"
+    return PROMPT_TEMPLATE_DAWN_LIST.format(POSTS=posts_str)
+'''
