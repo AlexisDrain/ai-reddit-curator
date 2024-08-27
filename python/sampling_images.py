@@ -8,6 +8,7 @@ from io import BytesIO
 import json
 
 
+
 # Example usage
 # claude example. Don't use
 '''
@@ -57,11 +58,21 @@ Do NOT add anything else like your reasoning in that list. Make the list ordered
 '''
 
 # this is what we currently use
-PROMPT_TEST_IMAGES_ONEATATIME = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
+PROMPT_IMAGES_ONEATATIME = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
 The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
 The worst posts are: ragebait, political, or stupid.
 Your answer will be a score from 0 to 10. Do NOT add anything else like your reasoning.
 """
+
+PRMOPT_COMMENT_HIGH = """This is a reddit post that Claude has rated it highly. Explain why it's a good post in one sentence.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, or stupid.
+"""
+PRMOPT_COMMENT_LOW = """This is a reddit post that Claude has rated it poorly. Explain why it's a bad post in one sentence.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, or stupid.
+"""
+
 # rate if above 9 or below 2: This is bad because then the model makes EVERYTHING above 9 or below 2.
 PROMPT_TEST_IMAGES_ONEATATIME_COMMENT = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
 The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
@@ -120,8 +131,8 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
     client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
     
     def process_post(index, debug_prompt=False):
-        content = [{"type": "text", "text": PROMPT_TEST_IMAGES_ONEATATIME}]
-        post = test_get_posts[index]
+        content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME}]
+        post = posts[index]
         posts_str = ""
 
         # add post info
@@ -185,17 +196,57 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
             model=model,
         )
         return message.content[0].text
+    
+    def process_post_claudeComment(index, rate_high = True):
+        if rate_high:
+            content = [{"type": "text", "text": PRMOPT_COMMENT_HIGH}]
+        else:
+            content = [{"type": "text", "text": PRMOPT_COMMENT_LOW}]
+
+        post = posts[index]
+        posts_str = ""
+
+        # add post info
+        if not post['data']['link_flair_text']: # post flair
+            post['data']['link_flair_text'] = ""
+        else:
+            post['data']['link_flair_text'] = "flair: " + post['data']['link_flair_text']
+        # We send to Claude the following:
+        # title
+        # permalink
+        # flair
+        # selftext
+        # image
+        posts_str += f"{post['data']['title']}\n{post['data']['permalink']}\n{post['data']['link_flair_text']}\n{post['data']['selftext']}"
+        content.append({
+            "type": "text",
+            "text": posts_str
+        })
+        message = client.messages.create(
+            max_tokens=4096,
+            messages=[{"role": "user", "content": content}],
+            model=model,
+        )
+        return message.content[0].text
 
     # Process posts in batches
     results = []
-    debug_listOfPosts = []
-    for i in range(0, len(posts)):
+    resultsComments = []
+    # debug_listOfPosts = []
+    for i in tqdm(range(0, len(posts)), desc="Processing posts"):
         result = process_post(index=i, debug_prompt=False)
         results.append(result)
-        debug_listOfPosts.append(posts[i]["data"]["url"])
+        # debug_listOfPosts.append(posts[i]["data"]["url"])
     
-    print(debug_listOfPosts)
-    return results
+    for i, score in tqdm(enumerate(results), desc="Adding Claude comments for exeptional posts"):
+        if int(score) >= 9:
+            comment = process_post_claudeComment(i, rate_high=True)
+            resultsComments.append(str(i) + ". " + comment)
+        if int(score) <= 2:
+            comment = process_post_claudeComment(i, rate_high=False)
+            resultsComments.append(str(i) + ". " + comment)
+
+    return results, resultsComments
     '''
     # Combine and summarize results
     final_summary = client.messages.create(
