@@ -21,19 +21,28 @@ jobs:
         python -m pip install --upgrade pip
         pip install anthropic
     
-    - name: Run Anthropic script
+    
+    - name: Run Anthropic script with at most 3 retries
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      run: python ./python/demo.py
+      run: |
+        max_attempts=3
+        attempt=1
+        until python ./python/demo.py || [ $attempt -eq $max_attempts ]; do
+          echo "Attempt $attempt failed. Retrying..."
+          attempt=$((attempt + 1))
+          sleep 5  # Optional: add a delay between retries
+        done
+        
+        if [ $attempt -eq $max_attempts ] && [ $? -ne 0 ]; then
+          echo "All attempts failed. Exiting with error."
+          exit 1
+        fi
 
-
-      
     #- name: Debug - List directory contents
     #  run: |
     #    echo "Contents of website/dailyData:"
     #    ls -l website/dailyData || echo "Directory not found"
-
-
 
     - name: Debug - Check new output files
       run: |

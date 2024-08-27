@@ -15,11 +15,29 @@ from write_date_in_dailyData import write_date_in_index_file
 
 
 # posts_reddit = get_posts(10, "crosspostNudes", allow_over_18=True) # this is the first 10 posts from r/all reddit
-posts_reddit = get_posts(10)
+# posts_reddit = get_posts(10)
 
-with open('reddit_posts.json', 'w') as file:
+'''
+posts_reddit = get_posts(300)
+with open('reddit_posts_300.json', 'w') as file:
     # Write the JSON data to the file
     json.dump(posts_reddit, file, indent=2)
+'''
+
+'''
+with open('reddit_posts_300.json', 'r') as file:
+    # Load the JSON data from the file into a variable
+    test_get_posts = json.load(file)
+    print (len(test_get_posts))
+
+'''
+# sampling_images.py
+with open('reddit_posts.json', 'r') as file:
+    # Load the JSON data from the file into a variable
+    test_get_posts = json.load(file)
+final_analysis = analyze_reddit_posts(test_get_posts)
+print(final_analysis)
+
 
 # print(posts_reddit)
 

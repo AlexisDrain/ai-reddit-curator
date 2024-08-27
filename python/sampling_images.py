@@ -120,13 +120,6 @@ Do NOT add anything else like your reasoning in that list. Make the list ordered
 claude_key = "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"
 os.environ["ANTHROPIC_API_KEY"] = claude_key
 
-
-with open('reddit_posts.json', 'r') as file:
-    # Load the JSON data from the file into a variable
-    test_get_posts = json.load(file)
-
-
-
 def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307"):
     client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
     
@@ -262,10 +255,6 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
     return final_summary.content[0].text
     '''
 
-
-final_analysis = analyze_reddit_posts(test_get_posts)
-# get_prompt(test_get_posts)
-print(final_analysis)
 
 '''
 def get_prompt(posts, include_comments=False):
