@@ -20,7 +20,7 @@ posts = [
     # ... more posts ...
 ]
 '''
-
+# retro: original prompt
 test_get_prompt = '''
 Can you help me decide what reddit posts to look at?
 I'm going to give a list of reddit posts, and I want you to rate them from 0 to 10.
@@ -56,6 +56,22 @@ etc.
 Do NOT add anything else like your reasoning in that list. Make the list ordered in the same order that I gave you.
 '''
 
+# this is what we currently use
+PROMPT_TEST_IMAGES_ONEATATIME = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, or stupid.
+Your answer will be a score from 0 to 10. Do NOT add anything else like your reasoning.
+"""
+# rate if above 9 or below 2: This is bad because then the model makes EVERYTHING above 9 or below 2.
+PROMPT_TEST_IMAGES_ONEATATIME_COMMENT = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, or stupid.
+Your answer will be a score from 0 to 10. If the score is 9 or higher, or if it's 2 or lower, add your reasoning. Here are 4 examples:
+3
+9 - This post is mindblowing and hilarious, as it showcases Steve's iconic personality and his humble response to a question about his personal fortune.
+7
+1 - This post is rage-bait.
+"""
 # Don't use this. claude runs out of tokens FAST. You should work on posts one at a time.
 PROMPT_TEST_IMAGES = """Describe each of the following images using this format:
 1. (your description of image 1) (link to image 1)
@@ -63,18 +79,15 @@ PROMPT_TEST_IMAGES = """Describe each of the following images using this format:
 3. (your description of image 3) (link to image 3)
 etc
 """
-PROMPT_TEST_IMAGES_ONEATATIME = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
-The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
-The worst posts are: ragebait, political, or stupid.
-Your answer will be a score from 0 to 10. Do NOT add anything else like your reasoning.
-"""
 
+# debug, describe the image.
 PROMPT_TEST_IMAGES_ONEATATIME_IMAGEDEBUG = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
 The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
 The worst posts are: ragebait, political, or stupid.
 Your answer will be a description of the image and a score from 0 to 10. Do NOT add anything else like your reasoning.
 """
 
+# retro: rate all the posts in one go.
 PROMPT_TEMPLATE_DAWN_LIST = """Can you help me decide what reddit posts to look at?
 I'm going to give a list of reddit posts, and I want you to rate them from 0 to 10.
 The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
@@ -125,24 +138,40 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
         if(debug_prompt):
             print(posts_str)
         # Add post image
-        if post['data'].get('url', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+        imgSource = ""
+        if post['data'].get('url', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')): # .gif uses only the first frame
+            imgSource = post['data']['url']
+            if(debug_prompt):
+                print("url " + imgSource)
+        elif post['data'].get('thumbnail', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
+            imgSource = post['data']['thumbnail']
+            if(debug_prompt):
+                print("thumbnail " + imgSource)
+
+        if imgSource != "":
             try:
-                response = requests.get(post['data']['url'], timeout=10)
+                response = requests.get(imgSource, timeout=10)
                 response.raise_for_status()  # Raise an exception for bad status codes
                 image_data = BytesIO(response.content)
                 base64_image = base64.b64encode(image_data.getvalue()).decode('utf-8')
+
+                extension = imgSource.split('.')[-1].lower()
+                if extension == "jpg":
+                    extension = "jpeg"
+
                 content.append({
                     "type": "image",
                     "source": {
                         "type": "base64",
-                        "media_type": f"image/{post['data']['url'].split('.')[-1].lower()}",
+                        "media_type": f"image/{extension}",
                         "data": base64_image
                     }
                 })
                 
             except requests.RequestException as e:
-                Warning(f"Error downloading image from {post['data']['url']}: {e}")
+                Warning(f"Error downloading image from {imgSource}: {e}")
                 # Optionally, add a placeholder or error message to the content
+            
                     
         message = client.messages.create(
             max_tokens=4096,
