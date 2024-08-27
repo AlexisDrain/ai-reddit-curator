@@ -113,6 +113,41 @@ def test_parse_enumerated_list():
 Hope you enjoy!"""
     assert parse_enumerated_list(my_sample) == [8, 3, 9]
 
+"""
+def test_image_sample_results():
+    example = ['2. The cozy Amsterdam summer garden studio post is highly rated as it showcases a beautifully designed and inviting living space that is both aesthetically pleasing and creates a sense of comfort and relaxation for the viewer.', '3. This post showcases an impressive LOTR-themed living room that is highly detailed, cozy, and visually appealing, making it an excellent example of a "mind-blowing" and "inspiring" post on the r/CozyPlaces subreddit.', '4. The reddit post you provided is highly rated by Claude because it appears to be a visually stunning and cozy living space that evokes a sense of maximalist, playful, and whimsical design, which can be considered "mind-blowing" and "extremely cute" based on the criteria you provided.']
+    assert parse_image_claudeComment(example) 
+"""
+    
+def combine_postScores_claudeComments_reddit(posts, scores, claudeComments, claudeComments_index):
+    # Initialize combined_posts as a list of dictionaries
+    combined_posts = []
+
+    for i, (score, full_post) in enumerate(zip(scores, posts, strict=True)):
+        # Create a new dictionary for each post
+        combined_post = {}
+
+        # Add score
+        if isinstance(score, (int, float, str)):
+            combined_post["rating"] = score
+        elif isinstance(score, dict):
+            combined_post.update(score)
+        else:
+            raise TypeError(f"Unexpected type for score: {type(score)}")
+
+        # Add Reddit post data
+        combined_post.update({
+            k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext", "thumbnail", "link_flair_text", "author"]
+        })
+
+        # Add Claude comment if the index is in claudeComments_index
+        if i in claudeComments_index:
+            comment_index = claudeComments_index.index(i)
+            combined_post["claudeComment"] = claudeComments[comment_index]
+
+        combined_posts.append(combined_post)
+
+    return combined_posts
 
 def combine_claude_reddit_crawl(
     scored_claude_posts: list[dict | int], reddit_posts

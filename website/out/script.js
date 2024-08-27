@@ -43,7 +43,7 @@ function createCards(cardsToCreate, cards) {
             cardImageWrapper.classList.add("card-image-wrapper");
             const img = document.createElement('img');
             img.classList.add('card-image');
-            img.src = card.galleryFirst;
+            img.src = card.url;
             img.addEventListener('load', function () {
                 cardImageWrapper.appendChild(createNextImageSVG());
             });
@@ -104,8 +104,8 @@ function createCards(cardsToCreate, cards) {
         }
         const claudeReasonElement = document.createElement('p');
         claudeReasonElement.classList.add('card-claudeReason');
-        if (card.comment && card.comment !== "") {
-            claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
+        if (card.claudeComment && card.claudeComment !== "") {
+            claudeReasonElement.textContent = "Claude AI: \"" + card.claudeComment + "\"";
         }
         /*
         const redditUrlElement = document.createElement('a');

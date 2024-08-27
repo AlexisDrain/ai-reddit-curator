@@ -149,14 +149,26 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
             print(posts_str)
         # Add post image
         imgSource = ""
+        # url. mostly for uploaded images
         if post['data'].get('url', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')): # .gif uses only the first frame
             imgSource = post['data']['url']
-            if(debug_prompt):
+            if debug_prompt:
                 print("url " + imgSource)
+        # url for newsposts
         elif post['data'].get('thumbnail', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
             imgSource = post['data']['thumbnail']
-            if(debug_prompt):
+            if debug_prompt:
                 print("thumbnail " + imgSource)
+        # url for videos.
+        elif post["data"]["is_video"] and post["data"]["preview"]["images"][0]["source"].get('url', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
+            try:
+                imgSource = post["data"]["preview"]["images"][0]["source"]["url"]
+                imgSource = imgSource.replace("&amp;", "&")
+                if debug_prompt:
+                    print("video thumbnail " + imgSource)
+            except (KeyError, IndexError, TypeError):
+                print("video thumbnail not found")
+                pass  # or set a default value if needed
 
         if imgSource != "":
             try:
@@ -224,7 +236,8 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
 
     # Process posts in batches
     results = []
-    resultsComments = []
+    results_comment = []
+    results_comment_index = []
     # debug_listOfPosts = []
     for i in tqdm(range(0, len(posts)), desc="Processing posts"):
         result = process_post(index=i, debug_prompt=False)
@@ -234,12 +247,14 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
     for i, score in tqdm(enumerate(results), desc="Adding Claude comments for exeptional posts"):
         if int(score) >= 9:
             comment = process_post_claudeComment(i, rate_high=True)
-            resultsComments.append(str(i) + ". " + comment)
+            results_comment.append(comment)
+            results_comment_index.append(i)
         if int(score) <= 2:
             comment = process_post_claudeComment(i, rate_high=False)
-            resultsComments.append(str(i) + ". " + comment)
+            results_comment.append(comment)
+            results_comment_index.append(i)
 
-    return results, resultsComments
+    return results, results_comment, results_comment_index
     '''
     # Combine and summarize results
     final_summary = client.messages.create(

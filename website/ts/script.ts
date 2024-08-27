@@ -11,10 +11,10 @@ interface RedditPost {
   author?: string // name of user who made the post
   link_flair_text?: string // flair for post
   rating?: number; // rating by claude
-  comment?: string; // comment by claude
+  claudeComment?: string; // comment by claude
   url?: string;  // this is an image in Reddit speak
   selftext?: string;  // this is a text post in Reddit speak
-  galleryFirst?: string; // this is the first image in a gallery of images
+  // galleryFirst?: string; // this is the first image in a gallery of images
   thumbnail?: string; // for news posts
   // videoThumbnail?: string; // for video posts hosted on Reddit
   // dash_url?: string; // this is the video url .mp4
@@ -73,7 +73,7 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
         const img = document.createElement('img');
         img.classList.add('card-image');
-        img.src = card.galleryFirst;
+        img.src = card.url;
         
         img.addEventListener('load', function() {
           cardImageWrapper.appendChild(createNextImageSVG());
@@ -144,8 +144,8 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
       const claudeReasonElement = document.createElement('p');
       claudeReasonElement.classList.add('card-claudeReason');
-      if (card.comment && card.comment !== "") {
-          claudeReasonElement.textContent = "Claude AI: \"" + card.comment + "\"";
+      if (card.claudeComment && card.claudeComment !== "") {
+          claudeReasonElement.textContent = "Claude AI: \"" + card.claudeComment + "\"";
       }
           
         /*

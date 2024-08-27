@@ -8,7 +8,7 @@ from crawl import get_posts
 # from sampling import get_prompt, basic_sample
 from sampling_images import analyze_reddit_posts
 
-from score_extract import parse_enumerated_list, combine_claude_reddit_crawl
+from score_extract import combine_postScores_claudeComments_reddit
 
 from write_date_in_dailyData import write_date_in_index_file
 
@@ -25,33 +25,30 @@ with open('reddit_posts_300.json', 'w') as file:
 '''
 
 '''
+with open('reddit_posts_gallery.json', 'w') as file:
+    # Write the JSON data to the file
+    json.dump(posts_reddit, file, indent=2)
 with open('reddit_posts_300.json', 'r') as file:
     # Load the JSON data from the file into a variable
     test_get_posts = json.load(file)
     print (len(test_get_posts))
 
-'''
 # sampling_images.py
-with open('reddit_posts.json', 'r') as file:
+with open('reddit_posts_gallery.json', 'r') as file:
     # Load the JSON data from the file into a variable
-    test_get_posts = json.load(file)
-final_analysis = analyze_reddit_posts(test_get_posts)
-print(final_analysis)
-
-
-# print(posts_reddit)
-
-# prompt = analyze_reddit_posts(posts_reddit) # this converts the posts into the prompt
-
-# print(prompt)
-
+    posts_reddit = json.load(file)
 '''
 
-claude_sample = basic_sample(prompt) # this returns the message from Claude
+    
+posts_reddit = get_posts(1, "CozyPlaces")
 
-claude_data = parse_enumerated_list(claude_sample) # get the scores from claude and save them into this variable
+post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit)
 
-combined_data = combine_claude_reddit_crawl(claude_data, posts_reddit) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
+# claude_sample = basic_sample(prompt) # this returns the message from Claude
+
+# claude_data = parse_enumerated_list(final_analysis) # get the scores from claude and save them into this variable
+
+combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, post_claudeComments, post_claudeComment_index) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
 ### write the file inside dailyData
 
@@ -64,14 +61,14 @@ output_dir = Path(repo_root) / 'website' / 'dailyData'
 output_dir.mkdir(parents=True, exist_ok=True)
 
 current_date = datetime.now().strftime('%Y-%m-%d') # name the file
-output_file = output_dir / f'{current_date}.json'
-# output_file = output_dir / 'dontsave.json' # uncomment previous line for testing the dumped json
+# output_file = output_dir / f'{current_date}.json'
+output_file = output_dir / 'dontsave.json' # uncomment previous line for testing the dumped json
 output_file.write_text(json.dumps(combined_data, indent=2))
 
 write_date_in_index_file(current_date, output_dir / 'datesIndex.jsonl')
 
 print(f"Demo.py ran successfully. New file {output_file} in {output_dir}")
-'''
+
 
 '''
 Saving data as a test
