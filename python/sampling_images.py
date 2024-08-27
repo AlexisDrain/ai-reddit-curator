@@ -128,8 +128,14 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
         if not post['data']['link_flair_text']: # post flair
             post['data']['link_flair_text'] = ""
         else:
-            post['data']['link_flair_text'] = "\nflair: " + post['data']['link_flair_text']
-        posts_str += f"{post['data']['title']}\n{post['data']['permalink']}{post['data']['link_flair_text']}"
+            post['data']['link_flair_text'] = "flair: " + post['data']['link_flair_text']
+        # We send to Claude the following:
+        # title
+        # permalink
+        # flair
+        # selftext
+        # image
+        posts_str += f"{post['data']['title']}\n{post['data']['permalink']}\n{post['data']['link_flair_text']}\n{post['data']['selftext']}"
         content.append({
             "type": "text",
             "text": posts_str
