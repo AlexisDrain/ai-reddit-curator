@@ -40,9 +40,14 @@ with open('reddit_posts_gallery.json', 'r') as file:
 '''
 
     
-posts_reddit = get_posts(1, "CozyPlaces")
+# posts_reddit = get_posts(1, "CozyPlaces")
 
-post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit)
+with open('reddit_posts_gallery.json', 'r') as file:
+    # Load the JSON data from the file into a variable
+    posts_reddit = json.load(file)
+    print ("number of posts loaded: " + str(len(posts_reddit)))
+
+post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit, debug_prompt=False)
 
 # claude_sample = basic_sample(prompt) # this returns the message from Claude
 

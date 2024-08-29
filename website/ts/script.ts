@@ -16,7 +16,7 @@ interface RedditPost {
   selftext?: string;  // this is a text post in Reddit speak
   // galleryFirst?: string; // this is the first image in a gallery of images
   thumbnail?: string; // for news posts
-  // videoThumbnail?: string; // for video posts hosted on Reddit
+  // videoThumbnail?: string; // [Depricated because I can't play reddit videos] for video posts hosted on Reddit
   // dash_url?: string; // this is the video url .mp4
   // over_18?: boolean; // [removed because of anthropic refusal] nsfw posts
 }
@@ -73,7 +73,11 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
         const img = document.createElement('img');
         img.classList.add('card-image');
-        img.src = card.url;
+        if (card.thumbnail != "") {
+          img.src = card.thumbnail;
+        } else {
+          img.src = card.url;
+        }
         
         img.addEventListener('load', function() {
           cardImageWrapper.appendChild(createNextImageSVG());
@@ -91,7 +95,9 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
         const videoThumbnailImg = document.createElement('img');
         videoThumbnailImg.classList.add('card-video-thumbnail');
-        videoThumbnailImg.src = card.thumbnail;
+        if(card.thumbnail != "") {
+          videoThumbnailImg.src = card.thumbnail;
+        }
         
         /*
         [Deprecated Video because I cannot sync video+audio easily]
@@ -126,7 +132,7 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         const img = document.createElement('img');
         img.classList.add('card-image');
         imgContainer.href = "https://reddit.com"+ card.permalink;
-        if(card.thumbnail != "default") {
+        if(card.thumbnail != "") {
             img.src = card.thumbnail;
             imgContainer.appendChild(img);
         }

@@ -6,7 +6,7 @@ import os
 from tqdm import tqdm
 from io import BytesIO
 import json
-
+from score_extract import fetch_gallery_firstImage
 
 
 # Example usage
@@ -120,10 +120,10 @@ Do NOT add anything else like your reasoning in that list. Make the list ordered
 claude_key = "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"
 os.environ["ANTHROPIC_API_KEY"] = claude_key
 
-def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307"):
+def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307", debug_prompt=False):
     client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
     
-    def process_post(index, debug_prompt=False):
+    def process_post(index):
         content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME}]
         post = posts[index]
         posts_str = ""
@@ -149,8 +149,13 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
             print(posts_str)
         # Add post image
         imgSource = ""
-        # url. mostly for uploaded images
-        if post['data'].get('url', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')): # .gif uses only the first frame
+        
+        if "gallery" in post['data'].get('url', ''):
+            imgSource = fetch_gallery_firstImage(post['data']['url'])
+            if debug_prompt:
+                print("gallery url " + imgSource)
+            # url. mostly for uploaded images
+        elif post['data'].get('url', '').lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')): # .gif uses only the first frame
             imgSource = post['data']['url']
             if debug_prompt:
                 print("url " + imgSource)
@@ -172,11 +177,32 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
 
         if imgSource != "":
             try:
+                max_size=5242879 # one bit smaller than 5mb
+
+                # Send a HEAD request first to check the content length
+                head_response = requests.head(imgSource, timeout=10)
+                content_length = int(head_response.headers.get('Content-Length', 0))
+                
+                # Estimate base64 size (33% larger than original)
+                estimated_base64_size = content_length * 4 // 3
+                
+                if estimated_base64_size > max_size:
+                    print(f"Image is likely too large after base64 encoding (estimated {estimated_base64_size} bytes). Skipping download.")
+                    return None
+                
+                # If the image might be small enough, proceed with GET request
                 response = requests.get(imgSource, timeout=10)
-                response.raise_for_status()  # Raise an exception for bad status codes
+                response.raise_for_status()
+                
+                # Encode to base64
                 image_data = BytesIO(response.content)
                 base64_image = base64.b64encode(image_data.getvalue()).decode('utf-8')
-
+                
+                # Check actual base64 size
+                if len(base64_image) > max_size:
+                    print(f"Image is too large after base64 encoding ({len(base64_image)} bytes). Discarding.")
+                    return None
+            
                 extension = imgSource.split('.')[-1].lower()
                 if extension == "jpg":
                     extension = "jpeg"
@@ -240,19 +266,27 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
     results_comment_index = []
     # debug_listOfPosts = []
     for i in tqdm(range(0, len(posts)), desc="Processing posts"):
-        result = process_post(index=i, debug_prompt=False)
+        result = process_post(index=i)
         results.append(result)
         # debug_listOfPosts.append(posts[i]["data"]["url"])
     
+    if debug_prompt:
+        print(results)
+
     for i, score in tqdm(enumerate(results), desc="Adding Claude comments for exeptional posts"):
-        if int(score) >= 9:
-            comment = process_post_claudeComment(i, rate_high=True)
-            results_comment.append(comment)
-            results_comment_index.append(i)
-        if int(score) <= 2:
-            comment = process_post_claudeComment(i, rate_high=False)
-            results_comment.append(comment)
-            results_comment_index.append(i)
+        if score is not None and score != '':
+            if int(score) >= 9:
+                comment = process_post_claudeComment(i, rate_high=True)
+                results_comment.append(comment)
+                results_comment_index.append(i)
+            if int(score) <= 2:
+                comment = process_post_claudeComment(i, rate_high=False)
+                results_comment.append(comment)
+                results_comment_index.append(i)
+    
+    if debug_prompt:
+        print(results_comment)
+        print(results_comment_index)
 
     return results, results_comment, results_comment_index
     '''

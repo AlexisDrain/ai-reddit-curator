@@ -1,6 +1,6 @@
 import re
 from copy import deepcopy
-
+import requests
 
 
 old_test_data = """
@@ -118,7 +118,39 @@ def test_image_sample_results():
     example = ['2. The cozy Amsterdam summer garden studio post is highly rated as it showcases a beautifully designed and inviting living space that is both aesthetically pleasing and creates a sense of comfort and relaxation for the viewer.', '3. This post showcases an impressive LOTR-themed living room that is highly detailed, cozy, and visually appealing, making it an excellent example of a "mind-blowing" and "inspiring" post on the r/CozyPlaces subreddit.', '4. The reddit post you provided is highly rated by Claude because it appears to be a visually stunning and cozy living space that evokes a sense of maximalist, playful, and whimsical design, which can be considered "mind-blowing" and "extremely cute" based on the criteria you provided.']
     assert parse_image_claudeComment(example) 
 """
+
+
+'''How to convert galleries to our website:
+    start with: https://www.reddit.com/gallery/1eem8zd
+    [replace gallery with comments and add .json]
+    https://www.reddit.com/comments/1eem8zd.json
+    [0][data][children][0][gallerydata][0][id] get the id and put it in https://i.redd.it/
+    https://i.redd.it/d22w83turcfd1.jpg
+'''
+def fetch_gallery_firstImage(url="https://www.reddit.com/gallery/1eem8zd"):
+    try:
+        # Add a user agent to avoid potential 429 errors
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+        
+        # new url after replace: "https://www.reddit.com/comments/1eem8zd.json"
+        gallery_json = url.replace("gallery", "comments")
+        gallery_json += ".json"
+
+        response = requests.get(gallery_json, headers=headers)
+        
+        # Check if the request was successful
+        response.raise_for_status()
+        
+        # Parse the JSON data
+        data = response.json()
+        
+        id_ = str(data[0]["data"]["children"][0]["data"]["gallery_data"]["items"][0]["media_id"])
+        return f'https://i.redd.it/{id_}.jpg'
     
+    except requests.RequestException as e:
+        print(f"An error occurred while fetching the data: {e}")
+        return None
+
 def combine_postScores_claudeComments_reddit(posts, scores, claudeComments, claudeComments_index):
     # Initialize combined_posts as a list of dictionaries
     combined_posts = []
@@ -139,6 +171,11 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments, clau
         combined_post.update({
             k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext", "thumbnail", "link_flair_text", "author"]
         })
+        
+        if "gallery" in combined_post["url"]:
+            combined_post["thumbnail"] = fetch_gallery_firstImage(combined_post["url"])
+        if combined_post["thumbnail"] in ["self", "default"]:
+            combined_post["thumbnail"] = ""
 
         # Add Claude comment if the index is in claudeComments_index
         if i in claudeComments_index:
@@ -149,6 +186,7 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments, clau
 
     return combined_posts
 
+# [Depricated. Doesn't handle images or claudeComments]
 def combine_claude_reddit_crawl(
     scored_claude_posts: list[dict | int], reddit_posts
 ) -> list[dict]:
@@ -171,6 +209,7 @@ def combine_claude_reddit_crawl(
 
         # [Deprecated Video because I cannot sync video+audio easily]
         # For videos: Add the fallback_url if it exists
+        
         if full_post["data"]["is_video"]:
             try:
                 videoThumbnail = full_post["data"]["preview"]["images"][0]["source"]["url"]
@@ -179,6 +218,7 @@ def combine_claude_reddit_crawl(
             except (KeyError, IndexError, TypeError):
                 print("video thumbnail not found")
                 pass  # or set a default value if needed
+            
 
     return combined_posts
 

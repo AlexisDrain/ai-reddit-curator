@@ -43,7 +43,12 @@ function createCards(cardsToCreate, cards) {
             cardImageWrapper.classList.add("card-image-wrapper");
             const img = document.createElement('img');
             img.classList.add('card-image');
-            img.src = card.url;
+            if (card.thumbnail != "") {
+                img.src = card.thumbnail;
+            }
+            else {
+                img.src = card.url;
+            }
             img.addEventListener('load', function () {
                 cardImageWrapper.appendChild(createNextImageSVG());
             });
@@ -57,7 +62,9 @@ function createCards(cardsToCreate, cards) {
             cardVideoWrapper.classList.add("card-image-wrapper");
             const videoThumbnailImg = document.createElement('img');
             videoThumbnailImg.classList.add('card-video-thumbnail');
-            videoThumbnailImg.src = card.thumbnail;
+            if (card.thumbnail != "") {
+                videoThumbnailImg.src = card.thumbnail;
+            }
             /*
             [Deprecated Video because I cannot sync video+audio easily]
     
@@ -89,7 +96,7 @@ function createCards(cardsToCreate, cards) {
             const img = document.createElement('img');
             img.classList.add('card-image');
             imgContainer.href = "https://reddit.com" + card.permalink;
-            if (card.thumbnail != "default") {
+            if (card.thumbnail != "") {
                 img.src = card.thumbnail;
                 imgContainer.appendChild(img);
             }

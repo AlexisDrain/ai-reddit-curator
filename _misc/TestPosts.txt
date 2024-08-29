@@ -1,0 +1,42 @@
+🧪Test:
+super long image:
+https://www.reddit.com/r/HalfLife/comments/1dptye6/fun_with_physics_props/
+https://www.reddit.com/r/RunningCirclejerk/comments/1dpq2et/absolute_chad_gets_banned_from_running_and/#lightbox
+
+An image post with a body text:
+https://www.reddit.com/r/HalfLife/comments/1eeai02/if_there_was_a_half_life_movie_would_it_be_like/
+
+- ❌➕Crossposts: I.e. Repost reddit posts. [Removed currently. Very rare in r/all]
+1- https://www.reddit.com/r/CrosspostNudes/
+2- https://www.reddit.com/r/dataisugly/comments/1eq06n5/what_i_liked_about_each_state_ive_been_too/
+
+🎞️videos:
+links to YouTube: https://www.reddit.com/r/videos/
+videos inside Reddit: https://www.reddit.com/r/yesyesyesyesno/
+
+videos start with v.redd.it images start with i.redd.it
+https://v.redd.it/jeog4l3kwbfd1
+https://i.redd.it/d22w83turcfd1.jpg
+
+links to other website:
+https://www.reddit.com/r/accursedfarms/comments/jktnlk/someone_has_actually_went_ahead_and_made_a_remake/
+
+linkifiy selftext. check that tweet images and links are visible.
+https://www.reddit.com/r/WhitePeopleTwitter/comments/1eehbjj/hide_the_ketchup/
+
+🌱Gallery of images:
+https://www.reddit.com/r/CozyPlaces/comments/1eem8zd/moving_out_ill_really_miss_this_place/
+How to convert to our website:
+https://www.reddit.com/gallery/1eem8zd [replace gallery with comments and add .json]
+https://www.reddit.com/comments/1eem8zd.json
+[0][data][children][0][gallerydata][0][id] get the id and put it in https://i.redd.it/
+https://i.redd.it/d22w83turcfd1.jpg
+
+- Test metadata for seo
+https://threadcreator.com/tools/twitter-card-validator
+https://developers.facebook.com/tools/debug/?q=https%3A%2F%2Falexisdrain.github.io%2FClaude-Reddit-Curator%2Fabout.html
+
+⚒️How our website handles workflow in order:
+1- anthropic.yml: Launch demo.py
+2- commit to master: dataIndex.jsonl & the new /dailyData file
+3- static.yml: launch GitHub static HTML converter.
