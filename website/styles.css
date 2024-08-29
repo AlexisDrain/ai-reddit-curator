@@ -69,7 +69,7 @@ body.dark-mode {
     }
     .page-center {
         position: absolute;
-        margin-top: 23em;
+        margin-top: 29em;
     }
     .page-right {
             /* For top positioning */
@@ -388,13 +388,13 @@ span {
 }
 .card-warning {
     font-size: 16px;
-    color: cornflowerblue;
+    color: #a00;
 }
 .light-mode .card-warning {
-    color: #000;
+    color: #a00;
 }
 .dark-mode .card-warning {
-    color: #fff;
+    color: #a00;
 }
 
 
@@ -451,13 +451,14 @@ span {
 
 
 /* text: powered by claude */
-h4 {
+.text-left {
     margin-top: .75em;
+    width: 17em;
 }
-.light-mode h4  {
+.light-mode .text-left  {
     color: #000;
 }
-.dark-mode h4  {
+.dark-mode .text-left  {
     color: #fff;
 }
 

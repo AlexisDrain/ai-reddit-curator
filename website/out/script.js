@@ -29,6 +29,11 @@ function createCards(cardsToCreate, cards) {
         imgContainer.classList.add('card-imgContainer');
         const warningElement = document.createElement('p');
         warningElement.classList.add('card-warning');
+        if (card.link_flair_text) {
+            let text = String(card.link_flair_text);
+            card.link_flair_text = text.charAt(1).toUpperCase() + text.slice(2);
+            warningElement.textContent = card.link_flair_text;
+        }
         if (cardElement.getAttribute('typeOfCard') === "image") {
             // img.src = resolveImageLink(card.url);
             const img = document.createElement('img');
@@ -38,7 +43,7 @@ function createCards(cardsToCreate, cards) {
             imgContainer.appendChild(img);
         }
         if (cardElement.getAttribute('typeOfCard') === "gallery") {
-            warningElement.textContent = "🌱 This is a gallery of images. Click the image to see rest on Reddit!";
+            // warningElement.textContent = "🌱 This is a gallery of images. Click the image to see rest on Reddit!";
             const cardImageWrapper = document.createElement("div");
             cardImageWrapper.classList.add("card-image-wrapper");
             const img = document.createElement('img');
@@ -57,7 +62,7 @@ function createCards(cardsToCreate, cards) {
             imgContainer.appendChild(cardImageWrapper);
         }
         if (cardElement.getAttribute('typeOfCard') === "video") {
-            warningElement.textContent = "📽️⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
+            // warningElement.textContent = "📽️⚠️ This AI is unable to view the content of videos other than the title and thumbnail.";
             const cardVideoWrapper = document.createElement("div");
             cardVideoWrapper.classList.add("card-image-wrapper");
             const videoThumbnailImg = document.createElement('img');
