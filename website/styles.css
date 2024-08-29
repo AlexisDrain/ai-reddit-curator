@@ -307,6 +307,7 @@ span {
 .button-arrowContainer {
     position: absolute;
     top: 50%;
+    translate: 0% -50%;
     right: 1em;
     border-radius: 1000px;
     background-color: black;
