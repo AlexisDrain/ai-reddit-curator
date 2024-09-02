@@ -40,6 +40,49 @@ def get_headers_with_access_token():
     headers = {**headers, **{"Authorization": f"Bearer {token}"}}
     return headers
 
+def get_posts_300(limit=300, subredditName="all", sortByTop=False, time_filter="all", allow_over_18=False, allow_crosspost=False):
+    
+    headers = get_headers_with_access_token()
+
+    if sortByTop:
+        url = f"https://oauth.reddit.com/r/{subredditName}/top"
+        params = {
+            "limit": limit,
+            "t": time_filter,
+            "sort": "top",
+        }
+    else:
+        url = f"https://oauth.reddit.com/r/{subredditName}"
+        params = {"limit": limit}
+    
+    all_posts = []
+    after = None
+    
+    while len(all_posts) < limit:
+        params = {
+            "limit": min(100, limit - len(all_posts)),
+            "after": after
+        }
+        
+        response = requests.get(url, headers=headers, params=params)
+        
+        if response.status_code != 200:
+            print(f"Error: Status code {response.status_code}")
+            break
+        
+        data = response.json()
+        posts = data['data']['children']
+        
+        if not posts:
+            break
+        
+        all_posts.extend(posts)
+        after = data['data']['after']
+        
+        if not after:
+            break
+    
+    return all_posts
 
 def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all", allow_over_18=False, allow_crosspost=False):
     """https://www.reddit.com/dev/api#GET_best

@@ -7,7 +7,7 @@ from tqdm import tqdm
 from io import BytesIO
 import json
 from score_extract import fetch_gallery_firstImage
-
+import logging
 
 # Example usage
 # claude example. Don't use
@@ -116,6 +116,16 @@ etc.
 
 Do NOT add anything else like your reasoning in that list. Make the list ordered in the same order that I gave you.
 """
+import re
+def _extract_first_number(s):
+    if s is None:
+        Warning(f"Error in _extract_first_number: string is empty.")
+        return None
+    match = re.search(r'\d+', str(s))
+    if match:
+        return int(match.group())
+    Warning(f"Error in _extract_first_number: could not parse integer.")
+    return None
 
 claude_key = "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"
 os.environ["ANTHROPIC_API_KEY"] = claude_key
@@ -273,22 +283,28 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
     if debug_prompt:
         print(results)
 
-    for i, score in tqdm(enumerate(results), desc="Adding Claude comments for exeptional posts"):
-        if score is not None and score != '':
-            if int(score) >= 9:
-                comment = process_post_claudeComment(i, rate_high=True)
-                results_comment.append(comment)
-                results_comment_index.append(i)
-            if int(score) <= 2:
-                comment = process_post_claudeComment(i, rate_high=False)
-                results_comment.append(comment)
-                results_comment_index.append(i)
+    for i, score in tqdm(enumerate(results), desc="Adding Claude comments for exceptional posts"):
+            try:
+                val = _extract_first_number(score)
+                if val is not None:
+                    if val >= 9:
+                        comment = process_post_claudeComment(i, rate_high=True)
+                        results_comment.append(comment)
+                        results_comment_index.append(i)
+                    if val <= 2:
+                        comment = process_post_claudeComment(i, rate_high=False)
+                        results_comment.append(comment)
+                        results_comment_index.append(i)
+            except Exception as e:
+                logging.warning(f"sampling_images: Error processing score at index {i}: {score}. Error: {str(e)}")
     
     if debug_prompt:
         print(results_comment)
         print(results_comment_index)
 
     return results, results_comment, results_comment_index
+
+
     '''
     # Combine and summarize results
     final_summary = client.messages.create(

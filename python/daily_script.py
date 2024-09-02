@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 import os
 
-from crawl import get_posts
+from crawl import get_posts, get_posts_300
 
 # from sampling import get_prompt, basic_sample
 from sampling_images import analyze_reddit_posts
@@ -40,8 +40,43 @@ with open('reddit_posts_gallery.json', 'r') as file:
 '''
 
     
-# posts_reddit = get_posts(1, "CozyPlaces")
+posts_reddit = get_posts_300(300, "all")
 
+post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit, debug_prompt=False)
+
+combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, post_claudeComments, post_claudeComment_index) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
+
+### write the file inside dailyData
+
+
+script_dir = Path(__file__).parent.absolute() # Get the directory of the current script
+repo_root = script_dir.parent # Navigate up
+
+# output_dir = Path('../website/dailyData')
+output_dir = Path(repo_root) / 'website' / 'dailyData'
+output_dir.mkdir(parents=True, exist_ok=True)
+
+current_date = datetime.now().strftime('%Y-%m-%d') # name the file
+output_file = output_dir / f'{current_date}.json'
+# output_file = output_dir / 'dontsave.json' # uncomment previous line for testing the dumped json
+output_file.write_text(json.dumps(combined_data, indent=2))
+
+write_date_in_index_file(current_date, output_dir / 'datesIndex.jsonl')
+
+print(f"daily_script.py ran successfully. New file {output_file} in {output_dir}")
+
+'''
+with open('reddit_posts_300.json', 'w') as file:
+    # Write the JSON data to the file
+    json.dump(posts_reddit, file, indent=2)
+
+with open('reddit_posts_300.json', 'r') as file:
+    # Load the JSON data from the file into a variable
+    posts_reddit = json.load(file)
+    print ("number of posts loaded: " + str(len(posts_reddit)))
+
+'''
+'''
 with open('reddit_posts_gallery.json', 'r') as file:
     # Load the JSON data from the file into a variable
     posts_reddit = json.load(file)
@@ -74,6 +109,7 @@ write_date_in_index_file(current_date, output_dir / 'datesIndex.jsonl')
 
 print(f"Demo.py ran successfully. New file {output_file} in {output_dir}")
 
+'''
 
 '''
 Saving data as a test

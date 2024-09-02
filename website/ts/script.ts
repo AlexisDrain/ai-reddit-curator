@@ -59,7 +59,7 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
       
       if (card.link_flair_text) {
           let text = String(card.link_flair_text);
-          card.link_flair_text = text.charAt(1).toUpperCase() + text.slice(2);
+          card.link_flair_text = text.charAt(0).toUpperCase() + text.slice(1);
           warningElement.textContent = card.link_flair_text;
       }
 
@@ -195,9 +195,11 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
         const ratingElement = document.createElement('div');
         ratingElement.classList.add('card-rating');
-        if (card.rating) {
+        if (card.rating && card.rating.toString().length < 5) {
           ratingElement.textContent = "AI Rating: " + card.rating.toString() + "/10";
           cardElement.setAttribute('rating', card.rating.toString());
+        } else {
+          ratingElement.textContent = "AI Rating: unrated";
         }
 
         // if (card.title) {

@@ -2,7 +2,7 @@ name: Claude Reddit Curator poster
 
 on:
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '40 11 * * *' # lanuch at 11:40 UTC time
   workflow_dispatch:
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       run: |
         max_attempts=3
         attempt=1
-        until python ./python/demo.py || [ $attempt -eq $max_attempts ]; do
+        until python ./python/daily_script.py || [ $attempt -eq $max_attempts ]; do
           echo "Attempt $attempt failed. Retrying..."
           attempt=$((attempt + 1))
           sleep 5  # Optional: add a delay between retries

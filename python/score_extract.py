@@ -1,6 +1,7 @@
 import re
 from copy import deepcopy
 import requests
+import logging
 
 
 old_test_data = """
@@ -160,12 +161,18 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments, clau
         combined_post = {}
 
         # Add score
-        if isinstance(score, (int, float, str)):
-            combined_post["rating"] = score
-        elif isinstance(score, dict):
-            combined_post.update(score)
-        else:
-            raise TypeError(f"Unexpected type for score: {type(score)}")
+        try:
+            if isinstance(score, (int, float, str)):
+                combined_post["rating"] = score
+            elif isinstance(score, dict):
+                combined_post.update(score)
+            else:
+                raise TypeError(f"Unexpected type for score: {type(score)}")
+        except TypeError as e:
+            # Log the error
+            logging.warning(f"score_extract: Error processing score at index {i}: {e}")
+            # Optionally, you can set a default value or skip this score
+            combined_post["rating"] = None  # or any default value you prefer
 
         # Add Reddit post data
         combined_post.update({
