@@ -152,7 +152,7 @@ def fetch_gallery_firstImage(url="https://www.reddit.com/gallery/1eem8zd"):
         print(f"An error occurred while fetching the data: {e}")
         return None
 
-def combine_postScores_claudeComments_reddit(posts, scores, claudeComments, claudeComments_index):
+def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None, claudeComments_index=None, allow_claudeComments=False):
     # Initialize combined_posts as a list of dictionaries
     combined_posts = []
 
@@ -184,10 +184,11 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments, clau
         if combined_post["thumbnail"] in ["self", "default"]:
             combined_post["thumbnail"] = ""
 
-        # Add Claude comment if the index is in claudeComments_index
-        if i in claudeComments_index:
-            comment_index = claudeComments_index.index(i)
-            combined_post["claudeComment"] = claudeComments[comment_index]
+        if allow_claudeComments:
+            # Add Claude comment if the index is in claudeComments_index
+            if i in claudeComments_index:
+                comment_index = claudeComments_index.index(i)
+                combined_post["claudeComment"] = claudeComments[comment_index]
 
         combined_posts.append(combined_post)
 

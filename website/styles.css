@@ -98,6 +98,26 @@ video {
     width: 100%;
 }
 
+/* denylist on left side of screen */
+#denylist {
+    background: chocolate;
+    padding: 1em;
+    border-radius: 0.5em;
+    box-shadow: 0 2px 4px #000;
+    display: flex;
+    flex-basis: 100%;
+    flex-direction: column;
+  }
+.denylist-child {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 2.5em;
+}
+.denylist-button {
+    margin-left: auto;
+}
+
 /* date picker on right side of screen */
 #form-date {
     background: chocolate;

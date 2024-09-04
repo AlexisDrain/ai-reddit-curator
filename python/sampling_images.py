@@ -60,7 +60,7 @@ Do NOT add anything else like your reasoning in that list. Make the list ordered
 # this is what we currently use
 PROMPT_IMAGES_ONEATATIME = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
 The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
-The worst posts are: ragebait, political, or stupid.
+The worst posts are: ragebait, political, stupid, disturbing, sad, or recent USA politics.
 Your answer will be a score from 0 to 10. Do NOT add anything else like your reasoning.
 """
 
@@ -130,7 +130,7 @@ def _extract_first_number(s):
 claude_key = "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"
 os.environ["ANTHROPIC_API_KEY"] = claude_key
 
-def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307", debug_prompt=False):
+def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307", allow_claudeComments=False, debug_prompt=False):
     client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
     
     def process_post(index):
@@ -282,27 +282,28 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
     
     if debug_prompt:
         print(results)
+    if allow_claudeComments:
+        for i, score in tqdm(enumerate(results), desc="Adding Claude comments for exceptional posts"):
+                try:
+                    val = _extract_first_number(score)
+                    if val is not None:
+                        if val >= 9:
+                            comment = process_post_claudeComment(i, rate_high=True)
+                            results_comment.append(comment)
+                            results_comment_index.append(i)
+                        if val <= 2:
+                            comment = process_post_claudeComment(i, rate_high=False)
+                            results_comment.append(comment)
+                            results_comment_index.append(i)
+                except Exception as e:
+                    logging.warning(f"sampling_images: Error processing score at index {i}: {score}. Error: {str(e)}")
+        
+        if debug_prompt:
+            print(results_comment)
+            print(results_comment_index)
+        return results, results_comment, results_comment_index
 
-    for i, score in tqdm(enumerate(results), desc="Adding Claude comments for exceptional posts"):
-            try:
-                val = _extract_first_number(score)
-                if val is not None:
-                    if val >= 9:
-                        comment = process_post_claudeComment(i, rate_high=True)
-                        results_comment.append(comment)
-                        results_comment_index.append(i)
-                    if val <= 2:
-                        comment = process_post_claudeComment(i, rate_high=False)
-                        results_comment.append(comment)
-                        results_comment_index.append(i)
-            except Exception as e:
-                logging.warning(f"sampling_images: Error processing score at index {i}: {score}. Error: {str(e)}")
-    
-    if debug_prompt:
-        print(results_comment)
-        print(results_comment_index)
-
-    return results, results_comment, results_comment_index
+    return results
 
 
     '''

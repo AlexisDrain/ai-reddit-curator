@@ -1,7 +1,20 @@
 // using tutorial from https://www.youtube.com/watch?v=S-T9XoCMwt4
 const body = document.body;
-// options button toggle
-const darkModeToggle = document.getElementById('darkModeToggle');
+let darkModeToggle = null; // toggle dark mode
+let denylistInput = null; // denylist text input
+document.addEventListener('DOMContentLoaded', () => {
+    darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('click', toggleDarkMode);
+    denylistInput = document.getElementById('denylist-input');
+    if (denylistInput) {
+        denylistInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission if within a form
+                submitDenyListType(denylistInput.value);
+            }
+        });
+    }
+});
 // load dark-mode setting
 let themeDark;
 try {
@@ -33,7 +46,8 @@ try {
 catch (error) {
     console.error("Error accessing localStorage:", error);
 }
-// click listener event
+;
+// toggle dark mode, click listener event
 const toggleDarkMode = (event) => {
     // event.preventDefault(); // Prevent default behavior // Alexis: this makes the toggle button stuck at dark-mode for some reason
     console.log("toggle dark mode");
@@ -50,7 +64,10 @@ const toggleDarkMode = (event) => {
     darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
     localStorage.setItem("theme-dark", themeDark);
 };
-darkModeToggle.addEventListener('click', toggleDarkMode);
+// denylist press enter listener event
+function submitDenyListType(value) {
+    alert(value);
+}
 export {};
 // Add touch event listeners for mobile
 // darkModeToggle.addEventListener('touchstart', toggleDarkMode);

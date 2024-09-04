@@ -42,9 +42,13 @@ with open('reddit_posts_gallery.json', 'r') as file:
     
 posts_reddit = get_posts_300(300, "all")
 
-post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit, debug_prompt=False)
+# old, claudeComments
+# post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit, allow_claudeComments=True, debug_prompt=False)
+# combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, post_claudeComments, post_claudeComment_index) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
-combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, post_claudeComments, post_claudeComment_index) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
+post_scores = analyze_reddit_posts(posts_reddit, allow_claudeComments=False, debug_prompt=False)
+
+combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, allow_claudeComments=False) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
 ### write the file inside dailyData
 
