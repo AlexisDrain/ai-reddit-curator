@@ -2,23 +2,26 @@
 
 const body = document.body;
 
-let darkModeToggle = null; // toggle dark mode
-let denylistInput = null; // denylist text input
+let darkModeToggleHTML = null; // toggle dark mode
+let denylistInputHTML = null; // denylist text input
+let denylistChildrenHTML = null; // denylist list of blocked subreddits
 let themeDark: string | null = "true";
 
 document.addEventListener('DOMContentLoaded', () => {
-  darkModeToggle = document.getElementById('darkModeToggle') as HTMLInputElement | null;
-  darkModeToggle.addEventListener('click', toggleDarkMode);
-
+  darkModeToggleHTML = document.getElementById('darkModeToggle') as HTMLInputElement | null;
+  darkModeToggleHTML.addEventListener('click', toggleDarkMode);
+  
+  // deny list table
+  denylistChildrenHTML = document.getElementById('denylist-children') as HTMLInputElement | null;
   // deny list "add" button
   const denylistInputButton = document.getElementById('denylist-input-button') as HTMLInputElement;
   if(denylistInputButton) {
       denylistInputButton.addEventListener('click', submitDenyListType);
   }
   // for pressing enter when you are typing in the denylist field
-  denylistInput = document.getElementById('denylist-input') as HTMLInputElement;
-  if (denylistInput) {
-    denylistInput.addEventListener('keydown', (event: KeyboardEvent) => {
+  denylistInputHTML = document.getElementById('denylist-input') as HTMLInputElement;
+  if (denylistInputHTML) {
+    denylistInputHTML.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
           event.preventDefault(); // Prevent form submission if within a form
           submitDenyListType();
@@ -26,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   }
 
+  // load denylist children
+  createDivWithButtonAndLabel("r/hello_world");
+  createDivWithButtonAndLabel("r/politics");
   // load dark-mode setting
   try {
     themeDark = localStorage.getItem('theme-dark');
@@ -41,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
       body.classList.toggle('dark-mode', true);
       body.classList.toggle('light-mode', false);
 
-      darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
+      darkModeToggleHTML.checked = body.classList.contains('dark-mode'); // visual, for the check button
     } else {
       console.log("Retrieved 'theme-dark' from localStorage. var value: ", themeDark);
 
@@ -53,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body.classList.toggle('dark-mode', false);
         body.classList.toggle('light-mode', true);
       }
-      darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
+      darkModeToggleHTML.checked = body.classList.contains('dark-mode'); // visual, for the check button
     }
   } catch (error) {
     console.error("Error accessing localStorage:", error);
@@ -75,14 +81,43 @@ const toggleDarkMode = (event: Event) => {
     body.classList.toggle('light-mode', false);
   }
 
-  darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
+  darkModeToggleHTML.checked = body.classList.contains('dark-mode'); // visual, for the check button
   localStorage.setItem("theme-dark", themeDark);
 };
 
+
+function createDivWithButtonAndLabel(labelText: string) {
+  // Create the main div element
+  const div = document.createElement('div');
+  div.classList.add("denylist-child");
+  
+    // Create the label element
+    const label = document.createElement('label');
+    label.textContent = labelText;
+
+  // Create the button element
+  const button = document.createElement('button');
+  button.textContent = "X";
+  button.classList.add("denylist-button");
+  button.addEventListener("click", () => removeDenylistChild(div));
+
+  // Append the button and label to the div
+  div.appendChild(label);
+  div.appendChild(button);
+
+  denylistChildrenHTML.appendChild(div);
+}
+
+function removeDenylistChild(div: HTMLElement) {
+  div.parentNode.removeChild(div);
+}
 // denylist press enter listener event
 function submitDenyListType() {
-  alert(denylistInput.value);
+  alert(denylistInputHTML.value);
 }
+
+// Usage example
+const newDiv = createDivWithButtonAndLabel('Click me', 'This is a label');
 
 // Add touch event listeners for mobile
 // darkModeToggle.addEventListener('touchstart', toggleDarkMode);
