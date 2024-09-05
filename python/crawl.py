@@ -72,7 +72,20 @@ def get_posts_300(limit=300, subredditName="all", sortByTop=False, time_filter="
         
         data = response.json()
         posts = data['data']['children']
-        
+        for i in range(len(posts) - 1, -1, -1):
+            post = posts[i]
+            
+            if allow_over_18 == False:
+                # safe_posts = [post for post in posts if not post['data']['over_18']]
+                if post['data']['over_18']:
+                    print(f"Removing post {i + 1} (over 18)")
+                    posts.pop(i)
+
+            if allow_crosspost == False:
+                if post['data'].get('crosspost_parent_list'):
+                    print(f"Removing post {i + 1} (crosspost)")
+                    posts.pop(i)
+                    
         if not posts:
             break
         

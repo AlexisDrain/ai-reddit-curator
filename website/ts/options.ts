@@ -113,7 +113,10 @@ function removeDenylistChild(div: HTMLElement) {
 }
 // denylist press enter listener event
 function submitDenyListType() {
-  alert(denylistInputHTML.value);
+  if(denylistInputHTML.value != "") {
+    createDivWithButtonAndLabel(denylistInputHTML.value);
+    denylistInputHTML.value = "";
+  }
 }
 
 // Usage example

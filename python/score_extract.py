@@ -160,6 +160,7 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None,
         # Create a new dictionary for each post
         combined_post = {}
 
+
         # Add score
         try:
             if isinstance(score, (int, float, str)):
@@ -179,6 +180,11 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None,
             k: full_post["data"][k] for k in ["permalink", "url", "title", "selftext", "thumbnail", "link_flair_text", "author"]
         })
         
+        if full_post["data"]["is_video"] and full_post["data"]["preview"]["images"][0]["source"]["url"]:
+            imgSource = full_post["data"]["preview"]["images"][0]["source"]["url"]
+            imgSource = imgSource.replace("&amp;", "&")
+            combined_post["thumbnail"] = imgSource
+
         if "gallery" in combined_post["url"]:
             combined_post["thumbnail"] = fetch_gallery_firstImage(combined_post["url"])
         if combined_post["thumbnail"] in ["self", "default"]:

@@ -31,10 +31,12 @@ function createCards(cardsToCreate, cards) {
         imgContainer.classList.add('card-imgContainer');
         const warningElement = document.createElement('p');
         warningElement.classList.add('card-warning');
+        const flairElement = document.createElement('p');
+        flairElement.classList.add('card-flair');
         if (card.link_flair_text) {
             let text = String(card.link_flair_text);
             card.link_flair_text = text.charAt(0).toUpperCase() + text.slice(1);
-            warningElement.textContent = card.link_flair_text;
+            flairElement.textContent = card.link_flair_text;
         }
         if (cardElement.getAttribute('typeOfCard') === "image") {
             // img.src = resolveImageLink(card.url);
@@ -166,6 +168,7 @@ function createCards(cardsToCreate, cards) {
         cardElement.appendChild(titleElement);
         cardElement.appendChild(ratingElement);
         cardElement.appendChild(claudeReasonElement);
+        cardElement.appendChild(flairElement);
         cardElement.appendChild(warningElement);
         cardElement.appendChild(selftextElement);
         cardElement.appendChild(imgContainer);

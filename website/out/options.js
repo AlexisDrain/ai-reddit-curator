@@ -98,7 +98,10 @@ function removeDenylistChild(div) {
 }
 // denylist press enter listener event
 function submitDenyListType() {
-    alert(denylistInputHTML.value);
+    if (denylistInputHTML.value != "") {
+        createDivWithButtonAndLabel(denylistInputHTML.value);
+        denylistInputHTML.value = "";
+    }
 }
 // Usage example
 const newDiv = createDivWithButtonAndLabel('Click me', 'This is a label');
