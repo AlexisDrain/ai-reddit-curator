@@ -7,12 +7,17 @@ let denylistInput = null; // denylist text input
 document.addEventListener('DOMContentLoaded', () => {
   darkModeToggle = document.getElementById('darkModeToggle') as HTMLInputElement | null;
   darkModeToggle.addEventListener('click', toggleDarkMode);
+
+  // deny list "add" button
+  const denylistInputButton = document.getElementById('denylist-input-button') as HTMLInputElement;
+  denylistInputButton.addEventListener('click', submitDenyListType);
+  // for pressing enter when you are typing in the denylist field
   denylistInput = document.getElementById('denylist-input') as HTMLInputElement;
   if (denylistInput) {
     denylistInput.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
           event.preventDefault(); // Prevent form submission if within a form
-          submitDenyListType(denylistInput.value);
+          submitDenyListType();
       }
   });
   }
@@ -72,8 +77,8 @@ const toggleDarkMode = (event: Event) => {
 };
 
 // denylist press enter listener event
-function submitDenyListType(value: string) {
-  alert(value);
+function submitDenyListType() {
+  alert(denylistInput.value);
 }
 
 // Add touch event listeners for mobile

@@ -38,56 +38,6 @@ body.dark-mode {
     gap: 20px;
     padding-right: 20px;
 }
-/* Styles for larger desktops */
-@media (min-width: 1200px) {
-    /* Your styles for larger screens */
-
-  }
-  @media (max-width: 1450px) {
-    .page-left {
-        width: 300px;
-    }
-  }
-  
-  /* Styles for medium-sized screens (tablets and smaller desktops) */
-  @media (max-width: 1199px) {
-  }
-  /* Styles for smaller tablets and mobile */
-  @media (max-width: 991px) {
-  }
-
-  /* Styles for smaller tablets and mobile */
-@media (max-width: 1100px) {
-    .page-container {
-        justify-content: center;
-      }
-    .page-left {
-        width: 100%;
-        padding-top: 5em;
-        align-items: center;
-        padding-right: 0px;
-    }
-    .page-center {
-        position: absolute;
-        margin-top: 29em;
-    }
-    .page-right {
-            /* For top positioning */
-        top: 0;
-        bottom: auto;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: auto; /* Height will adjust to content */
-        max-height: 50vh; /* Limit to half the viewport height */
-    }
-    #form-date {
-        justify-content: center;
-        text-align: center;
-    }
-  }
-  /* end: main components of page */
-
 
 .page-container {
 display: flex;
@@ -107,7 +57,21 @@ video {
     display: flex;
     flex-basis: 100%;
     flex-direction: column;
+    width: 100%;
   }
+#denylist-textfield {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+#denylist-input {
+    flex-grow: 1;
+  }
+#denylist-input-button {
+    margin-left: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
 .denylist-child {
     display: flex;
     flex-direction: row;
@@ -302,13 +266,14 @@ span {
     border-radius: 1em;
     box-shadow: 0 2px 4px #555;
     padding: 20px;
-    max-width: 80vw; /* Set a maximum width of 80% of the viewport width */
-    width: 100%; /* Make the card take up the full width of the container */
+    max-width: 600px;
+    /* max-width: 80vw; Set a maximum width of 80% of the viewport width */
+    /* width: 100%; /* Make the card take up the full width of the container */
     transition: transform 0.3s ease, z-index 0.3s ease;
 }
 @media (min-width: 768px) {
     .card {
-      max-width: 60vw; /* Reduce max-width to 60% of the viewport width for screens above 768px */
+      /* max-width: 60vw; /* Reduce max-width to 60% of the viewport width for screens above 768px */
     }
   }
 .card.expanded {
@@ -496,4 +461,65 @@ span {
     background: #346;
   }
   
+  /* Styles for larger desktops */
+
+  @media (max-width: 1449px) {
+    .page-left {
+        width: 300px;
+    }
+  }
   
+  /* Styles for medium-sized screens (tablets and smaller desktops) */
+  @media (max-width: 1279px) {
+    .page-left {
+        width: 200px;
+    }
+    .text-left{
+        width: 16em;
+    }
+  }
+
+  /* Styles for smaller tablets and mobile */
+@media (max-width: 1138px) {
+    .card {
+        max-width: 80vw;
+    }
+    .page-container {
+        justify-content: center;
+        flex-direction: column;
+      }
+    .page-left {
+        width: 100%;
+        padding-top: 5em;
+        align-items: center;
+        padding-right: 0px;
+        flex: 1;
+        margin-bottom: 1em;
+    }
+    .page-center {
+        position: relative;
+    }
+    .page-right {
+            /* For top positioning */
+        top: 0;
+        bottom: auto;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: auto; /* Height will adjust to content */
+        max-height: 50vh; /* Limit to half the viewport height */
+        max-width: 100vw;
+    }
+    .text-left {
+        text-align: center;
+    }
+    #form-date {
+        justify-content: center;
+        text-align: center;
+    }
+    #denylist {
+        width: 70vw;
+    }
+  }
+  /* end: main components of page */
+
