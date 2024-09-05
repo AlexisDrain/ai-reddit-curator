@@ -156,7 +156,7 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
       selftextElement.classList.add('card-selftext');
       if(card.selftext) {
         card.selftext = linkifyText(card.selftext);
-        selftextElement.innerHTML = card.selftext;
+        selftextElement.innerHTML = card.selftext.replace(/\n/g, '<br>'); // add line breaks
 
       }
 
