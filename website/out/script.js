@@ -25,6 +25,8 @@ function createCards(cardsToCreate, cards) {
                 cardElement.setAttribute('typeOfCard', "misc");
             }
         }
+        const subredditRegex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
+        cardElement.setAttribute('subreddit', card.permalink.match(subredditRegex)[1]);
         const imgContainer = document.createElement('a');
         imgContainer.classList.add('card-imgContainer');
         const warningElement = document.createElement('p');
@@ -132,9 +134,8 @@ function createCards(cardsToCreate, cards) {
         const containerElement = document.createElement('span');
         // Create the first link element
         const redditUrlElement1 = document.createElement('a');
-        const regex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
-        redditUrlElement1.textContent = card.permalink.match(regex)[1];
-        redditUrlElement1.href = "https://reddit.com/" + card.permalink.match(regex)[1];
+        redditUrlElement1.textContent = card.permalink.match(subredditRegex)[1];
+        redditUrlElement1.href = "https://reddit.com/" + card.permalink.match(subredditRegex)[1];
         // Create the second link element
         const redditUrlElement2 = document.createElement('a');
         redditUrlElement2.href = "https://reddit.com/u/" + card.author;

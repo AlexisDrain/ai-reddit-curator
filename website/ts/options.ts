@@ -4,13 +4,17 @@ const body = document.body;
 
 let darkModeToggle = null; // toggle dark mode
 let denylistInput = null; // denylist text input
+let themeDark: string | null = "true";
+
 document.addEventListener('DOMContentLoaded', () => {
   darkModeToggle = document.getElementById('darkModeToggle') as HTMLInputElement | null;
   darkModeToggle.addEventListener('click', toggleDarkMode);
 
   // deny list "add" button
   const denylistInputButton = document.getElementById('denylist-input-button') as HTMLInputElement;
-  denylistInputButton.addEventListener('click', submitDenyListType);
+  if(denylistInputButton) {
+      denylistInputButton.addEventListener('click', submitDenyListType);
+  }
   // for pressing enter when you are typing in the denylist field
   denylistInput = document.getElementById('denylist-input') as HTMLInputElement;
   if (denylistInput) {
@@ -21,42 +25,41 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   });
   }
-})
 
-// load dark-mode setting
-let themeDark: string | null;
-try {
-  themeDark = localStorage.getItem('theme-dark');
-  
-  if (themeDark === null) {
-    console.log("Item 'theme-dark' not found in localStorage. Set to true (dark)");
+  // load dark-mode setting
+  try {
+    themeDark = localStorage.getItem('theme-dark');
     
-    // save the bool for the user
-    themeDark = "true";
-    localStorage.setItem("theme-dark", themeDark);
+    if (themeDark === null) {
+      console.log("Item 'theme-dark' not found in localStorage. Set to true (dark)");
+      
+      // save the bool for the user
+      themeDark = "true";
+      localStorage.setItem("theme-dark", themeDark);
 
-    // added to the body
-    body.classList.toggle('dark-mode', true);
-    body.classList.toggle('light-mode', false);
-
-    darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
-  } else {
-    console.log("Retrieved 'theme-dark' from localStorage. var value: ", themeDark);
-
-    // added to the body
-    if(themeDark == "true") {
+      // added to the body
       body.classList.toggle('dark-mode', true);
       body.classList.toggle('light-mode', false);
-    } else if(themeDark == "false") {
-      body.classList.toggle('dark-mode', false);
-      body.classList.toggle('light-mode', true);
-    }
-    darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
-  }
-} catch (error) {
-  console.error("Error accessing localStorage:", error);
-};
 
+      darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
+    } else {
+      console.log("Retrieved 'theme-dark' from localStorage. var value: ", themeDark);
+
+      // added to the body
+      if(themeDark == "true") {
+        body.classList.toggle('dark-mode', true);
+        body.classList.toggle('light-mode', false);
+      } else if(themeDark == "false") {
+        body.classList.toggle('dark-mode', false);
+        body.classList.toggle('light-mode', true);
+      }
+      darkModeToggle.checked = body.classList.contains('dark-mode'); // visual, for the check button
+    }
+  } catch (error) {
+    console.error("Error accessing localStorage:", error);
+  };
+
+});
 
 // toggle dark mode, click listener event
 const toggleDarkMode = (event: Event) => {
