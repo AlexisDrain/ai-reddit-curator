@@ -72,20 +72,6 @@ def get_posts_300(limit=300, subredditName="all", sortByTop=False, time_filter="
         
         data = response.json()
         posts = data['data']['children']
-        for i in range(len(posts) - 1, -1, -1):
-            post = posts[i]
-            
-            if allow_over_18 == False:
-                # safe_posts = [post for post in posts if not post['data']['over_18']]
-                if post['data']['over_18']:
-                    print(f"Removing post {i + 1} (over 18)")
-                    posts.pop(i)
-
-            if allow_crosspost == False:
-                if post['data'].get('crosspost_parent_list'):
-                    print(f"Removing post {i + 1} (crosspost)")
-                    posts.pop(i)
-                    
         if not posts:
             break
         
@@ -95,6 +81,23 @@ def get_posts_300(limit=300, subredditName="all", sortByTop=False, time_filter="
         if not after:
             break
     
+    # remove some of the posts
+    for i in range(len(all_posts) - 1, -1, -1):
+        post = all_posts[i]
+
+        if allow_over_18 == False:
+            # safe_posts = [post for post in posts if not post['data']['over_18']]
+            if post['data']['over_18']:
+                print(f"Removing post {i + 1} (over 18)")
+                all_posts.pop(i)
+        if allow_crosspost == False:
+            if post['data'].get('crosspost_parent_list'):
+                print(f"Removing post {i + 1} (crosspost)")
+                all_posts.pop(i)
+        if len(post['data']["selftext"]) > 1000:
+            print(f"selftext is too long. truncating post {i + 1}")
+            post['data']["selftext"] = post['data']["selftext"][:997] + "..."
+
     return all_posts
 
 def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all", allow_over_18=False, allow_crosspost=False):
