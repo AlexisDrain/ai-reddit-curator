@@ -56,11 +56,12 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
       const subredditRegex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
       cardElement.setAttribute('subreddit', card.permalink.match(subredditRegex)[1]);
 
+      /*
       if(cardElement.getAttribute("subreddit") in blocked_subreddits) {
         console.log("subreddit " + cardElement.getAttribute("subreddit") + " is blocked")
         return;
       }
-
+      */
       const imgContainer = document.createElement('a');
       imgContainer.classList.add('card-imgContainer');
       const warningElement = document.createElement('p');

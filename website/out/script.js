@@ -1,5 +1,4 @@
 import * as DateChanger from "./dateChanger.js";
-import { blocked_subreddits } from "./options.js";
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
 const noDataMessageText = document.getElementById('noDataMessage-text');
@@ -28,10 +27,12 @@ function createCards(cardsToCreate, cards) {
         }
         const subredditRegex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
         cardElement.setAttribute('subreddit', card.permalink.match(subredditRegex)[1]);
-        if (cardElement.getAttribute("subreddit") in blocked_subreddits) {
-            console.log("subreddit " + cardElement.getAttribute("subreddit") + " is blocked");
-            return;
+        /*
+        if(cardElement.getAttribute("subreddit") in blocked_subreddits) {
+          console.log("subreddit " + cardElement.getAttribute("subreddit") + " is blocked")
+          return;
         }
+        */
         const imgContainer = document.createElement('a');
         imgContainer.classList.add('card-imgContainer');
         const warningElement = document.createElement('p');
