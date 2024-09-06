@@ -22,3 +22,4 @@ chevron-right.svg
 play-circle.svg  
 settings.svg  
 lock.svg  
+trash.svg
