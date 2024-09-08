@@ -81,26 +81,61 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        # Function to log messages
+        log_message() {
+          echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+        }
+
         # Generate a unique branch name
         branch_name="update-daily-data-$(date +%Y%m%d-%H%M%S)"
-        
+        log_message "Generated branch name: $branch_name"
+
         # Create and switch to the new branch
         git checkout -b $branch_name
-        
+        log_message "Created and switched to new branch"
+
         # Push the changes to the new branch
-        git push origin $branch_name
+        if git push origin $branch_name; then
+          log_message "Pushed changes to new branch"
+        else
+          log_message "Failed to push changes to new branch"
+          exit 1
+        fi
 
-        # Install GitHub CLI
-        type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-        && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-        && sudo apt update \
-        && sudo apt install gh -y
+        # Check if GitHub CLI is installed, install if not
+        if ! command -v gh &> /dev/null; then
+          log_message "Installing GitHub CLI"
+          sudo apt update && sudo apt install gh -y
+        fi
 
-        # Create and merge the pull request
+        # Create the pull request
+        log_message "Creating pull request"
         pr_url=$(gh pr create --title "Update: Daily data from Claude Reddit Curator" --body "Automated update of daily data files." --base main --head $branch_name)
-        gh pr merge $pr_url --merge --auto
+        
+        if [ -z "$pr_url" ]; then
+          log_message "Failed to create pull request"
+          exit 1
+        fi
+        
+        log_message "Pull request created: $pr_url"
+
+        # Wait for a short period to allow for any immediate checks
+        sleep 30
+
+        # Attempt to merge the pull request
+        log_message "Attempting to merge pull request"
+        for i in {1..3}; do
+          if gh pr merge $pr_url --merge --auto; then
+            log_message "Successfully merged pull request"
+            exit 0
+          else
+            log_message "Merge attempt $i failed, waiting before retry"
+            sleep 30
+          fi
+        done
+
+        log_message "Failed to merge pull request after 3 attempts"
+        exit 1
 
     - name: Debug - PR Creation and Merge
       if: steps.git-check.outputs.changes == 'true'
