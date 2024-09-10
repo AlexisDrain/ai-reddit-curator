@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         blocked_subreddits = JSON.parse(localStorage.getItem('blocked-subreddits'));
         if (blocked_subreddits === null) {
             console.log("Item 'blocked_subreddits' not found in localStorage. Initilizing blocked_subreddits");
-            createDivWithButtonAndLabel("r/politics");
+            addNewBlockedSubreddit("r/politics");
         }
     }
     catch (error) {
@@ -86,7 +86,10 @@ const toggleDarkMode = (event) => {
     darkModeToggleHTML.checked = body.classList.contains('dark-mode'); // visual, for the check button
     localStorage.setItem("theme-dark", themeDark);
 };
-function createDivWithButtonAndLabel(labelText) {
+function addNewBlockedSubreddit(labelText) {
+    // save this new label
+    blocked_subreddits.push(labelText);
+    localStorage.setItem("myArrayKey", JSON.stringify(blocked_subreddits));
     // Create the main div element
     const div = document.createElement('div');
     div.classList.add("denylist-child");
@@ -98,14 +101,16 @@ function createDivWithButtonAndLabel(labelText) {
         width: 20,
         height: 20,
         color: '#ff0000',
-        onClick: () => removeDenylistChild(div)
+        onClick: () => removeDenylistChild(div, labelText)
     });
     // Append the button and label to the div
     div.appendChild(label);
     div.appendChild(trashButton);
     denylistChildrenHTML.appendChild(div);
 }
-function removeDenylistChild(div) {
+function removeDenylistChild(div, subreddit) {
+    blocked_subreddits = blocked_subreddits.filter(item => item !== subreddit); // remove subreddit from array
+    localStorage.setItem("myArrayKey", JSON.stringify(blocked_subreddits));
     div.parentNode.removeChild(div);
 }
 // denylist press enter listener event
@@ -120,7 +125,7 @@ function submitDenyListType() {
         if (subreddit.startsWith("r/") == false) {
             subreddit = "r/" + subreddit;
         }
-        createDivWithButtonAndLabel(subreddit);
+        addNewBlockedSubreddit(subreddit);
         denylistInputHTML.value = "";
     }
 }

@@ -2,6 +2,7 @@ import * as DateChanger from "./dateChanger.js";
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
 const noDataMessageText = document.getElementById('noDataMessage-text');
+const elementImgMap = new WeakMap();
 // Create and append card elements
 function createCards(cardsToCreate, cards) {
     cardsToCreate.forEach(card => {
@@ -48,7 +49,9 @@ function createCards(cardsToCreate, cards) {
             // img.src = resolveImageLink(card.url);
             const img = document.createElement('img');
             img.classList.add('card-image');
-            img.src = card.url;
+            elementImgMap.set(cardElement, img);
+            // img.src = card.url;
+            cardElement.setAttribute('img-src', card.url);
             imgContainer.href = "https://reddit.com" + card.permalink;
             imgContainer.appendChild(img);
         }
@@ -58,11 +61,14 @@ function createCards(cardsToCreate, cards) {
             cardImageWrapper.classList.add("card-image-wrapper");
             const img = document.createElement('img');
             img.classList.add('card-image');
+            elementImgMap.set(cardElement, img);
             if (card.thumbnail != "") {
                 img.src = card.thumbnail;
+                cardElement.setAttribute('img-src', card.thumbnail);
             }
             else {
                 img.src = card.url;
+                cardElement.setAttribute('img-src', card.url);
             }
             img.addEventListener('load', function () {
                 cardImageWrapper.appendChild(createNextImageSVG());
@@ -76,9 +82,11 @@ function createCards(cardsToCreate, cards) {
             const cardVideoWrapper = document.createElement("div");
             cardVideoWrapper.classList.add("card-image-wrapper");
             const videoThumbnailImg = document.createElement('img');
+            elementImgMap.set(cardElement, videoThumbnailImg);
             videoThumbnailImg.classList.add('card-video-thumbnail');
             if (card.thumbnail != "") {
-                videoThumbnailImg.src = card.thumbnail;
+                cardElement.setAttribute('img-src', card.thumbnail);
+                //videoThumbnailImg.src = card.thumbnail;
             }
             /*
             [Deprecated Video because I cannot sync video+audio easily]
@@ -109,10 +117,12 @@ function createCards(cardsToCreate, cards) {
             // img.src = resolveImageLink(card.url);
             warningElement.textContent = "📞 This post is a link to external site!";
             const img = document.createElement('img');
+            elementImgMap.set(cardElement, img);
             img.classList.add('card-image');
             imgContainer.href = "https://reddit.com" + card.permalink;
             if (card.thumbnail != "") {
-                img.src = card.thumbnail;
+                // img.src = card.thumbnail;
+                cardElement.setAttribute('img-src', card.thumbnail);
                 imgContainer.appendChild(img);
             }
         }
@@ -129,15 +139,6 @@ function createCards(cardsToCreate, cards) {
         if (card.claudeComment && card.claudeComment !== "") {
             claudeReasonElement.textContent = "Claude AI: \"" + card.claudeComment + "\"";
         }
-        /*
-        const redditUrlElement = document.createElement('a');
-        redditUrlElement.classList.add('card-url');
-        if (card.permalink) {
-            redditUrlElement.href = "https://reddit.com"+ card.permalink;
-            const regex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
-            redditUrlElement.textContent = card.permalink.match(regex)[1] + " - u/" + card.author;
-        }
-            */
         // subreddet + user line
         const containerElement = document.createElement('span');
         // Create the first link element
@@ -163,7 +164,6 @@ function createCards(cardsToCreate, cards) {
         else {
             ratingElement.textContent = "AI Rating: unrated";
         }
-        // if (card.title) {
         const titleElement = document.createElement('h2');
         const linkElement = document.createElement('a');
         titleElement.classList.add('card-title');
@@ -287,40 +287,38 @@ function linkifyText(text) {
         return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
     });
 }
-/*  delete this if there are no cookies generated  */
-let weservAvailable = false;
-function checkWeservAvailability(timeout = 5000) {
-    return new Promise((resolve, reject) => {
-        const testImage = new Image();
-        const timer = setTimeout(() => {
-            testImage.onerror = testImage.onload = null;
-            resolve('Timeout while checking Images.weserv.nl');
-            console.log("images.weserv.nl is unavailable. time out");
-            weservAvailable = false;
-        }, timeout);
-        testImage.onerror = () => {
-            clearTimeout(timer);
-            resolve('images.weserv.nl is unavailable. Error loading test image from Images.weserv.nl');
-            console.log("images.weserv.nl is unavailable. Error loading test image from Images.weserv.nl");
-            weservAvailable = false;
-        };
-        testImage.onload = () => {
-            clearTimeout(timer);
-            resolve('Images.weserv.nl is available');
-            weservAvailable = true;
-            console.log("images.weserv.nl is available");
-        };
-        // Use a small, static image from weserv.nl for the test
-        testImage.src = 'https://images.weserv.nl/favicon.ico';
-    });
+// lazy loading https://claude.ai/chat/a3deb893-a035-4d45-bb76-a369a89d4905
+function setupIntersectionObserver(cards) {
+    const cardsArray = Array.from(cards.children);
+    const options = {
+        root: null,
+        rootMargin: '50px', // Start loading slightly before the image comes into view
+        threshold: 0.1
+    };
+    let observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                loadImage(entry.target);
+                observer.unobserve(entry.target); // Stop observing once loaded
+            }
+        });
+    }, options);
+    cardsArray.forEach(placeholder => observer.observe(placeholder));
 }
-// Proxy the image through images.weserv.nl so we don't raise cookie warning
-function resolveImageLink(newLink) {
-    let proxyUrl = newLink;
-    if (weservAvailable) {
-        proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(newLink)}`; // Proxy the image through images.weserv.nl so we don't raise cookie warning
+function loadImage(card) {
+    const src = card.getAttribute('img-src');
+    if (!src) {
+        console.error('No image source found');
+        return;
     }
-    return proxyUrl;
+    const retrievedImg = elementImgMap.get(card);
+    retrievedImg.src = src;
+    retrievedImg.onload = () => {
+        console.log("image Loaded");
+    };
+    retrievedImg.onerror = () => {
+        // console.error(`Failed to load image: ${src}`);
+    };
 }
 // start of page
 export function main() {
@@ -333,6 +331,7 @@ export function main() {
         cardContainerDestroyAll(cardContainer);
         createCards(jsonFileCurrent, cardContainer);
         sortCards(cardContainer);
+        setupIntersectionObserver(cardContainer);
     });
 }
 // init page

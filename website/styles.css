@@ -433,22 +433,27 @@ span {
     align-items: center;
     width: 100%; /* Or any specific width */
 }
-
 #logo-img {
     border-radius: 15px;
     width: 75px;
     height: 75px;
     box-shadow: 0 2px 4px #555;
 }
-
 #logo-text {
     padding-left: 20px;
 }
-
-
+#android-logo {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+}
+#android-image {
+    width: 100%;
+}
 /* text: powered by claude */
 .text-left {
     margin-top: .75em;
+    margin-bottom: 0px;
     width: 17em;
 }
 .light-mode .text-left  {
@@ -530,6 +535,9 @@ span {
     }
     #denylist {
         width: 70vw;
+    }
+    #android-logo {
+        width: 30%;
     }
   }
   /* end: main components of page */

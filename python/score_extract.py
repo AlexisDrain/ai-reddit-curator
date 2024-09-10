@@ -146,6 +146,7 @@ def fetch_gallery_firstImage(url="https://www.reddit.com/gallery/1eem8zd"):
         data = response.json()
         
         id_ = str(data[0]["data"]["children"][0]["data"]["gallery_data"]["items"][0]["media_id"])
+
         return f'https://i.redd.it/{id_}.jpg'
     
     except requests.RequestException as e:
@@ -159,7 +160,6 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None,
     for i, (score, full_post) in enumerate(zip(scores, posts, strict=True)):
         # Create a new dictionary for each post
         combined_post = {}
-
 
         # Add score
         try:
@@ -187,9 +187,9 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None,
 
         if "gallery" in combined_post["url"]:
             combined_post["thumbnail"] = fetch_gallery_firstImage(combined_post["url"])
-        if combined_post["thumbnail"] in ["self", "default"]:
-            combined_post["thumbnail"] = ""
-
+        #elif combined_post["thumbnail"] in ["self", "default"]:
+        #    combined_post["thumbnail"] = ""
+        
         if allow_claudeComments:
             # Add Claude comment if the index is in claudeComments_index
             if i in claudeComments_index:
