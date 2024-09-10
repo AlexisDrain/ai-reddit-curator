@@ -387,21 +387,27 @@ function setupIntersectionObserver(cards : HTMLElement | null): void {
 function loadImage(card: HTMLElement): void {
   const src = card.getAttribute('img-src');
   if (!src) {
-    console.error('No image source found');
+    if(debugMode) {
+      console.error('No image source found');
+    }
     return;
   }
   const retrievedImg = elementImgMap.get(card);
   retrievedImg.src = src;
 
-  retrievedImg.onload = () => {
-      console.log("image Loaded");
-  };
-  retrievedImg.onerror = () => {
-      // console.error(`Failed to load image: ${src}`);
-  };
+  if(debugMode) {
+    retrievedImg.onload = () => {
+        console.log("image Loaded");
+    };
+    retrievedImg.onerror = () => {
+        // console.error(`Failed to load image: ${src}`);
+    };
+  }
 }
 
 // start of page
+
+const debugMode : Boolean = false;
 export function main() {
 
   let jsonFileCurrent : RedditPost[];

@@ -308,19 +308,24 @@ function setupIntersectionObserver(cards) {
 function loadImage(card) {
     const src = card.getAttribute('img-src');
     if (!src) {
-        console.error('No image source found');
+        if (debugMode) {
+            console.error('No image source found');
+        }
         return;
     }
     const retrievedImg = elementImgMap.get(card);
     retrievedImg.src = src;
-    retrievedImg.onload = () => {
-        console.log("image Loaded");
-    };
-    retrievedImg.onerror = () => {
-        // console.error(`Failed to load image: ${src}`);
-    };
+    if (debugMode) {
+        retrievedImg.onload = () => {
+            console.log("image Loaded");
+        };
+        retrievedImg.onerror = () => {
+            // console.error(`Failed to load image: ${src}`);
+        };
+    }
 }
 // start of page
+const debugMode = false;
 export function main() {
     let jsonFileCurrent;
     //checkWeservAvailability(1000).then(() => // use the image proxy to avoid raising cookies

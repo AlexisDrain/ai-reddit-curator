@@ -13,13 +13,13 @@ body.dark-mode {
     transition: 0.3s;
   }
 
-
 /* start: main components of page */
   .page-center {
     max-width: 600px;
     left: 50%;
     transform: translateX(-50%);
     position: absolute;
+    
     /*
     display: flex;
     flex-direction: column;  Stack cards vertically
@@ -488,7 +488,7 @@ span {
   /* Styles for medium-sized screens (tablets and smaller desktops) */
   @media (max-width: 1279px) {
     .page-left {
-        width: 200px;
+        width: 212px;
     }
     .text-left{
         width: 16em;
@@ -542,3 +542,10 @@ span {
   }
   /* end: main components of page */
 
+
+
+  p, h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* Modern browsers */
+    word-break: break-word; /* For non-CJK text */
+  }
