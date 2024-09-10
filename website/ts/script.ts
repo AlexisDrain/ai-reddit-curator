@@ -1,4 +1,5 @@
 import * as DateChanger from "./dateChanger.js";
+import { loadOptions } from './options.js';
 import { blocked_subreddits } from "./options.js";
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
@@ -27,12 +28,22 @@ const elementImgMap = new WeakMap<HTMLElement, HTMLImageElement>();
 // Create and append card elements
 function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
-    cardsToCreate.forEach(card => {
+    for (let i = 0; i < cardsToCreate.length; i++) {
 
+      let card = cardsToCreate[i];
 
-      
       const cardElement = document.createElement('div');
       cardElement.classList.add('card');
+      
+      const subredditRegex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
+      cardElement.setAttribute('subreddit', card.permalink.match(subredditRegex)[1]);
+
+      // denylist
+      const subreddit = normalizeSubredditName(cardElement.getAttribute("subreddit") || "");
+      const normalizedBlockedSubreddits = blocked_subreddits.map(normalizeSubredditName);
+      if (normalizedBlockedSubreddits.includes(subreddit)) {
+        continue;
+      }
       
 
       
@@ -54,9 +65,6 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
       }
 
       
-      const subredditRegex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
-      cardElement.setAttribute('subreddit', card.permalink.match(subredditRegex)[1]);
-
 
       /*
       if(cardElement.getAttribute("subreddit") in blocked_subreddits) {
@@ -251,7 +259,7 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         // cardElement.appendChild(cardUnlock);
         // cardElement.appendChild(cardLock);
         */
-    });
+    };
 
     
     noDataMessageText.innerHTML = "You've reached the end of this Reddit day! You may pick another date."
@@ -265,9 +273,11 @@ function sortCards(cards : HTMLElement | null) {
     const ratingB = Number(b.getAttribute('rating')) || 0;
     return ratingB - ratingA; // Sort in descending order
   });
-
+  
   // Reappend the sorted elements
-  cardsArray.forEach(card => cards.appendChild(card));
+  cardsArray.forEach(card => {
+      cards.appendChild(card)
+  });
 }
 
 function createPlayButtonSVG() : SVGSVGElement {
@@ -405,6 +415,11 @@ function loadImage(card: HTMLElement): void {
   }
 }
 
+function normalizeSubredditName(name: string): string {
+  // Remove leading '/' if present, ensure 'r/' prefix, and convert to lowercase
+  return name.replace(/^\/?(r\/)?/i, 'r/').toLowerCase();
+}
+
 // start of page
 
 const debugMode : Boolean = false;
@@ -414,7 +429,8 @@ export function main() {
 
   //checkWeservAvailability(1000).then(() => // use the image proxy to avoid raising cookies
   loadData(DateChanger.dateChangerInput.value)
-  .then(jsonFile => {
+    .then(jsonFile => {
+      loadOptions()
       jsonFileCurrent = jsonFile;
     }).then(asdf => {
       cardContainerDestroyAll(cardContainer);

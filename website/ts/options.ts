@@ -1,17 +1,19 @@
+import * as script from "./script.js";
+
 // using tutorial from https://www.youtube.com/watch?v=S-T9XoCMwt4
 
 const body = document.body;
 
 let darkModeToggleHTML = null; // toggle dark mode
 let denylistInputHTML = null; // denylist text input
-let denylistChildrenHTML = null; // denylist list of blocked subreddits
+let denylistChildrenHTML = null; // visual denylist list of blocked subreddits
 let themeDark: string | null = "true";
-export let blocked_subreddits: string[] | null;
+export let blocked_subreddits: string[] | null; // denylist list of blocked subreddits
 
-document.addEventListener('DOMContentLoaded', () => {
+export function loadOptions() {
   darkModeToggleHTML = document.getElementById('darkModeToggle') as HTMLInputElement | null;
   darkModeToggleHTML.addEventListener('click', toggleDarkMode);
-  
+
   // deny list table
   denylistChildrenHTML = document.getElementById('denylist-children') as HTMLInputElement | null;
   // deny list "add" button
@@ -67,16 +69,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // load blocked subreddits setting
 
   try {
-    blocked_subreddits = JSON.parse(localStorage.getItem('blocked-subreddits'));
-    if (blocked_subreddits === null) {
+    if (localStorage.getItem('blocked-subreddits') == null) {
       console.log("Item 'blocked_subreddits' not found in localStorage. Initilizing blocked_subreddits");
+      blocked_subreddits = [];
       addNewBlockedSubreddit("r/politics");
+    } else {
+      blocked_subreddits = JSON.parse(localStorage.getItem('blocked-subreddits'));
+      blocked_subreddits.forEach (element => {
+      displayBlockedSubreddit(element);
+      });
     }
   }
   catch (error) {
     console.error("Error accessing blocked-subreddits localStorage:", error);
   };
-});
+}
 
 // toggle dark mode, click listener event
 const toggleDarkMode = (event: Event) => {
@@ -100,14 +107,18 @@ const toggleDarkMode = (event: Event) => {
 function addNewBlockedSubreddit(labelText: string) {
   // save this new label
   blocked_subreddits.push(labelText);
-  localStorage.setItem("myArrayKey", JSON.stringify(blocked_subreddits));
+  localStorage.setItem("blocked-subreddits", JSON.stringify(blocked_subreddits));
+
+  displayBlockedSubreddit(labelText);
+}
+function displayBlockedSubreddit(labelText: string) {
   // Create the main div element
   const div = document.createElement('div');
   div.classList.add("denylist-child");
   
-    // Create the label element
-    const label = document.createElement('label');
-    label.textContent = labelText;
+  // Create the label element
+  const label = document.createElement('label');
+  label.textContent = labelText;
 
   // Create the button element
   const trashButton = createTrashIconButton({
@@ -126,8 +137,10 @@ function addNewBlockedSubreddit(labelText: string) {
 
 function removeDenylistChild(div: HTMLElement, subreddit: string) {
   blocked_subreddits = blocked_subreddits.filter(item => item !== subreddit); // remove subreddit from array
-  localStorage.setItem("myArrayKey", JSON.stringify(blocked_subreddits));
+  localStorage.setItem("blocked-subreddits", JSON.stringify(blocked_subreddits));
   div.parentNode.removeChild(div);
+  
+  script.main(); // restart page with new denylist settings
 }
 // denylist press enter listener event
 function submitDenyListType() {
@@ -137,13 +150,15 @@ function submitDenyListType() {
     if(subreddit.match(regex)) {
       subreddit = subreddit.match(regex)[0];
     }
-    console.log(subreddit);
     if(subreddit.startsWith("r/") == false) {
       subreddit = "r/" + subreddit
     }
     addNewBlockedSubreddit(subreddit);
     denylistInputHTML.value = "";
   }
+
+  
+  script.main(); // restart page with new denylist settings
 }
 
 // Add touch event listeners for mobile

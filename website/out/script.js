@@ -1,13 +1,24 @@
 import * as DateChanger from "./dateChanger.js";
+import { loadOptions } from './options.js';
+import { blocked_subreddits } from "./options.js";
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
 const noDataMessageText = document.getElementById('noDataMessage-text');
 const elementImgMap = new WeakMap();
 // Create and append card elements
 function createCards(cardsToCreate, cards) {
-    cardsToCreate.forEach(card => {
+    for (let i = 0; i < cardsToCreate.length; i++) {
+        let card = cardsToCreate[i];
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
+        const subredditRegex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
+        cardElement.setAttribute('subreddit', card.permalink.match(subredditRegex)[1]);
+        // denylist
+        const subreddit = normalizeSubredditName(cardElement.getAttribute("subreddit") || "");
+        const normalizedBlockedSubreddits = blocked_subreddits.map(normalizeSubredditName);
+        if (normalizedBlockedSubreddits.includes(subreddit)) {
+            continue;
+        }
         if (card.url) {
             if (card.url.includes("//v.redd.it")) {
                 // video
@@ -26,8 +37,6 @@ function createCards(cardsToCreate, cards) {
                 cardElement.setAttribute('typeOfCard', "misc");
             }
         }
-        const subredditRegex = /^(\/r\/[^\/]+)/; // this regex gets the subreddit from the permalink
-        cardElement.setAttribute('subreddit', card.permalink.match(subredditRegex)[1]);
         /*
         if(cardElement.getAttribute("subreddit") in blocked_subreddits) {
           console.log("subreddit " + cardElement.getAttribute("subreddit") + " is blocked")
@@ -193,7 +202,8 @@ function createCards(cardsToCreate, cards) {
         // cardElement.appendChild(cardUnlock);
         // cardElement.appendChild(cardLock);
         */
-    });
+    }
+    ;
     noDataMessageText.innerHTML = "You've reached the end of this Reddit day! You may pick another date.";
 }
 function sortCards(cards) {
@@ -204,7 +214,9 @@ function sortCards(cards) {
         return ratingB - ratingA; // Sort in descending order
     });
     // Reappend the sorted elements
-    cardsArray.forEach(card => cards.appendChild(card));
+    cardsArray.forEach(card => {
+        cards.appendChild(card);
+    });
 }
 function createPlayButtonSVG() {
     // Create the SVG element
@@ -324,6 +336,10 @@ function loadImage(card) {
         };
     }
 }
+function normalizeSubredditName(name) {
+    // Remove leading '/' if present, ensure 'r/' prefix, and convert to lowercase
+    return name.replace(/^\/?(r\/)?/i, 'r/').toLowerCase();
+}
 // start of page
 const debugMode = false;
 export function main() {
@@ -331,6 +347,7 @@ export function main() {
     //checkWeservAvailability(1000).then(() => // use the image proxy to avoid raising cookies
     loadData(DateChanger.dateChangerInput.value)
         .then(jsonFile => {
+        loadOptions();
         jsonFileCurrent = jsonFile;
     }).then(asdf => {
         cardContainerDestroyAll(cardContainer);
