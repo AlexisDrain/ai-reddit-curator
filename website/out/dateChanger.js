@@ -19,12 +19,6 @@ const scrollToTop = () => {
         window.scrollTo(0, c - c / 8);
     }
 };
-export function callDefaultDate() {
-    fetchMostRecentData().then(name => {
-        dateChangerInput.value = name;
-        script.main();
-    });
-}
 // we keep an index file that updates everyday because we cant use Path in a static website
 async function fetchMostRecentData() {
     try {
@@ -48,4 +42,15 @@ function onChangeDate(e) {
     scrollToTop();
     script.main();
 }
-dateChangerInput.addEventListener('input', onChangeDate);
+if (dateChangerInput) { // this is true in index.html, false in about.html
+    dateChangerInput.addEventListener('input', onChangeDate);
+}
+// this is the first funciton called by the website
+export function callDefaultDate() {
+    fetchMostRecentData().then(name => {
+        if (dateChangerInput) { // this is true in index.html, false in about.html
+            dateChangerInput.value = name;
+            script.main();
+        }
+    });
+}

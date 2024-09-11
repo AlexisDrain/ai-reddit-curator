@@ -13,7 +13,7 @@ from score_extract import combine_postScores_claudeComments_reddit
 from write_date_in_dailyData import write_date_in_index_file
 
 
-posts_reddit = get_posts_300(5, "CozyPlaces")
+posts_reddit = get_posts_300(15, "CozyPlaces")
 
 # old, claudeComments
 # post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit, allow_claudeComments=True, debug_prompt=False)

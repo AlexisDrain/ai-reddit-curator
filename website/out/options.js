@@ -62,11 +62,13 @@ export function loadOptions() {
         if (localStorage.getItem('blocked-subreddits') == null) {
             console.log("Item 'blocked_subreddits' not found in localStorage. Initilizing blocked_subreddits");
             blocked_subreddits = [];
+            denylistContainerDestroyAll(denylistChildrenHTML);
             addNewBlockedSubreddit("r/politics");
         }
         else {
+            denylistContainerDestroyAll(denylistChildrenHTML);
             blocked_subreddits = JSON.parse(localStorage.getItem('blocked-subreddits'));
-            console.log("Retrieved 'theme-dark' from localStorage. var value: ", blocked_subreddits);
+            console.log("Retrieved 'blocked-subreddits' from localStorage. var value: ", blocked_subreddits);
             blocked_subreddits.forEach(element => {
                 displayBlockedSubreddit(element);
             });
@@ -95,6 +97,16 @@ const toggleDarkMode = (event) => {
     localStorage.setItem("theme-dark", themeDark);
 };
 function addNewBlockedSubreddit(labelText) {
+    // check duplicate
+    let isDuplicate = false;
+    blocked_subreddits.forEach((subreddit) => {
+        if (normalizeSubredditName(subreddit) === normalizeSubredditName(labelText)) {
+            isDuplicate = true; // if we return here, it only stops the forEach() function. not the addNewBlockedSubbreddit()
+        }
+    });
+    if (isDuplicate) {
+        return;
+    }
     // save this new label
     blocked_subreddits.push(labelText);
     localStorage.setItem("blocked-subreddits", JSON.stringify(blocked_subreddits));
@@ -104,6 +116,7 @@ function displayBlockedSubreddit(labelText) {
     // Create the main div element
     const div = document.createElement('div');
     div.classList.add("denylist-child");
+    div.setAttribute("subreddit", labelText);
     // Create the label element
     const label = document.createElement('label');
     label.textContent = labelText;
@@ -203,4 +216,11 @@ function createTrashIconButton({ width = 24, height = 24, color = '#000000', str
         icon.style.stroke = "#000";
     });
     return button;
+}
+function normalizeSubredditName(name) {
+    // Remove leading '/' if present, ensure 'r/' prefix, and convert to lowercase
+    return name.replace(/^\/?(r\/)?/i, 'r/').toLowerCase();
+}
+function denylistContainerDestroyAll(ele) {
+    ele.innerHTML = "";
 }

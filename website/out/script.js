@@ -124,7 +124,13 @@ function createCards(cardsToCreate, cards) {
         }
         if (cardElement.getAttribute('typeOfCard') === "misc") {
             // img.src = resolveImageLink(card.url);
-            warningElement.textContent = "📞 This post is a link to external site!";
+            // warningElement.textContent = "📞 This post is a link to external site!" + card.url;
+            // warningElement.textContent = "📞 This post is a link to external site!";
+            let websiteLink = document.createElement('a');
+            websiteLink.style.color = '#a00';
+            websiteLink.textContent = "📞 External Site: " + card.url;
+            websiteLink.href = card.url;
+            warningElement.appendChild(websiteLink);
             const img = document.createElement('img');
             elementImgMap.set(cardElement, img);
             img.classList.add('card-image');
@@ -140,8 +146,9 @@ function createCards(cardsToCreate, cards) {
         const selftextElement = document.createElement('p');
         selftextElement.classList.add('card-selftext');
         if (card.selftext) {
-            card.selftext = linkifyText(card.selftext);
-            selftextElement.innerHTML = card.selftext.replace(/\n/g, '<br>'); // add line breaks
+            // card.selftext = linkifyText(card.selftext);
+            // selftextElement.innerHTML = card.selftext.replace(/\n/g, '<br>'); // add line breaks. this can be XSS vulnerability 
+            addLineBreaks(selftextElement, card.selftext);
         }
         const claudeReasonElement = document.createElement('p');
         claudeReasonElement.classList.add('card-claudeReason');
@@ -291,14 +298,6 @@ async function loadData(date) {
 function cardContainerDestroyAll(cards) {
     cards.innerHTML = "";
 }
-function linkifyText(text) {
-    // Regular expression to match URLs
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    // Replace URLs with anchor tags
-    return text.replace(urlRegex, (url) => {
-        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-    });
-}
 // lazy loading https://claude.ai/chat/a3deb893-a035-4d45-bb76-a369a89d4905
 function setupIntersectionObserver(cards) {
     const cardsArray = Array.from(cards.children);
@@ -339,6 +338,34 @@ function loadImage(card) {
 function normalizeSubredditName(name) {
     // Remove leading '/' if present, ensure 'r/' prefix, and convert to lowercase
     return name.replace(/^\/?(r\/)?/i, 'r/').toLowerCase();
+}
+function linkifyText(text) {
+    // Regular expression to match URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    // Replace URLs with anchor tags
+    return text.replace(urlRegex, (url) => {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+}
+function addLineBreaks(element, text) {
+    // Split the text by newline characters
+    const lines = text.split('\n');
+    // Process each line
+    lines.forEach((line, index) => {
+        // Linkify the text
+        const linkifiedLine = linkifyText(line);
+        // Create a temporary container for the linkified HTML
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = linkifiedLine;
+        // Append each child of the temporary container
+        while (tempContainer.firstChild) {
+            element.appendChild(tempContainer.firstChild);
+        }
+        // If it's not the last line, add a line break
+        if (index < lines.length - 1) {
+            element.appendChild(document.createElement('br'));
+        }
+    });
 }
 // start of page
 const debugMode = false;

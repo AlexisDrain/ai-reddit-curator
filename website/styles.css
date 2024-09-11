@@ -374,13 +374,13 @@ span {
 }
 .card-warning {
     font-size: 16px;
-    color: #a00;
+    color: #000;
 }
 .light-mode .card-warning {
-    color: #a00;
+    color: #000;
 }
 .dark-mode .card-warning {
-    color: #a00;
+    color: #fff;
 }
 .card-flair {
     font-size: 16px;

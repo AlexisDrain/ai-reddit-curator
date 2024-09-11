@@ -185,7 +185,7 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None,
             imgSource = imgSource.replace("&amp;", "&")
             combined_post["thumbnail"] = imgSource
 
-        if "gallery" in combined_post["url"]:
+        if "gallery" in full_post["data"]["url"]:
             combined_post["thumbnail"] = fetch_gallery_firstImage(combined_post["url"])
         #elif combined_post["thumbnail"] in ["self", "default"]:
         #    combined_post["thumbnail"] = ""
@@ -223,7 +223,8 @@ def combine_claude_reddit_crawl(
 
         # [Deprecated Video because I cannot sync video+audio easily]
         # For videos: Add the fallback_url if it exists
-        
+        if "gallery" in full_post['data'].get('url', ''):
+            print(full_post["data"]["url"])
         if full_post["data"]["is_video"]:
             try:
                 videoThumbnail = full_post["data"]["preview"]["images"][0]["source"]["url"]
