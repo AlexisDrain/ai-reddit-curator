@@ -75,6 +75,7 @@ export function loadOptions() {
       addNewBlockedSubreddit("r/politics");
     } else {
       blocked_subreddits = JSON.parse(localStorage.getItem('blocked-subreddits'));
+      console.log("Retrieved 'theme-dark' from localStorage. var value: ", blocked_subreddits);
       blocked_subreddits.forEach (element => {
       displayBlockedSubreddit(element);
       });

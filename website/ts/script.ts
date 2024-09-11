@@ -105,11 +105,11 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
         const img = document.createElement('img');
         img.classList.add('card-image');
         elementImgMap.set(cardElement, img);
-        if (card.thumbnail != "") {
-          img.src = card.thumbnail;
+        if (card.thumbnail != "" || card.thumbnail != null) {
+          // img.src = card.thumbnail;
           cardElement.setAttribute('img-src', card.thumbnail);
         } else {
-          img.src = card.url;
+          // img.src = card.url;
           cardElement.setAttribute('img-src', card.url);
         }
         
@@ -430,8 +430,11 @@ export function main() {
   //checkWeservAvailability(1000).then(() => // use the image proxy to avoid raising cookies
   loadData(DateChanger.dateChangerInput.value)
     .then(jsonFile => {
-      loadOptions()
-      jsonFileCurrent = jsonFile;
+      return new Promise<void>((resolve) => {
+        loadOptions(); // load denylist
+        jsonFileCurrent = jsonFile;
+        setTimeout(() => resolve(), 0); // Use setTimeout to ensure all DOM updates from loadOptions() are processed
+      });
     }).then(asdf => {
       cardContainerDestroyAll(cardContainer);
       createCards(jsonFileCurrent, cardContainer);
