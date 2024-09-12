@@ -141,38 +141,48 @@ if not client_id:
         client_id = re.search(r"REDDIT_CLIENTID:\s*([\w-]+)", content).group(1)
         secret = re.search(r"REDDIT_SECRET:\s*([\w-]+)", content).group(1)
 
-def get_headers_with_access_token():
-    # taken from https://ssl.reddit.com/prefs/apps/
-    # REDDIT_SECRET2
+# def get_headers_with_access_token():
+#     # taken from https://ssl.reddit.com/prefs/apps/
+#     # REDDIT_SECRET2
 
-    # Step 1: Get an access token
-    auth = requests.auth.HTTPBasicAuth(client_id, secret)
-    data = {"grant_type": "client_credentials"}
-    headers = {"User-Agent": "AIRedditCurator/1.0 by my_tummy_hurts"}
-    res = requests.post(
-        "https://www.reddit.com/api/v1/access_token",
-        auth=auth,
-        data=data,
-        headers=headers,
-    )
-    token = res.json()["access_token"]
-    headers = {**headers, **{"Authorization": f"Bearer {token}"}}
-    return headers
+#     # Step 1: Get an access token
+#     auth = requests.auth.HTTPBasicAuth(client_id, secret)
+#     data = {"grant_type": "client_credentials"}
+#     headers = {"User-Agent": "AIRedditCurator/1.0 by my_tummy_hurts"}
+#     res = requests.post(
+#         "https://www.reddit.com/api/v1/access_token",
+#         auth=auth,
+#         data=data,
+#         headers=headers,
+#     )
+#     token = res.json()["access_token"]
+#     headers = {**headers, **{"Authorization": f"Bearer {token}"}}
+#     return headers
 
 
 def fetch_gallery_firstImage(url="https://www.reddit.com/gallery/1eem8zd"):
-    try:
-        # Add a user agent to avoid potential 429 errors
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'DNT': '1',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1'
-        }
+    try:    
+        auth = requests.auth.HTTPBasicAuth(client_id, secret)
+        headers = {"User-Agent": "AIRedditCurator/1.0 by my_tummy_hurts"}
+        data = {'grant_type': 'client_credentials'}
         
+        response = requests.post('https://www.reddit.com/api/v1/access_token',
+                                 auth=auth, data=data, headers=headers)
+        response.raise_for_status()
+        token = response.json()['access_token']
+
+        # Step 2: Use the token to request the post data
+        headers['Authorization'] = f'Bearer {token}'
+        # new url after replace: "https://www.reddit.com/comments/1eem8zd.json"
+        match = re.search(r"\/gallery\/(\w+)", url)
+
+        url = f'https://oauth.reddit.com/comments/{match.group(1)}.json'
+        
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        
+        data = response.json()
+
         # {
         #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         #     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -182,19 +192,17 @@ def fetch_gallery_firstImage(url="https://www.reddit.com/gallery/1eem8zd"):
         #     'Connection': 'keep-alive',
         #     'Upgrade-Insecure-Requests': '1'
         # }
-
-
         # new url after replace: "https://www.reddit.com/comments/1eem8zd.json"
-        gallery_json = url.replace("gallery", "comments")
-        gallery_json += ".json"
+        # gallery_json = url.replace("gallery", "comments")
+        # gallery_json += ".json"
 
-        time.sleep(0.2) # small delay
+        # time.sleep(0.2) # small delay
 
-        response = requests.get(gallery_json, headers=headers, timeout=10)
-        response.raise_for_status() # Check if the request was successful
+        # response = requests.get(gallery_json, headers=headers, timeout=10)
+        # response.raise_for_status() # Check if the request was successful
         
-        # Parse the JSON data
-        data = response.json()
+        # # Parse the JSON data
+        # data = response.json()
         
         id_ = str(data[0]["data"]["children"][0]["data"]["gallery_data"]["items"][0]["media_id"])
 
