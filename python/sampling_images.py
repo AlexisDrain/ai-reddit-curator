@@ -127,11 +127,16 @@ def _extract_first_number(s):
     Warning(f"Error in _extract_first_number: could not parse integer.")
     return None
 
-claude_key = "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"
-os.environ["ANTHROPIC_API_KEY"] = claude_key
+claude_key = os.environ.get("ANTHROPIC_API_KEY")
+
+if not claude_key:
+    with open("../_misc/scriptSecret.txt", "r") as file:
+        content = file.read()
+        claude_key = re.search(r"ANTHROPIC_API_KEY:\s*([\w-]+)", content).group(1)
+
 
 def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307", allow_claudeComments=False, debug_prompt=False):
-    client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+    client = Anthropic(api_key=claude_key)
     
     def process_post(index):
         content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME}]

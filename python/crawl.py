@@ -1,9 +1,20 @@
 import requests
-import secrets
+import os
 from functools import lru_cache
+import re
 
 # Replace the placeholders with your actual values
-client_id = "6Hef4rlP_2-rMq5Qfeox5w"
+
+client_id = os.environ.get("REDDIT_CLIENTID_2")
+secret = os.environ.get("REDDIT_SECRET2")
+
+if not client_id:
+    with open("./../_misc/scriptSecret.txt", "r") as file:
+        
+        content = file.read()
+        client_id = re.search(r"REDDIT_CLIENTID:\s*([\w-]+)", content).group(1)
+        secret = re.search(r"REDDIT_SECRET:\s*([\w-]+)", content).group(1)
+
 # response_type = "code"
 # random_string = secrets.token_urlsafe(16)
 # redirect_uri = "https://github.com/AlexisDrain/Claude-Reddit-Curator"
@@ -24,7 +35,7 @@ client_id = "6Hef4rlP_2-rMq5Qfeox5w"
 @lru_cache(1)
 def get_headers_with_access_token():
     # taken from https://ssl.reddit.com/prefs/apps/
-    secret = "c0aOfsj7xRn3JzuoJC2EPfeVlHiQAA"
+    # REDDIT_SECRET2
 
     # Step 1: Get an access token
     auth = requests.auth.HTTPBasicAuth(client_id, secret)

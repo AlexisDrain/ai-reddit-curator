@@ -40,7 +40,7 @@ with open('reddit_posts_gallery.json', 'r') as file:
 '''
 
     
-posts_reddit = get_posts_300(300, "all")
+posts_reddit = get_posts_300(10, "all")
 
 # old, claudeComments
 # post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit, allow_claudeComments=True, debug_prompt=False)
@@ -61,8 +61,8 @@ output_dir = Path(repo_root) / 'website' / 'dailyData'
 output_dir.mkdir(parents=True, exist_ok=True)
 
 current_date = datetime.now().strftime('%Y-%m-%d') # name the file
-output_file = output_dir / f'{current_date}.json'
-# output_file = output_dir / 'dontsave.json' # uncomment previous line for testing the dumped json
+# output_file = output_dir / f'{current_date}.json'
+output_file = output_dir / 'dontsave.json' # uncomment previous line for testing the dumped json
 output_file.write_text(json.dumps(combined_data, indent=2))
 
 write_date_in_index_file(current_date, output_dir / 'datesIndex.jsonl')

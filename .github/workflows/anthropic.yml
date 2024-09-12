@@ -25,6 +25,8 @@ jobs:
     - name: Run Anthropic script with at most 3 retries
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        REDDIT_SECRET2: ${{ secrets.REDDIT_SECRET2 }}
+        REDDIT_CLIENTID_2: ${{ secrets.REDDIT_CLIENTID_2 }}
       run: |
         max_attempts=3
         attempt=1

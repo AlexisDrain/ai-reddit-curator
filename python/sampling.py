@@ -5,9 +5,11 @@ from crawl import get_headers_with_access_token
 import requests
 from tqdm import tqdm
 
-claude_key = "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"
-os.environ["ANTHROPIC_API_KEY"] = claude_key
-
+claude_key = os.environ.get("ANTHROPIC_API_KEY")
+if not claude_key:
+    with open("../_misc/scriptSecret.txt", "r") as file:
+        content = file.read()
+        claude_key = re.search(r"ANTHROPIC_API_KEY:\s*([\w-]+)", content).group(1)
 
 def basic_sample(prompt: str, model="claude-3-haiku-20240307"):
     # "claude-3-5-sonnet-20240620"
