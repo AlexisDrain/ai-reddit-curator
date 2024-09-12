@@ -413,6 +413,26 @@ function loadImage(card: HTMLElement): void {
   }
 }
 
+export function getPlatform() {
+  // Check if running in Capacitor
+  if (window.Capacitor) {
+    return window.Capacitor.getPlatform();
+  }
+  
+  // Check if running on Android
+  if (/android/i.test(navigator.userAgent)) {
+    return 'android';
+  }
+  
+  // Check if running on iOS
+  if (/ipad|iphone|ipod/i.test(navigator.userAgent)) {
+    return 'ios';
+  }
+  
+  // Default to web
+  return 'web';
+}
+
 function normalizeSubredditName(name: string): string {
   // Remove leading '/' if present, ensure 'r/' prefix, and convert to lowercase
   return name.replace(/^\/?(r\/)?/i, 'r/').toLowerCase();
@@ -456,6 +476,9 @@ function addLineBreaks(element: HTMLElement, text: string) {
 
 const debugMode : Boolean = false;
 export function main() {
+  if(getPlatform() != "web") {
+    document.getElementById("android-logo").innerHTML = "";
+  }
 
   let jsonFileCurrent : RedditPost[];
 

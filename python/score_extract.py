@@ -186,7 +186,7 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None,
             combined_post["thumbnail"] = imgSource
 
         if "gallery" in full_post["data"]["url"]:
-            combined_post["thumbnail"] = fetch_gallery_firstImage(combined_post["url"])
+            combined_post["thumbnail"] = fetch_gallery_firstImage(full_post["data"]["url"])
         #elif combined_post["thumbnail"] in ["self", "default"]:
         #    combined_post["thumbnail"] = ""
         

@@ -335,6 +335,22 @@ function loadImage(card) {
         };
     }
 }
+export function getPlatform() {
+    // Check if running in Capacitor
+    if (window.Capacitor) {
+        return window.Capacitor.getPlatform();
+    }
+    // Check if running on Android
+    if (/android/i.test(navigator.userAgent)) {
+        return 'android';
+    }
+    // Check if running on iOS
+    if (/ipad|iphone|ipod/i.test(navigator.userAgent)) {
+        return 'ios';
+    }
+    // Default to web
+    return 'web';
+}
 function normalizeSubredditName(name) {
     // Remove leading '/' if present, ensure 'r/' prefix, and convert to lowercase
     return name.replace(/^\/?(r\/)?/i, 'r/').toLowerCase();
@@ -370,6 +386,9 @@ function addLineBreaks(element, text) {
 // start of page
 const debugMode = false;
 export function main() {
+    if (getPlatform() != "web") {
+        document.getElementById("android-logo").innerHTML = "";
+    }
     let jsonFileCurrent;
     //checkWeservAvailability(1000).then(() => // use the image proxy to avoid raising cookies
     loadData(DateChanger.dateChangerInput.value)
