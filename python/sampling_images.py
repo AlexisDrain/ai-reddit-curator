@@ -243,6 +243,7 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
         )
         return message.content[0].text
     
+    # [deprecated] creates the reasoning why Claude rated something high or low.
     def process_post_claudeComment(index, rate_high = True):
         if rate_high:
             content = [{"type": "text", "text": PRMOPT_COMMENT_HIGH}]

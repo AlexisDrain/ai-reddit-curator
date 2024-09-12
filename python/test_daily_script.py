@@ -13,13 +13,16 @@ from score_extract import combine_postScores_claudeComments_reddit
 from write_date_in_dailyData import write_date_in_index_file
 
 
-posts_reddit = get_posts_300(15, "CozyPlaces")
+posts_reddit = get_posts_300(300, "all")
 
 # old, claudeComments
 # post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit, allow_claudeComments=True, debug_prompt=False)
 # combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, post_claudeComments, post_claudeComment_index) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
+
 post_scores = analyze_reddit_posts(posts_reddit, allow_claudeComments=False, debug_prompt=False)
+# uncomment next line for faster/no claude test
+# post_scores = [10 for _ in range(len(posts_reddit))] 
 
 combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, allow_claudeComments=False) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
