@@ -30,7 +30,7 @@ jobs:
       run: |
         max_attempts=3
         attempt=1
-        until python ./python/daily_script.py || [ $attempt -eq $max_attempts ]; do
+        until python ./python/test_daily_script.py || [ $attempt -eq $max_attempts ]; do
           echo "Attempt $attempt failed. Retrying..."
           attempt=$((attempt + 1))
           sleep 5  # Optional: add a delay between retries
