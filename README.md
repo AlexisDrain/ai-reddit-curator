@@ -1,20 +1,17 @@
 # Claude-Reddit-Curator  
- 
-We use Claude to rerank content from reddit.
+https://alexisdrain.github.io/ai-reddit-curator/  
 
-That way you can see the best of the best (posts that are awe-inspiring, laugh-out-loud hilarious, or weirdly educational) while avoiding the worst (ragebait, doomscroll'y, or just plain stupid)
+We use Claude to rate content from reddit.  
 
-Another advantage that we have over reddit is that we can grab the best content over a longer time horizon (the reddit api lets us crawl posts that are up to two months old), rather than constantly displacing them with newer posts
+That way you can see the best of the best (posts that are awe-inspiring, laugh-out-loud hilarious, or educational) while avoiding the worst (ragebait or doomscroll'y).  
 
+This site uses Claude 3 Haiku and it is updated daily using Github Actions. We fetch posts from r/all, which is a diverse subreddit that exhibits the daily posts that reach the front page of Reddit (It's so diverse that most subreddits appear less than twice per 100 posts). We then feed the posts to Claude 3 Haiku which rates them. Then we show you a sorted list of the highest scoring posts, and sometimes alongside a comment by Claude behind the reasoning.  
 
+This website is non-commercial. We use the official Reddit API to crawl once a day. The data we crawl is not used for training the AI.  
 
+This site was made by me, [Alexis Drain](https://github.com/AlexisDrain) (front-end, TypeScript), and [Dawn Drain](https://github.com/DawnDrain) (back-end, Python).  
 
-# To Do's
-
-1. Show Claude images and comments
-2. make a test set
-3. make the website better (e.g. at least have a compelling screenshot with real posts)
-
+Check out my other work, such as the browser extension [Less Addictive YouTube](https://addons.mozilla.org/en-US/firefox/addon/less-addictive-youtube/)... or [my 15 web games](https://alexclay.itch.io/)!
 
 ### Credits:  
 Icons from https://iconsvg.xyz/  
