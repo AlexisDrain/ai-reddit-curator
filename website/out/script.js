@@ -173,9 +173,18 @@ function createCards(cardsToCreate, cards) {
         containerElement.appendChild(redditUrlElement2);
         const ratingElement = document.createElement('div');
         ratingElement.classList.add('card-rating');
-        if (card.rating && card.rating.toString().length < 5) {
-            ratingElement.textContent = "AI Rating: " + card.rating.toString() + "/10";
-            cardElement.setAttribute('rating', card.rating.toString());
+        if (card.rating) {
+            // rating is an array of catagories
+            if (Array.isArray(card.rating)) {
+                const ratingArray = card.rating.map(Number);
+                ratingElement.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
+                cardElement.setAttribute('rating', ratingArray[0].toString());
+                // rating is one number
+            }
+            else {
+                ratingElement.textContent = "AI Rating: " + card.rating.toString() + "/10";
+                cardElement.setAttribute('rating', card.rating.toString());
+            }
         }
         else {
             ratingElement.textContent = "AI Rating: unrated";
@@ -257,8 +266,8 @@ function createNextImageSVG() {
     arrowContainer.classList.add('button-arrowContainer', "svg-always-light");
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.classList.add("svg-always-light");
-    svg.setAttribute("width", "100");
-    svg.setAttribute("height", "100");
+    svg.setAttribute("width", "50");
+    svg.setAttribute("height", "45");
     svg.setAttribute("viewBox", "-0.5 0 24 24");
     svg.setAttribute("fill", "none");
     svg.setAttribute("stroke", "#fff");

@@ -63,6 +63,14 @@ The best posts are: mind blowing, hilarious, informative, educational, inspiring
 The worst posts are: ragebait, political, stupid, disturbing, sad, or recent USA politics.
 Your answer will be a score from 0 to 10. Do NOT add anything else like your reasoning.
 """
+PROMPT_IMAGES_ONEATATIME_CATAGORIES = """I'm going to give you a reddit post that might include an image, and I want you to rate it from 0 to 10.
+The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
+The worst posts are: ragebait, political, stupid, disturbing, sad, or recent USA politics.
+Your answer will be an array of scores from 0 to 10. Do NOT add anything else like your reasoning.
+Format your array as the following: [Total rating, educational, hilarious, cute, political.]
+An example of a response from you is:
+[10, 3, 1, 10, 0]
+"""
 
 PRMOPT_COMMENT_HIGH = """This is a reddit post that Claude has rated it highly. Explain why it's a good post in one sentence.
 The best posts are: mind blowing, hilarious, informative, educational, inspiring, or extremely cute.
@@ -135,11 +143,15 @@ if not claude_key:
         claude_key = re.search(r"ANTHROPIC_API_KEY:\s*([\w-]+)", content).group(1)
 
 
-def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307", allow_claudeComments=False, debug_prompt=False):
+def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307", split_catagories = False, allow_claudeComments=False, debug_prompt=False):
     client = Anthropic(api_key=claude_key)
     
     def process_post(index):
-        content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME}]
+        if split_catagories:
+            content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME_CATAGORIES}]
+        else:
+            content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME}]
+
         post = posts[index]
         posts_str = ""
 
@@ -313,6 +325,11 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
 
 
     '''
+
+['[6, 2, 2, 1, 0]', '[7, 0, 0, 0, 0]', '[10, 0, 0, 9, 0]', '[9, 3, 2, 8, 0]', '[9, 5, 4, 6, 0]', None, '[10, 0, 0, 10, 0]', '[8, 4, 6, 7, 0]', '[10, 0, 0, 10, 0]', '[9, 2, 3, 10, 0]', None, '[9, 5, 4, 8, 0]', '[8, 7, 9, 9, 0]', '[9, 5, 0, 7, 0]', '[9, 3, 5, 4, 0]', '[9, 2, 3, 9, 0]', None]
+['[7, 3, 2, 3, 0]', '[7, 5, 0, 0, 0]', '[9, 3, 2, 8, 0]', '[8, 2, 2, 9, 0]', '[8, 2, 3, 4, 0]', None, '[9, 1, 1, 10, 0]', '[8, 3, 5, 8, 0]', '[9, 3, 8, 7, 0]', '[10, 0, 0, 10, 0]', None, '[9, 3, 0, 10, 0]', '[8, 3, 3, 8, 0]', '[8, 4, 5, 6, 0]', '[9, 3, 2, 1, 0]', '[9, 3, 5, 10, 0]', None]
+['8', '8', '9', '9', '9', '8', None, '10', '9', '8', None, '10', '8', '9', '9', '10', None]
+
     # Combine and summarize results
     final_summary = client.messages.create(
         max_tokens=4096,

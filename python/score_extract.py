@@ -4,6 +4,7 @@ import requests
 import logging
 import os
 import time
+import json
 
 old_test_data = """
 Here is the list of posts with my ratings and comments:
@@ -212,7 +213,7 @@ def fetch_gallery_firstImage(url="https://www.reddit.com/gallery/1eem8zd"):
         print(f"An error occurred while fetching the data: {e}")
         return None
 
-def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None, claudeComments_index=None, allow_claudeComments=False):
+def combine_postScores_claudeComments_reddit(posts, scores, split_catagories=False, claudeComments=None, claudeComments_index=None, allow_claudeComments=False):
     # Initialize combined_posts as a list of dictionaries
     combined_posts = []
 
@@ -222,12 +223,20 @@ def combine_postScores_claudeComments_reddit(posts, scores, claudeComments=None,
 
         # Add score
         try:
-            if isinstance(score, (int, float, str)):
-                combined_post["rating"] = score
-            elif isinstance(score, dict):
-                combined_post.update(score)
+            if split_catagories:
+                if isinstance(score, str):
+                    score_list = score.strip('[]').split(',')
+                    combined_post["rating"] = [int(x.strip()) for x in score_list]
+                else:
+                    raise TypeError(f"Unexpected type for score: {type(score)}")
+            # retro: no catagories. just one rating
             else:
-                raise TypeError(f"Unexpected type for score: {type(score)}")
+                if isinstance(score, (int, float, str)):
+                    combined_post["rating"] = score
+                elif isinstance(score, dict):
+                    combined_post.update(score)
+                else:
+                    raise TypeError(f"Unexpected type for score: {type(score)}")
         except TypeError as e:
             # Log the error
             logging.warning(f"score_extract: Error processing score at index {i}: {e}")

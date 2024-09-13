@@ -1,3 +1,4 @@
+import { stringify } from "querystring";
 import * as DateChanger from "./dateChanger.js";
 import { loadOptions } from './options.js';
 import { blocked_subreddits } from "./options.js";
@@ -12,7 +13,7 @@ interface RedditPost {
   title?: string; // title of post
   author?: string // name of user who made the post
   link_flair_text?: string // flair for post
-  rating?: number; // rating by claude
+  rating?: Array<number> | string; // rating by claude
   claudeComment?: string; // comment by claude
   url?: string;  // this is an image in Reddit speak
   selftext?: string;  // this is a text post in Reddit speak
@@ -224,9 +225,19 @@ function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
         const ratingElement = document.createElement('div');
         ratingElement.classList.add('card-rating');
-        if (card.rating && card.rating.toString().length < 5) {
-          ratingElement.textContent = "AI Rating: " + card.rating.toString() + "/10";
-          cardElement.setAttribute('rating', card.rating.toString());
+
+        if(card.rating) {
+          // rating is an array of catagories
+          if(Array.isArray(card.rating)) {
+            const ratingArray: number[] = card.rating.map(Number);
+            ratingElement.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
+            cardElement.setAttribute('rating', ratingArray[0].toString());
+  
+          // rating is one number
+          } else {
+              ratingElement.textContent = "AI Rating: " + card.rating.toString() + "/10";
+              cardElement.setAttribute('rating', card.rating.toString());
+          }
         } else {
           ratingElement.textContent = "AI Rating: unrated";
         }
@@ -324,8 +335,8 @@ function createNextImageSVG(): HTMLElement {
   
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("svg-always-light");
-  svg.setAttribute("width", "100");
-  svg.setAttribute("height", "100");
+  svg.setAttribute("width", "50");
+  svg.setAttribute("height", "45");
   svg.setAttribute("viewBox", "-0.5 0 24 24");
   svg.setAttribute("fill", "none");
   svg.setAttribute("stroke", "#fff");
