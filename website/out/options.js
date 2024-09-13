@@ -19,7 +19,6 @@ export function loadOptions() {
     }
     darkModeToggleHTML = document.getElementById('darkModeToggle');
     darkModeToggleHTML.addEventListener('click', toggleDarkMode);
-    console.log(darkModeToggleHTML);
     // deny list table
     denylistChildrenHTML = document.getElementById('denylist-children');
     // deny list "add" button

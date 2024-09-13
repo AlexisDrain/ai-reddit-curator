@@ -179,18 +179,37 @@ function createCards(cardsToCreate, cards) {
             // rating is an array of catagories
             if (Array.isArray(card.rating)) {
                 const ratingArray = card.rating.map(Number);
-                ratingElement.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
-                cardElement.setAttribute('rating', ratingArray[0].toString());
-                cardElement.setAttribute('educational', ratingArray[1].toString());
-                cardElement.setAttribute('hilarious', ratingArray[2].toString());
-                cardElement.setAttribute('cute', ratingArray[3].toString());
-                cardElement.setAttribute('political', ratingArray[4].toString());
-                ratingElementSmall.textContent = "Educational: " + cardElement.getAttribute("educational") + "/10";
+                const attributes = ['total-score', 'educational', 'hilarious', 'cute', 'political'];
+                attributes.forEach((attr, index) => {
+                    if (ratingArray[index] !== undefined) {
+                        cardElement.setAttribute(attr, ratingArray[index].toString());
+                    }
+                });
+                if (categoryValue == "total-score") {
+                    ratingElement.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
+                    ratingElementSmall.textContent = "";
+                }
+                else if (categoryValue == "educational") {
+                    ratingElement.textContent = "Educational: " + cardElement.getAttribute("educational") + "/10";
+                    ratingElementSmall.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
+                }
+                else if (categoryValue == "hilarious") {
+                    ratingElement.textContent = "Hilarious: " + cardElement.getAttribute("hilarious") + "/10";
+                    ratingElementSmall.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
+                }
+                else if (categoryValue == "cute") {
+                    ratingElement.textContent = "Cute: " + cardElement.getAttribute("cute") + "/10";
+                    ratingElementSmall.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
+                }
+                else if (categoryValue == "political") {
+                    ratingElement.textContent = "Political: " + cardElement.getAttribute("political") + "/10";
+                    ratingElementSmall.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
+                }
                 // rating is one number
             }
             else {
                 ratingElement.textContent = "AI Rating: " + card.rating.toString() + "/10";
-                cardElement.setAttribute('rating', card.rating.toString());
+                cardElement.setAttribute('total-score', card.rating.toString());
             }
         }
         else {
@@ -232,11 +251,17 @@ function createCards(cardsToCreate, cards) {
 }
 function sortCards(cards) {
     const cardsArray = Array.from(cards.children);
-    console.log(categoryValue);
+    const sortingAttribute = categoryValue;
     cardsArray.sort((a, b) => {
-        const ratingA = Number(a.getAttribute('rating')) || 0;
-        const ratingB = Number(b.getAttribute('rating')) || 0;
-        return ratingB - ratingA; // Sort in descending order
+        const primaryA = Number(a.getAttribute(sortingAttribute)) || 0;
+        const primaryB = Number(b.getAttribute(sortingAttribute)) || 0;
+        if (primaryA !== primaryB) {
+            return primaryB - primaryA; // Sort primary attribute in descending order
+        }
+        // If primary attributes are equal, sort by secondary attribute
+        const secondaryA = Number(a.getAttribute("total-score")) || 0;
+        const secondaryB = Number(b.getAttribute("total-score")) || 0;
+        return secondaryB - secondaryA; // Sort secondary attribute in descending order
     });
     // Reappend the sorted elements
     cardsArray.forEach(card => {

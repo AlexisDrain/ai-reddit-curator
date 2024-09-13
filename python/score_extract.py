@@ -226,9 +226,16 @@ def combine_postScores_claudeComments_reddit(posts, scores, split_catagories=Fal
             if split_catagories:
                 if isinstance(score, str):
                     score_list = score.strip('[]').split(',')
-                    combined_post["rating"] = [int(x.strip()) if x.strip().isdigit() else 0 for x in score_list]
-                else:
-                    raise TypeError(f"Unexpected type for score: {type(score)}")
+                    if len(score_list) >= 5:
+                        combined_post["rating"] = [int(x.strip()) if x.strip().isdigit() else 0 for x in score_list]
+                    else:
+                        print(f"Warning: Expected at least 5 scores, but got {len(score_list)}")
+                        combined_post["rating"] = [0] * 5  # Default to five zeros
+               # if isinstance(score, str):
+                #    score_list = score.strip('[]').split(',')
+                #    combined_post["rating"] = [int(x.strip()) if x.strip().isdigit() else 0 for x in score_list]
+                #else:
+                #    raise TypeError(f"Unexpected type for score: {type(score)}")
             # retro: no catagories. just one rating
             else:
                 if isinstance(score, (int, float, str)):
