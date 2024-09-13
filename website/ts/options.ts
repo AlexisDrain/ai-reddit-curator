@@ -25,6 +25,8 @@ export function loadOptions() {
   darkModeToggleHTML = document.getElementById('darkModeToggle') as HTMLInputElement | null;
   darkModeToggleHTML.addEventListener('click', toggleDarkMode);
 
+console.log(darkModeToggleHTML);
+
   // deny list table
   denylistChildrenHTML = document.getElementById('denylist-children') as HTMLInputElement | null;
   // deny list "add" button
@@ -78,7 +80,10 @@ export function loadOptions() {
 
 
   // load blocked subreddits setting
-
+  // if there's no denylist on page, do not proceed
+  if(denylistChildrenHTML == null) {
+    return;
+  }
   try {
     if (localStorage.getItem('blocked-subreddits') == null) {
       console.log("Item 'blocked_subreddits' not found in localStorage. Initilizing blocked_subreddits");

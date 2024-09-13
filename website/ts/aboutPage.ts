@@ -1,4 +1,5 @@
 import { getPlatform } from "./script.js";
+import { loadOptions } from "./options.js";
 
 // init page: set dark mode
 // const body = document.body;
@@ -7,3 +8,5 @@ import { getPlatform } from "./script.js";
 if(getPlatform() != "web") {
     document.getElementById("android-logo").innerHTML = "";
   }
+
+loadOptions();
