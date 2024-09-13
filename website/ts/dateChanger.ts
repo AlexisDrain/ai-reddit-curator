@@ -2,6 +2,7 @@ import * as script from "./script.js";
 
 // dateChange (right side of screen)
 export const dateChangerInput : HTMLInputElement = document.getElementById('redditDate') as HTMLInputElement;
+const pageRightHTML : HTMLElement = document.getElementsByClassName('page-right')[0] as HTMLElement;
 /*
 export function callDefaultDate() {
   const today : Date = new Date();
@@ -50,6 +51,24 @@ function onChangeDate(e){
 if(dateChangerInput) { // this is true in index.html, false in about.html
   dateChangerInput.addEventListener('input', onChangeDate);
 }
+
+// hide page-right when scrolling down in mobile
+let lastScrollTop = 0;
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  
+  if (Math.abs(scrollTop) <= 5) return;
+
+  if (scrollTop > lastScrollTop && scrollTop > pageRightHTML.offsetHeight) {
+    // Scrolling down
+    pageRightHTML.classList.add('hidden');
+  } else {
+    // Scrolling up
+    pageRightHTML.classList.remove('hidden');
+  }
+
+  lastScrollTop = scrollTop;
+});
 
 // this is the first funciton called by the website
 export function callDefaultDate() {

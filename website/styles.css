@@ -30,6 +30,7 @@ body.dark-mode {
 .page-right {
     position: fixed;
     left: calc(50% + 360px);
+    transition: transform 0.3s ease-in-out;
 }
 
 .page-left {
@@ -526,6 +527,9 @@ span {
         max-height: 50vh; /* Limit to half the viewport height */
         max-width: 100vw;
     }
+    .page-right.hidden {
+        transform: translateY(-100%);
+      }
     .text-left {
         text-align: center;
     }
