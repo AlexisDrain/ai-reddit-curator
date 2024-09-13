@@ -206,12 +206,23 @@ a {
 .card-rating {
     font-size: 1.6em;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 0.4em;
 }
 .light-mode .card-rating  {
     color: chocolate;
 }
 .dark-mode .card-rating  {
+    color: chocolate; /* before: burlywood */
+}
+.card-rating-small {
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.light-mode .card-rating-small  {
+    color: chocolate;
+}
+.dark-mode .card-rating-small  {
     color: chocolate; /* before: burlywood */
 }
 

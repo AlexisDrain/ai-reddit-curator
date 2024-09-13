@@ -173,12 +173,19 @@ function createCards(cardsToCreate, cards) {
         containerElement.appendChild(redditUrlElement2);
         const ratingElement = document.createElement('div');
         ratingElement.classList.add('card-rating');
+        const ratingElementSmall = document.createElement('div');
+        ratingElementSmall.classList.add('card-rating-small');
         if (card.rating) {
             // rating is an array of catagories
             if (Array.isArray(card.rating)) {
                 const ratingArray = card.rating.map(Number);
                 ratingElement.textContent = "AI Rating: " + ratingArray[0].toString() + "/10";
                 cardElement.setAttribute('rating', ratingArray[0].toString());
+                cardElement.setAttribute('educational', ratingArray[1].toString());
+                cardElement.setAttribute('hilarious', ratingArray[2].toString());
+                cardElement.setAttribute('cute', ratingArray[3].toString());
+                cardElement.setAttribute('political', ratingArray[4].toString());
+                ratingElementSmall.textContent = "Educational: " + cardElement.getAttribute("educational") + "/10";
                 // rating is one number
             }
             else {
@@ -198,6 +205,7 @@ function createCards(cardsToCreate, cards) {
         cardElement.appendChild(containerElement);
         cardElement.appendChild(titleElement);
         cardElement.appendChild(ratingElement);
+        cardElement.appendChild(ratingElementSmall);
         cardElement.appendChild(claudeReasonElement);
         cardElement.appendChild(flairElement);
         cardElement.appendChild(warningElement);
