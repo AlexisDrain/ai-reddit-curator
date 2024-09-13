@@ -226,7 +226,7 @@ def combine_postScores_claudeComments_reddit(posts, scores, split_catagories=Fal
             if split_catagories:
                 if isinstance(score, str):
                     score_list = score.strip('[]').split(',')
-                    combined_post["rating"] = [int(x.strip()) for x in score_list]
+                    combined_post["rating"] = [int(x.strip()) if x.strip().isdigit() else 0 for x in score_list]
                 else:
                     raise TypeError(f"Unexpected type for score: {type(score)}")
             # retro: no catagories. just one rating
