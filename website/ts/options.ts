@@ -7,10 +7,21 @@ const body = document.body;
 let darkModeToggleHTML = null; // toggle dark mode
 let denylistInputHTML = null; // denylist text input
 let denylistChildrenHTML = null; // visual denylist list of blocked subreddits
+let catagorySelectHTML = null;
 let themeDark: string | null = "true";
+export let categoryValue = null;
 export let blocked_subreddits: string[] | null; // denylist list of blocked subreddits
 
 export function loadOptions() {
+  catagorySelectHTML = document.getElementById("rating-dropdown") as HTMLSelectElement
+  if (catagorySelectHTML) {
+    categoryValue = catagorySelectHTML.value;
+    catagorySelectHTML.addEventListener("change", () => {
+      scrollToTop();
+      script.main();
+    });
+  }
+
   darkModeToggleHTML = document.getElementById('darkModeToggle') as HTMLInputElement | null;
   darkModeToggleHTML.addEventListener('click', toggleDarkMode);
 
@@ -264,6 +275,16 @@ function createTrashIconButton({
 
   return button;
 }
+
+
+export const scrollToTop = () => {
+  const c = document.documentElement.scrollTop || document.body.scrollTop;
+  if (c > 0) {
+    window.requestAnimationFrame(scrollToTop);
+    window.scrollTo(0, c - c / 8);
+  }
+};
+
 
 function normalizeSubredditName(name: string): string {
   // Remove leading '/' if present, ensure 'r/' prefix, and convert to lowercase

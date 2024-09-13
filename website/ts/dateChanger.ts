@@ -1,4 +1,5 @@
 import * as script from "./script.js";
+import { scrollToTop } from "./options.js";
 
 // dateChange (right side of screen)
 export const dateChangerInput : HTMLInputElement = document.getElementById('redditDate') as HTMLInputElement;
@@ -14,14 +15,6 @@ export function callDefaultDate() {
   script.main();
 }
 */
-
-const scrollToTop = () => {
-  const c = document.documentElement.scrollTop || document.body.scrollTop;
-  if (c > 0) {
-    window.requestAnimationFrame(scrollToTop);
-    window.scrollTo(0, c - c / 8);
-  }
-};
 
 // we keep an index file that updates everyday because we cant use Path in a static website
 async function fetchMostRecentData() {

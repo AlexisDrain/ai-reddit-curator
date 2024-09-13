@@ -1,5 +1,5 @@
 import * as DateChanger from "./dateChanger.js";
-import { loadOptions } from './options.js';
+import { categoryValue, loadOptions } from './options.js';
 import { blocked_subreddits } from "./options.js";
 const body = document.body;
 const cardContainer = document.getElementById('cardContainer');
@@ -232,6 +232,7 @@ function createCards(cardsToCreate, cards) {
 }
 function sortCards(cards) {
     const cardsArray = Array.from(cards.children);
+    console.log(categoryValue);
     cardsArray.sort((a, b) => {
         const ratingA = Number(a.getAttribute('rating')) || 0;
         const ratingB = Number(b.getAttribute('rating')) || 0;
