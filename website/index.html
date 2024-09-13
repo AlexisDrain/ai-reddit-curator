@@ -136,10 +136,22 @@ http://localhost:4000
         <div id="page-right" class="page-right">
             <form id="form-date">
                 <label>
-                  Choose the date for Reddit:<br>
+                  <p style="line-height: 0em; margin-top: 0.3em;">Choose the date for Reddit:</p>
                   <input type="date" id="redditDate" min="2024-07-14" />
                 </label>
-              </form>
+            </form>
+            <form id="form-category">
+              <label for="rating-label">
+                <p style="line-height: 0em; margin-top: 0.3em;">Rating Category:</p>
+                <select id="rating-dropdown" name="rating-dropdown-name">
+                    <option value="total-score">Total Score</option>
+                    <option value="educational">Educational</option>
+                    <option value="hilarious">Hilarious</option>
+                    <option value="cute">Cute</option>
+                    <option value="political">Political</option>
+                </select> 
+              </label>
+            </form>
         </div>
     </div>
     <script type="module" type ="text/javascript" src="./out/dateChanger.js"></script>

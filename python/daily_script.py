@@ -46,9 +46,9 @@ posts_reddit = get_posts_300(300, "all")
 # post_scores, post_claudeComments, post_claudeComment_index = analyze_reddit_posts(posts_reddit, allow_claudeComments=True, debug_prompt=False)
 # combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, post_claudeComments, post_claudeComment_index) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
-post_scores = analyze_reddit_posts(posts_reddit, allow_claudeComments=False, debug_prompt=False)
+post_scores = analyze_reddit_posts(posts_reddit, split_catagories=True, allow_claudeComments=False, debug_prompt=False)
 
-combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, allow_claudeComments=False) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
+combined_data = combine_postScores_claudeComments_reddit(posts_reddit, post_scores, split_catagories=True, allow_claudeComments=False) # combine the data from Claude (permalink, rating,comment) with the data from the reddit crawl (selftext, image url)
 
 ### write the file inside dailyData
 
@@ -63,7 +63,7 @@ output_dir.mkdir(parents=True, exist_ok=True)
 current_date = datetime.now().strftime('%Y-%m-%d') # name the file
 output_file = output_dir / f'{current_date}.json'
 # output_file = output_dir / 'dontsave.json' # uncomment previous line for testing the dumped json
-output_file.write_text(json.dumps(combined_data, indent=2))
+output_file.write_text(json.dumps(combined_data, indent=0))
 
 write_date_in_index_file(current_date, output_dir / 'datesIndex.jsonl')
 

@@ -92,7 +92,17 @@ video {
     flex-basis: 100%;
     display: flex;
     box-shadow: 0 2px 4px #000;
+    margin-bottom: 1em;
 }
+#form-category {
+    background: chocolate;
+    padding: 1em;
+    border-radius: 0.5em;
+    flex-basis: 100%;
+    display: flex;
+    box-shadow: 0 2px 4px #000;
+}
+
 
 /* message at the bottom of text/or not found data on day */
 #noDataMessage {
@@ -536,6 +546,15 @@ span {
     #form-date {
         justify-content: center;
         text-align: center;
+        border-radius: 0em;
+        margin-bottom: -2px;
+    }
+    #form-category {
+        justify-content: center;
+        text-align: center;
+        border-radius: 0em;
+        border-bottom-right-radius: 0.5em;
+        border-bottom-left-radius: 0.5em;
     }
     #denylist {
         width: 70vw;
