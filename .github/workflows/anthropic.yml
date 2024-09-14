@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install anthropic
+        pip install anthropic==0.34.2 pillow==10.4.0
     
     
     - name: Run Anthropic script with at most 2 retries
