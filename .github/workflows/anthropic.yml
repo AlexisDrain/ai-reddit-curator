@@ -75,7 +75,8 @@ jobs:
           echo "changes=true" >> $GITHUB_OUTPUT
           git commit -m "Update daily data from Claude Reddit Curator"
         else
-          echo "No changes detected"
+          echo "::error::No changes were detected in the daily data files"
+          exit 1
         fi
   
     - name: Push changes and create/merge PR

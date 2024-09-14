@@ -227,7 +227,7 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
                 image_data = BytesIO(response.content)
                 width, height = Image.open(image_data).size
                 if width > 7999 or height > 7999:
-                    print(f"Image dimensions larger than 7999x7999: width: {width} - height: {height}")
+                    print(f"Image dimensions larger than 7999 in one axis: width: {width} - height: {height}. Discarding.")
                     return None
 
                 # Encode to base64
