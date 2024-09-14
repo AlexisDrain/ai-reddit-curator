@@ -8,6 +8,8 @@ from io import BytesIO
 import json
 from score_extract import fetch_gallery_firstImage
 import logging
+from PIL import Image
+import io
 
 # Example usage
 # claude example. Don't use
@@ -216,13 +218,19 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
                 if estimated_base64_size > max_size:
                     print(f"Image is likely too large after base64 encoding (estimated {estimated_base64_size} bytes). Skipping download.")
                     return None
-                
+
                 # If the image might be small enough, proceed with GET request
                 response = requests.get(imgSource, timeout=10)
                 response.raise_for_status()
-                
-                # Encode to base64
+
+                # open the image to check dimensions
                 image_data = BytesIO(response.content)
+                img = Image.open(image_data)
+                # Resize if necessary
+                if max(img.size) > 7999:
+                    img.thumbnail((7999, 7999))
+
+                # Encode to base64
                 base64_image = base64.b64encode(image_data.getvalue()).decode('utf-8')
                 
                 # Check actual base64 size
@@ -322,7 +330,6 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
         return results, results_comment, results_comment_index
 
     return results
-
 
     '''
 
