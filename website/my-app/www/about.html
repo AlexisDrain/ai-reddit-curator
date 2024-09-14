@@ -1,48 +1,11 @@
-<!--
-
-https://alexisdrain.github.io/Claude-Reddit-Curator/
-
-Running the website on a local server:
-D:
-cd D:\DProjects\AI\Claude-Reddit-Curator\website
-python -m http.server 8000
-http://localhost:8000
-
------------
-To convert TypeScript to JavaScript, press ctrl+shift+b then click on watch.
-
------------
-Running the website on android studio:
-update the app using:
-D:
-cd D:\DProjects\AI\Claude-Reddit-Curator\website\my-app
-npx cap sync
-
-open app using android studio: D:\DProjects\AI\Claude-Reddit-Curator\website\my-app
-
-
------------
-
------------
-
-// RETRO
-Running the website on Jekyll
-D:
-cd D:\DProjects\AI\Claude-Reddit-Curator\website
-bundle exec jekyll serve
-http://localhost:4000
-
-
-
--->
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Reddit Curator</title>
+    <title>About: AI Reddit Curator</title>
+
     <meta name="description" content="Make browsing Reddit more educational, hilarious, inspiring, and cute.">
     <meta name="keywords" content="AI, Claude 3, Reddit, curator, educational, hilarious, inspiring, cute, content curation">
 
@@ -50,7 +13,7 @@ http://localhost:4000
     <meta property="og:title" content="AI Reddit Curator">
     <meta property="og:description" content="Make browsing Reddit more educational, hilarious, inspiring, and cute.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://alexisdrain.github.io/Claude-Reddit-Curator">
+    <meta property="og:url" content="https://alexisdrain.github.io/Claude-Reddit-Curator/about.html">
     <meta property="og:image" content="https://alexisdrain.github.io/Claude-Reddit-Curator/assets/websiteLogo.png">
     
     <!-- Twitter: Card meta tags -->
@@ -65,7 +28,6 @@ http://localhost:4000
     <link rel="icon" 
       type="image/png" 
       href="./favicon.png" />
-      
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-F229EYX75X"></script>
     <script>
@@ -75,7 +37,6 @@ http://localhost:4000
 
     gtag('config', 'G-F229EYX75X');
     </script>
-
 </head>
 <body class="dark-mode">
     <!--
@@ -102,60 +63,38 @@ http://localhost:4000
                 <label for="darkModeToggle" id="darkModeLabel"></label>
 
              </div>
-             <a href = "./about.html">About AI Reddit Curator</a>
+             <a href = "./index.html">Back to main site.</a>
              <h4 class="text-left">
                 Updated daily at 8:00 AM EST.
                 <br><br>
                 Powered by Claude 3 Haiku.
                 <br><br>
                 📽️⚠️ This AI is unable to view the content of videos other than the title and thumbnail.
-                </h4>
-                <a id="android-logo" href="https://play.google.com/console/about/brand-and-marketing/">
-                    <img id="android-image" src="assets/androidLogo.png">
-                </a>
-                <div id="denylist">
-                    <h3 style="margin-top: 0em; margin-bottom: 0em; color: #fff;">Denylist:</h3>
-                    <div id="denylist-children">
-                        <!-- <div class="denylist-child"><h4>r/politics</h4><button class="denylist-button">X</button></div> -->
-                        <!-- <div class="denylist-child"><h4>r/politics</h4><button class="denylist-button">X</button></div> -->
-                    </div>
-                    <div id="denylist-textfield">
-                        <input type="text" aria-placeholder="Type name of subreddit to block" placeholder="Type name of subreddit to block" id="denylist-input">
-                        <button id="denylist-input-button">Add</button>
-                    </div>
-                </div>
+            </h4>
+            <a id="android-logo" href="https://play.google.com/console/about/brand-and-marketing/">
+                <img id="android-image" src="assets/androidLogo.png">
+            </a>
         </div>
-        <div id="page-center" class="page-center">
-            <!--<input id="textfield-subreddit" type= "text" placeholder="r/all" /> -->
-            <div class="card-container" id="cardContainer"></div>
-            <div id="noDataMessage">
-                <img id="noDataMessageLogo" src="favicon.png"/>
-                <h1 id="noDataMessage-text">No data found on this day.</h1>
+        <div class="page-center page-about">
+            <div class="about-card-container">
+                <h1 class="about">✅About Page:</h1>
+                <p>Why did my wife and I make this site? We want to make browsing Reddit more informative, educational, hilarious, inspiring, and extremely cute.
+                <br><br>
+                This site uses Claude 3 Haiku and it is updated daily using Github Actions. We fetch posts from r/all, which is a diverse subreddit that exhibits the daily posts that reach the front page of Reddit (It's so diverse that most subreddits appear less than twice per 100 posts). We then feed the posts to Claude 3 Haiku which rates them. Then we show you a sorted list of the highest scoring posts, and sometimes alongside a comment by Claude behind the reasoning.
+                <br><br>
+                This website is <a href="https://github.com/AlexisDrain/ai-reddit-curator">open source</a> and non-commercial. We use the official Reddit API to crawl once a day. The data we crawl is not used for training the AI.
+                <br><br>
+                This site was made by me, <a href="https://github.com/AlexisDrain">Alexis Drain</a> (front-end, TypeScript), and <a href="https://github.com/dawndrain">Dawn Drain</a> (back-end, Python).
+                <br><br>
+                Check out my other work, such as the browser extension <a href="https://addons.mozilla.org/en-US/firefox/addon/less-addictive-youtube/">Less Addictive YouTube</a> ...or <a href="https://alexclay.itch.io/">my 15 web games!</a>
+                <br><br>
+                - <a href = "./index.html">Back to main site.</a>
             </div>
         </div>
-        <div id="page-right" class="page-right">
-            <form id="form-date">
-                <label>
-                  <p style="line-height: 0em; margin-top: 0.3em;">Choose the date for Reddit:</p>
-                  <input type="date" id="redditDate" min="2024-07-14" />
-                </label>
-            </form>
-            <form id="form-category">
-              <label for="rating-label">
-                <p style="line-height: 0em; margin-top: 0.3em;">Rating category:</p>
-                <select id="rating-dropdown" name="rating-dropdown-name">
-                    <option value="total-score">Total Score</option>
-                    <option value="educational">Educational</option>
-                    <option value="hilarious">Hilarious</option>
-                    <option value="cute">Cute</option>
-                    <option value="political">Political</option>
-                </select> 
-              </label>
-            </form>
+        <div class="page-right">
         </div>
     </div>
-    <script type="module" type ="text/javascript" src="./out/dateChanger.js"></script>
+    <script type="module" type ="text/javascript" src="./out/aboutPage.js"></script>
     <script type="module" type ="text/javascript" src="./out/options.js"></script>
-    <script type="module" type ="text/javascript" src="./out/script.js"></script>
 </body>
 </html>
