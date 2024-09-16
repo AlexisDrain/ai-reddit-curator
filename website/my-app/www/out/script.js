@@ -385,16 +385,20 @@ function loadImage(card) {
 export function getPlatform() {
     // Check if running in Capacitor
     if (window.Capacitor) {
-        return window.Capacitor.getPlatform();
+        return "capacitor";
+        // return window.Capacitor.getPlatform();
     }
+    /*
     // Check if running on Android
     if (/android/i.test(navigator.userAgent)) {
-        return 'android';
+      return 'android';
     }
+    
     // Check if running on iOS
     if (/ipad|iphone|ipod/i.test(navigator.userAgent)) {
-        return 'ios';
+      return 'ios';
     }
+    */
     // Default to web
     return 'web';
 }
@@ -433,7 +437,7 @@ function addLineBreaks(element, text) {
 // start of page
 const debugMode = false;
 export function main() {
-    if (getPlatform() != "web") {
+    if (getPlatform() != "web") { // when running in capacitor, don't show logo
         document.getElementById("android-logo").innerHTML = "";
     }
     let jsonFileCurrent;

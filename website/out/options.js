@@ -233,7 +233,11 @@ function createTrashIconButton({ width = 24, height = 24, color = '#000000', str
 }
 export const scrollToTop = () => {
     const c = document.documentElement.scrollTop || document.body.scrollTop;
-    if (c > 0) {
+    let offset = 0;
+    if (document.body.clientWidth < 1139) { // if on mobile. scroll up but 500 pixels away from the top
+        offset = 500;
+    }
+    if (c > offset) {
         window.requestAnimationFrame(scrollToTop);
         window.scrollTo(0, c - c / 8);
     }
