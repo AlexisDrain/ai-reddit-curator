@@ -527,8 +527,8 @@ function addLineBreaks(element: HTMLElement, text: string) {
 
 const debugMode : Boolean = false;
 export function main() {
-  if(getPlatform() != "web") { // when running in capacitor, don't show logo
-    document.getElementById("android-logo").innerHTML = "";
+  if(getPlatform() == "web") { // when running in capacitor, don't show logo. only on web
+    document.getElementById("android-logo").style.display = "inline";
   }
 
   let jsonFileCurrent : RedditPost[];
