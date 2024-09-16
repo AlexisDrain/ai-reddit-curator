@@ -19,8 +19,15 @@ export function callDefaultDate() {
 // we keep an index file that updates everyday because we cant use Path in a static website
 async function fetchMostRecentData() {
   try {
-      // Fetch the index file
-      const indexResponse = await fetch('./dailyData/datesIndex.jsonl');
+
+      let indexResponse;
+      if (script.getPlatform() != "web") {
+        //android
+        indexResponse = await fetch('https://raw.githubusercontent.com/AlexisDrain/ai-reddit-curator/main/website/dailyData/datesIndex.jsonl');
+      } else { // web
+        // Fetch the index file
+        indexResponse = await fetch('./dailyData/datesIndex.jsonl');
+      }
       if (!indexResponse.ok) {
           throw new Error('Failed to fetch dates index file');
       }
