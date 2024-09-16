@@ -50,7 +50,7 @@ let lastScrollTop = 0;
 window.addEventListener('scroll', () => {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   
-  if (Math.abs(scrollTop) <= 5) return;
+  if (Math.abs(scrollTop - lastScrollTop) <= 50) return;
 
   if (scrollTop > lastScrollTop && scrollTop > pageRightHTML.offsetHeight) {
     // Scrolling down
