@@ -560,6 +560,7 @@ span {
         border-radius: 0em;
         margin-bottom: -2px;
         box-shadow: none;
+        padding-bottom: 0em;
     }
     #form-category {
         justify-content: center;
