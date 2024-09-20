@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.alexisdrain.app"
+    namespace "com.alexisdrain.airedditcurator"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.alexisdrain.app"
+        applicationId "com.alexisdrain.airedditcurator"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
+        versionCode 9
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
