@@ -5,7 +5,7 @@ We use Claude to rate content from reddit.
 
 That way you can see the best of the best (posts that are awe-inspiring, laugh-out-loud hilarious, or educational) while avoiding the worst (ragebait or doomscroll'y).  
 
-This site uses Claude 3 Haiku and it is updated daily using Github Actions. We fetch posts from r/all, which is a diverse subreddit that exhibits the daily posts that reach the front page of Reddit (It's so diverse that most subreddits appear less than twice per 100 posts). We then feed the posts to Claude 3 Haiku which rates them. Then we show you a sorted list of the highest scoring posts, and sometimes alongside a comment by Claude behind the reasoning.  
+This site uses Claude 3 Haiku and it is updated daily using Github Actions. We fetch posts from r/all, which is a diverse subreddit that exhibits the daily posts that reach the front page of Reddit (It's so diverse that most subreddits appear less than twice per 100 posts). We then feed the posts to Claude 3 Haiku which rates them. Then we show you a sorted list of the highest scoring posts split into various categories like "educational" or "cute."  
 
 This website is non-commercial. We use the official Reddit API to crawl once a day. The data we crawl is not used for training the AI.  
 
