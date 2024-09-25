@@ -451,6 +451,9 @@ export function main() {
         });
     }).then(asdf => {
         cardContainerDestroyAll(cardContainer);
+        if (jsonFileCurrent == null) {
+            return;
+        }
         createCards(jsonFileCurrent, cardContainer);
         sortCards(cardContainer);
         setupIntersectionObserver(cardContainer);

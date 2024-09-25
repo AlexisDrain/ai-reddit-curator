@@ -52,12 +52,12 @@ let lastScrollTop = 0;
 window.addEventListener('scroll', () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     // hack, when user is at the top, hide immediately.
-    if (pageRightHTML.offsetHeight < 15) {
+    if (scrollTop < 100) {
         pageRightHTML.classList.remove('hidden');
         return;
     }
     // hack, when user is close to the top and is scrolling down, hide immediately.
-    if (pageRightHTML.offsetHeight < 400 && scrollTop > lastScrollTop) {
+    if (scrollTop < 400 && scrollTop > lastScrollTop) {
         pageRightHTML.classList.add('hidden');
     }
     if (Math.abs(scrollTop - lastScrollTop) <= 50)

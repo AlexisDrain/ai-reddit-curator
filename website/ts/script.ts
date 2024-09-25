@@ -29,6 +29,7 @@ const elementImgMap = new WeakMap<HTMLElement, HTMLImageElement>();
 // Create and append card elements
 function createCards(cardsToCreate : RedditPost[], cards : HTMLElement | null) {
 
+
     for (let i = 0; i < cardsToCreate.length; i++) {
 
       let card = cardsToCreate[i];
@@ -543,6 +544,9 @@ export function main() {
       });
     }).then(asdf => {
       cardContainerDestroyAll(cardContainer);
+      if(jsonFileCurrent == null) {
+        return;
+      }
       createCards(jsonFileCurrent, cardContainer);
       sortCards(cardContainer);
       setupIntersectionObserver(cardContainer)
