@@ -9,9 +9,13 @@ This site uses Claude 3 Haiku and it is updated daily using Github Actions. We f
 
 This website is non-commercial. We use the official Reddit API to crawl once a day. The data we crawl is not used for training the AI.  
 
-This site was made by me, [Alexis Drain](https://github.com/AlexisDrain) (front-end, TypeScript), and [Dawn Drain](https://github.com/DawnDrain) (back-end, Python).  
+This site was made by me, [Alexis Drain](https://github.com/AlexisDrain) (front-end, TypeScript), and [Dawn Drain](https://github.com/DawnDrain) (back-end, Python). [Send me an email](mailto:AlexisDrain97@gmail.com) with feedback if you love or hate AI Reddit Curator!  
 
 Check out my other work, such as the browser extension [Less Addictive YouTube](https://addons.mozilla.org/en-US/firefox/addon/less-addictive-youtube/)... or [my 15 web games](https://alexclay.itch.io/)!
+
+### Android build instructions:  
+The Android studio project is located in this repository [here](https://github.com/AlexisDrain/ai-reddit-curator/tree/main/website/my-app/android).  
+
 
 ### Credits:  
 Icons from https://iconsvg.xyz/  
@@ -19,4 +23,7 @@ chevron-right.svg
 play-circle.svg  
 settings.svg  
 lock.svg  
-trash.svg
+trash.svg  
+
+### Photo of web version:
+![Photo of web version in action](https://raw.githubusercontent.com/AlexisDrain/ai-reddit-curator/refs/heads/main/_misc/screenshots/Web-screenshot.png)  
