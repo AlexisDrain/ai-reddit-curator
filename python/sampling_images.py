@@ -149,19 +149,25 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
     client = Anthropic(api_key=claude_key)
     
     def process_post(index):
+        #if split_catagories:
+        #    content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME_CATAGORIES}]
+        #else:
+        #    content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME}]
         if split_catagories:
-            content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME_CATAGORIES}]
+            system_prompt = PROMPT_IMAGES_ONEATATIME_CATAGORIES
         else:
-            content = [{"type": "text", "text": PROMPT_IMAGES_ONEATATIME}]
+            system_prompt = PROMPT_IMAGES_ONEATATIME
 
-        post = posts[index]
         posts_str = ""
+        post = posts[index]
 
         # add post info
         if not post['data']['link_flair_text']: # post flair
             post['data']['link_flair_text'] = ""
         else:
             post['data']['link_flair_text'] = "flair: " + post['data']['link_flair_text']
+
+            
         # We send to Claude the following:
         # title
         # permalink
@@ -169,10 +175,13 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
         # selftext
         # image
         posts_str += f"{post['data']['title']}\n{post['data']['permalink']}\n{post['data']['link_flair_text']}\n{post['data']['selftext']}"
-        content.append({
-            "type": "text",
-            "text": posts_str
-        })
+        content = system_prompt + "\n" + posts_str
+
+        # Remove this line entirely since we combined the text earlier
+        #content.append({
+         #   "type": "text",
+          #  "text": posts_str
+        #})
 
         if(debug_prompt):
             print(posts_str)
@@ -242,7 +251,19 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
                 if extension == "jpg":
                     extension = "jpeg"
 
-                content.append({
+
+                content = [{
+                    "type": "text", 
+                    "text": content  # your existing content string
+                }, {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": f"image/{extension}",
+                        "data": base64_image
+                    }
+                }]
+                '''content.append({
                     "type": "image",
                     "source": {
                         "type": "base64",
@@ -250,6 +271,7 @@ def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-2024030
                         "data": base64_image
                     }
                 })
+                '''
                 
             except requests.RequestException as e:
                 Warning(f"Error downloading image from {imgSource}: {e}")
