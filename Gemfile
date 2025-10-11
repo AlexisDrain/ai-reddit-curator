@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 gem 'nokogiri'
-gem 'rack', '~> 2.2.19'
+gem 'rack', '~> 2.2.20'
 gem 'rspec'
 gem "jekyll", "~> 4.0"
 # gem "rails"
