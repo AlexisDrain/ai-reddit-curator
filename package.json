@@ -2,6 +2,7 @@
   "type": "module",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.3",
+    "@capacitor/cli": "^8.3.0",
     "typescript": "^5.5.3"
   },
   "devDependencies": {
