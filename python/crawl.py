@@ -47,6 +47,8 @@ def get_headers_with_access_token():
         data=data,
         headers=headers,
     )
+    print(f"Token request status: {res.status_code}")
+    print(f"Token response: {res.text}")  # will show error details
     token = res.json()["access_token"]
     headers = {**headers, **{"Authorization": f"Bearer {token}"}}
     return headers
