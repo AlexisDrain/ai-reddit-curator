@@ -32,6 +32,10 @@ if not client_id:
 #     print(f"Request failed with status code: {response.status_code}")
 
 
+
+'''
+## @lru_cache(1) is caching the headers (including the Bearer token) forever for the lifetime of the process. Reddit tokens expire after 1 hour, so after that, every request uses a stale token and Reddit redirects you to the verification page.
+
 @lru_cache(1)
 def get_headers_with_access_token():
     # taken from https://ssl.reddit.com/prefs/apps/
@@ -47,12 +51,40 @@ def get_headers_with_access_token():
         data=data,
         headers=headers,
     )
-    print(f"Token request status: {res.status_code}")
-    print(f"Token response: {res.text}")  # will show error details
+    #print(f"Token request status: {res.status_code}")
+    #print(f"Token response: {res.text}")  # will show error details
     token = res.json()["access_token"]
     headers = {**headers, **{"Authorization": f"Bearer {token}"}}
     return headers
+'''
+import time
 
+_token_cache = {"token": None, "expires_at": 0}
+
+def get_headers_with_access_token():
+    now = time.time()
+    # Refresh if expired or within 60s of expiry
+    if now >= _token_cache["expires_at"] - 60:
+        auth = requests.auth.HTTPBasicAuth(client_id, secret)
+        data = {"grant_type": "client_credentials"}
+        headers = {"User-Agent": "AIRedditCurator/1.0 by my_tummy_hurts"}
+        res = requests.post(
+            "https://www.reddit.com/api/v1/access_token",
+            auth=auth,
+            data=data,
+            headers=headers,
+        )
+        # print(f"Token response: {res.json()}")
+        res.raise_for_status()
+        resp = res.json()
+        _token_cache["token"] = resp["access_token"]
+        # Reddit returns expires_in (seconds), typically 3600
+        _token_cache["expires_at"] = now + resp.get("expires_in", 3600)
+
+    return {
+        "User-Agent": "AIRedditCurator/1.0 by my_tummy_hurts",
+        "Authorization": f"Bearer {_token_cache['token']}",
+    }
 def get_posts_300(limit=300, subredditName="all", sortByTop=False, time_filter="all", allow_over_18=False, allow_crosspost=False):
     
     headers = get_headers_with_access_token()
@@ -65,24 +97,30 @@ def get_posts_300(limit=300, subredditName="all", sortByTop=False, time_filter="
             "sort": "top",
         }
     else:
-        url = f"https://oauth.reddit.com/r/{subredditName}"
+        url = "https://oauth.reddit.com/best"
         params = {"limit": limit}
     
     all_posts = []
     after = None
     
     while len(all_posts) < limit:
-        params = {
+        page_params = {
             "limit": min(100, limit - len(all_posts)),
-            "after": after
         }
+        if after:
+            page_params["after"] = after
         
-        response = requests.get(url, headers=headers, params=params)
-        
+        # preserve sort params
+        if sortByTop:
+            page_params["t"] = time_filter
+            page_params["sort"] = "top"
+
+        response = requests.get(url, headers=headers, params=page_params, allow_redirects=False)
+
         if response.status_code != 200:
             print(f"Error: Status code {response.status_code}")
             break
-        
+
         data = response.json()
         posts = data['data']['children']
         if not posts:
@@ -130,7 +168,7 @@ def get_posts(limit=10, subredditName="all", sortByTop=False, time_filter="all",
             "sort": "top",
         }
     else:
-        url = f"https://oauth.reddit.com/r/{subredditName}"
+        url = "https://oauth.reddit.com/best"
         params = {"limit": limit}
 
     response = requests.get(url, headers=headers, params=params)
