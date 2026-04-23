@@ -145,7 +145,7 @@ if not claude_key:
         claude_key = re.search(r"ANTHROPIC_API_KEY:\s*([\w-]+)", content).group(1)
 
 
-def analyze_reddit_posts(posts: List[Dict], model: str = "claude-3-haiku-20240307", split_catagories = False, allow_claudeComments=False, debug_prompt=False):
+def analyze_reddit_posts(posts: List[Dict], model: str = "claude-haiku-4-5-20251001", split_catagories = False, allow_claudeComments=False, debug_prompt=False):
     client = Anthropic(api_key=claude_key)
     
     def process_post(index):
