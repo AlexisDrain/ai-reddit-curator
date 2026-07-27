@@ -36,10 +36,17 @@
 			"rules": {
 				"func-style": "warn",
 				"max-params": "warn",
+				"no-magic-numbers": "off",
 				"no-param-reassign": "warn",
 				"no-var": "off",
 				"prefer-arrow-callback": "off",
 				"prefer-template": "off",
+			},
+		},
+		{
+			"files": "test/**",
+			"rules": {
+				"sort-keys": "off",
 			},
 		},
 	],

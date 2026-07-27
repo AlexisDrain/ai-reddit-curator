@@ -44,5 +44,5 @@ Thank you to [FangDun Cai](https://github.com/fundon) for donating the package n
 [downloads-url]: https://npm-stat.com/charts.html?package=pbkdf2
 [codecov-image]: https://codecov.io/gh/browserify/pbkdf2/branch/main/graphs/badge.svg
 [codecov-url]: https://app.codecov.io/gh/browserify/pbkdf2/
-[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/browserify/pbkdf2
+[actions-image]: https://img.shields.io/github/check-runs/browserify/pbkdf2/master
 [actions-url]: https://github.com/browserify/pbkdf2/actions

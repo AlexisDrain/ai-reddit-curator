@@ -9,9 +9,10 @@
     "typescript": "^5.5.3"
   },
   "devDependencies": {
-    "browserify": "^17.0.0"
+    "browserify": "^11.2.0"
   },
   "overrides": {
-    "tar": "7.5.11"
+    "tar": "7.5.11",
+    "sharp": "0.35.3"
   }
 }
